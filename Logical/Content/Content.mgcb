@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../../../Sprites/Log!cal Remake/BallBlue.png
+#begin BallBlue.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,9 +23,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/BallBlue.png;BallBlue.png
+/build:BallBlue.png;BallBlue.png
 
-#begin ../../../../../Sprites/Log!cal Remake/BallGreen.png
+#begin BallGreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,9 +35,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/BallGreen.png;BallGreen.png
+/build:BallGreen.png;BallGreen.png
 
-#begin ../../../../../Sprites/Log!cal Remake/BallPink.png
+#begin BallPink.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,9 +47,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/BallPink.png;BallPink.png
+/build:BallPink.png;BallPink.png
 
-#begin ../../../../../Sprites/Log!cal Remake/BallYellow.png
+#begin BallYellow.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -59,9 +59,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/BallYellow.png;BallYellow.png
+/build:BallYellow.png;BallYellow.png
 
-#begin ../../../../../Sprites/Log!cal Remake/ChangerBlue.png
+#begin ChangerBlue.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -71,9 +71,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/ChangerBlue.png;ChangerBlue.png
+/build:ChangerBlue.png;ChangerBlue.png
 
-#begin ../../../../../Sprites/Log!cal Remake/ChangerGreen.png
+#begin ChangerGreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -83,9 +83,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/ChangerGreen.png;ChangerGreen.png
+/build:ChangerGreen.png;ChangerGreen.png
 
-#begin ../../../../../Sprites/Log!cal Remake/ChangerPink.png
+#begin ChangerPink.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -95,9 +95,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/ChangerPink.png;ChangerPink.png
+/build:ChangerPink.png;ChangerPink.png
 
-#begin ../../../../../Sprites/Log!cal Remake/ChangerYellow.png
+#begin ChangerYellow.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -107,9 +107,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/ChangerYellow.png;ChangerYellow.png
+/build:ChangerYellow.png;ChangerYellow.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Cursor.png
+#begin Cursor.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -119,9 +119,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Cursor.png;Cursor.png
+/build:Cursor.png;Cursor.png
 
-#begin ../../../../../Sprites/Log!cal Remake/FilterBlue.png
+#begin FilterBlue.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -131,9 +131,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/FilterBlue.png;FilterBlue.png
+/build:FilterBlue.png;FilterBlue.png
 
-#begin ../../../../../Sprites/Log!cal Remake/FilterGreen.png
+#begin FilterGreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -143,9 +143,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/FilterGreen.png;FilterGreen.png
+/build:FilterGreen.png;FilterGreen.png
 
-#begin ../../../../../Sprites/Log!cal Remake/FilterPink.png
+#begin FilterPink.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -155,9 +155,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/FilterPink.png;FilterPink.png
+/build:FilterPink.png;FilterPink.png
 
-#begin ../../../../../Sprites/Log!cal Remake/FilterYellow.png
+#begin FilterYellow.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -167,9 +167,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/FilterYellow.png;FilterYellow.png
+/build:FilterYellow.png;FilterYellow.png
 
-#begin ../../../../../Sprites/Log!cal Remake/IndicatorBlue.png
+#begin IndicatorBlue.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -179,9 +179,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/IndicatorBlue.png;IndicatorBlue.png
+/build:IndicatorBlue.png;IndicatorBlue.png
 
-#begin ../../../../../Sprites/Log!cal Remake/IndicatorGreen.png
+#begin IndicatorGreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -191,9 +191,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/IndicatorGreen.png;IndicatorGreen.png
+/build:IndicatorGreen.png;IndicatorGreen.png
 
-#begin ../../../../../Sprites/Log!cal Remake/IndicatorPink.png
+#begin IndicatorPink.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -203,9 +203,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/IndicatorPink.png;IndicatorPink.png
+/build:IndicatorPink.png;IndicatorPink.png
 
-#begin ../../../../../Sprites/Log!cal Remake/IndicatorYellow.png
+#begin IndicatorYellow.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -215,9 +215,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/IndicatorYellow.png;IndicatorYellow.png
+/build:IndicatorYellow.png;IndicatorYellow.png
 
-#begin ../../../../../Sprites/Log!cal Remake/MainPipeBar.png
+#begin MainPipeBar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -227,9 +227,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/MainPipeBar.png;MainPipeBar.png
+/build:MainPipeBar.png;MainPipeBar.png
 
-#begin ../../../../../Sprites/Log!cal Remake/MovesBlue.png
+#begin MovesBlue.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -239,9 +239,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/MovesBlue.png;MovesBlue.png
+/build:MovesBlue.png;MovesBlue.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/BumperDown.png
+#begin 0/BumperDown.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -251,9 +251,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/BumperDown.png;0/BumperDown.png
+/build:0/BumperDown.png;0/BumperDown.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/BumperLeft.png
+#begin 0/BumperLeft.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -263,9 +263,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/BumperLeft.png;0/BumperLeft.png
+/build:0/BumperLeft.png;0/BumperLeft.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/BumperRight.png
+#begin 0/BumperRight.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -275,9 +275,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/BumperRight.png;0/BumperRight.png
+/build:0/BumperRight.png;0/BumperRight.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/BumperUp.png
+#begin 0/BumperUp.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -287,9 +287,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/BumperUp.png;0/BumperUp.png
+/build:0/BumperUp.png;0/BumperUp.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/ChangerShadowCross.png
+#begin 0/ChangerShadowCross.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -299,9 +299,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/ChangerShadowCross.png;0/ChangerShadowCross.png
+/build:0/ChangerShadowCross.png;0/ChangerShadowCross.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/ChangerShadowHorizontal.png
+#begin 0/ChangerShadowHorizontal.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -311,9 +311,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/ChangerShadowHorizontal.png;0/ChangerShadowHorizontal.png
+/build:0/ChangerShadowHorizontal.png;0/ChangerShadowHorizontal.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/ChangerShadowVertical.png
+#begin 0/ChangerShadowVertical.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -323,9 +323,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/ChangerShadowVertical.png;0/ChangerShadowVertical.png
+/build:0/ChangerShadowVertical.png;0/ChangerShadowVertical.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/ColorJob.png
+#begin 0/ColorJob.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -335,9 +335,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/ColorJob.png;0/ColorJob.png
+/build:0/ColorJob.png;0/ColorJob.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/EmptyBlock.png
+#begin 0/EmptyBlock.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -347,9 +347,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/EmptyBlock.png;0/EmptyBlock.png
+/build:0/EmptyBlock.png;0/EmptyBlock.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/EmptyBlockAlt.png
+#begin 0/EmptyBlockAlt.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -359,9 +359,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/EmptyBlockAlt.png;0/EmptyBlockAlt.png
+/build:0/EmptyBlockAlt.png;0/EmptyBlockAlt.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/FilterShadowCross.png
+#begin 0/FilterShadowCross.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -371,9 +371,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/FilterShadowCross.png;0/FilterShadowCross.png
+/build:0/FilterShadowCross.png;0/FilterShadowCross.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/FilterShadowHorizontal.png
+#begin 0/FilterShadowHorizontal.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -383,9 +383,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/FilterShadowHorizontal.png;0/FilterShadowHorizontal.png
+/build:0/FilterShadowHorizontal.png;0/FilterShadowHorizontal.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/FilterShadowVertical.png
+#begin 0/FilterShadowVertical.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -395,9 +395,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/FilterShadowVertical.png;0/FilterShadowVertical.png
+/build:0/FilterShadowVertical.png;0/FilterShadowVertical.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/Holder.png
+#begin 0/Holder.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -407,9 +407,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/Holder.png;0/Holder.png
+/build:0/Holder.png;0/Holder.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/HolderShadowCross.png
+#begin 0/HolderShadowCross.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -419,9 +419,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/HolderShadowCross.png;0/HolderShadowCross.png
+/build:0/HolderShadowCross.png;0/HolderShadowCross.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/HolderShadowEmpty.png
+#begin 0/HolderShadowEmpty.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -431,9 +431,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/HolderShadowEmpty.png;0/HolderShadowEmpty.png
+/build:0/HolderShadowEmpty.png;0/HolderShadowEmpty.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/HolderShadowHorizontal.png
+#begin 0/HolderShadowHorizontal.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -443,9 +443,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/HolderShadowHorizontal.png;0/HolderShadowHorizontal.png
+/build:0/HolderShadowHorizontal.png;0/HolderShadowHorizontal.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/HolderShadowVertical.png
+#begin 0/HolderShadowVertical.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -455,9 +455,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/HolderShadowVertical.png;0/HolderShadowVertical.png
+/build:0/HolderShadowVertical.png;0/HolderShadowVertical.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/MainPipe.png
+#begin 0/MainPipe.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -467,9 +467,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/MainPipe.png;0/MainPipe.png
+/build:0/MainPipe.png;0/MainPipe.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/MainPipeOpen.png
+#begin 0/MainPipeOpen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -479,9 +479,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/MainPipeOpen.png;0/MainPipeOpen.png
+/build:0/MainPipeOpen.png;0/MainPipeOpen.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/Moves.png
+#begin 0/Moves.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -491,9 +491,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/Moves.png;0/Moves.png
+/build:0/Moves.png;0/Moves.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/PipeClosedDown.png
+#begin 0/PipeClosedDown.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -503,9 +503,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/PipeClosedDown.png;0/PipeClosedDown.png
+/build:0/PipeClosedDown.png;0/PipeClosedDown.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/PipeClosedLeft.png
+#begin 0/PipeClosedLeft.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -515,9 +515,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/PipeClosedLeft.png;0/PipeClosedLeft.png
+/build:0/PipeClosedLeft.png;0/PipeClosedLeft.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/PipeClosedRight.png
+#begin 0/PipeClosedRight.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -527,9 +527,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/PipeClosedRight.png;0/PipeClosedRight.png
+/build:0/PipeClosedRight.png;0/PipeClosedRight.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/PipeClosedUp.png
+#begin 0/PipeClosedUp.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -539,9 +539,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/PipeClosedUp.png;0/PipeClosedUp.png
+/build:0/PipeClosedUp.png;0/PipeClosedUp.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/PipeCross.png
+#begin 0/PipeCross.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -551,9 +551,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/PipeCross.png;0/PipeCross.png
+/build:0/PipeCross.png;0/PipeCross.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/PipeHorizontal.png
+#begin 0/PipeHorizontal.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -563,9 +563,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/PipeHorizontal.png;0/PipeHorizontal.png
+/build:0/PipeHorizontal.png;0/PipeHorizontal.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/PipeHorizontalAlt.png
+#begin 0/PipeHorizontalAlt.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -575,9 +575,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/PipeHorizontalAlt.png;0/PipeHorizontalAlt.png
+/build:0/PipeHorizontalAlt.png;0/PipeHorizontalAlt.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/PipeVertical.png
+#begin 0/PipeVertical.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -587,9 +587,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/PipeVertical.png;0/PipeVertical.png
+/build:0/PipeVertical.png;0/PipeVertical.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/Sandclock.png
+#begin 0/Sandclock.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -599,9 +599,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/Sandclock.png;0/Sandclock.png
+/build:0/Sandclock.png;0/Sandclock.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/Spinner.png
+#begin 0/Spinner.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -611,9 +611,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/Spinner.png;0/Spinner.png
+/build:0/Spinner.png;0/Spinner.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerClosedDown.png
+#begin 0/SpinnerClosedDown.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -623,9 +623,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerClosedDown.png;0/SpinnerClosedDown.png
+/build:0/SpinnerClosedDown.png;0/SpinnerClosedDown.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerClosedLeft.png
+#begin 0/SpinnerClosedLeft.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -635,9 +635,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerClosedLeft.png;0/SpinnerClosedLeft.png
+/build:0/SpinnerClosedLeft.png;0/SpinnerClosedLeft.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerClosedRight.png
+#begin 0/SpinnerClosedRight.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -647,9 +647,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerClosedRight.png;0/SpinnerClosedRight.png
+/build:0/SpinnerClosedRight.png;0/SpinnerClosedRight.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerClosedUp.png
+#begin 0/SpinnerClosedUp.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -659,9 +659,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerClosedUp.png;0/SpinnerClosedUp.png
+/build:0/SpinnerClosedUp.png;0/SpinnerClosedUp.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerExplode0.png
+#begin 0/SpinnerExplode0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -671,9 +671,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerExplode0.png;0/SpinnerExplode0.png
+/build:0/SpinnerExplode0.png;0/SpinnerExplode0.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerExplode1.png
+#begin 0/SpinnerExplode1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -683,9 +683,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerExplode1.png;0/SpinnerExplode1.png
+/build:0/SpinnerExplode1.png;0/SpinnerExplode1.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerExplode2.png
+#begin 0/SpinnerExplode2.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -695,9 +695,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerExplode2.png;0/SpinnerExplode2.png
+/build:0/SpinnerExplode2.png;0/SpinnerExplode2.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerExplode3.png
+#begin 0/SpinnerExplode3.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -707,9 +707,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerExplode3.png;0/SpinnerExplode3.png
+/build:0/SpinnerExplode3.png;0/SpinnerExplode3.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerSpin0.png
+#begin 0/SpinnerSpin0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -719,9 +719,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerSpin0.png;0/SpinnerSpin0.png
+/build:0/SpinnerSpin0.png;0/SpinnerSpin0.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerSpin1.png
+#begin 0/SpinnerSpin1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -731,9 +731,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerSpin1.png;0/SpinnerSpin1.png
+/build:0/SpinnerSpin1.png;0/SpinnerSpin1.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerSpin2.png
+#begin 0/SpinnerSpin2.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -743,9 +743,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/SpinnerSpin2.png;0/SpinnerSpin2.png
+/build:0/SpinnerSpin2.png;0/SpinnerSpin2.png
 
-#begin ../../../../../Sprites/Log!cal Remake/Placeholders/TrafficLight.png
+#begin 0/TrafficLight.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -755,9 +755,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/Placeholders/TrafficLight.png;0/TrafficLight.png
+/build:0/TrafficLight.png;0/TrafficLight.png
 
-#begin ../../../../../Sprites/Log!cal Remake/SpinnerBallBlue.png
+#begin SpinnerBallBlue.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -767,9 +767,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/SpinnerBallBlue.png;SpinnerBallBlue.png
+/build:SpinnerBallBlue.png;SpinnerBallBlue.png
 
-#begin ../../../../../Sprites/Log!cal Remake/SpinnerBallExploded.png
+#begin SpinnerBallExploded.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -779,9 +779,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/SpinnerBallExploded.png;SpinnerBallExploded.png
+/build:SpinnerBallExploded.png;SpinnerBallExploded.png
 
-#begin ../../../../../Sprites/Log!cal Remake/SpinnerBallGreen.png
+#begin SpinnerBallGreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -791,9 +791,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/SpinnerBallGreen.png;SpinnerBallGreen.png
+/build:SpinnerBallGreen.png;SpinnerBallGreen.png
 
-#begin ../../../../../Sprites/Log!cal Remake/SpinnerBallPink.png
+#begin SpinnerBallPink.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -803,9 +803,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/SpinnerBallPink.png;SpinnerBallPink.png
+/build:SpinnerBallPink.png;SpinnerBallPink.png
 
-#begin ../../../../../Sprites/Log!cal Remake/SpinnerBallYellow.png
+#begin SpinnerBallYellow.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -815,9 +815,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/SpinnerBallYellow.png;SpinnerBallYellow.png
+/build:SpinnerBallYellow.png;SpinnerBallYellow.png
 
-#begin ../../../../../Sprites/Log!cal Remake/TpCross.png
+#begin TpCross.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -827,9 +827,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/TpCross.png;TpCross.png
+/build:TpCross.png;TpCross.png
 
-#begin ../../../../../Sprites/Log!cal Remake/TpHorizontal.png
+#begin TpHorizontal.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -839,9 +839,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/TpHorizontal.png;TpHorizontal.png
+/build:TpHorizontal.png;TpHorizontal.png
 
-#begin ../../../../../Sprites/Log!cal Remake/TpVertical.png
+#begin TpVertical.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -851,7 +851,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Sprites/Log!cal Remake/TpVertical.png;TpVertical.png
+/build:TpVertical.png;TpVertical.png
 
 #begin 0/About.png
 /importer:TextureImporter
