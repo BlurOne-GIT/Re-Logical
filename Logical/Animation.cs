@@ -1,35 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+namespace Logical;
 
 public class Animation<T>
 {
     #region Fields
-    private T[] _frames;
-    private int pos;
-    private bool isLooped;
-    public bool IsFinished { get => _frames.Length - 1 == pos; }
+    private readonly T[] _frames;
+    private int _pos;
+    private readonly bool _isLooped;
+    public bool IsFinished => _frames.Length - 1 == _pos;
+
     #endregion
 
     public Animation(T[] frames, bool looped)
     {
         _frames = frames;
-        isLooped = looped;
-        pos = _frames.Length - 1;
+        _isLooped = looped;
+        _pos = _frames.Length - 1;
     }
 
-    public void Start() => pos = 0;
+    public void Start() => _pos = 0;
 
     public T NextFrame()
     {
-        if (IsFinished)
-        {
-            if (isLooped)
-                pos = 0;
-            else
-                return _frames[pos];
-        }
+        if (!IsFinished) 
+            return _frames[_pos++];
+            
+        if (_isLooped)
+            _pos = 0;
+        else
+            return _frames[_pos];
 
-        return _frames[pos++];
+        return _frames[_pos++];
     }
 }

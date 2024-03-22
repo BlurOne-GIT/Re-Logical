@@ -1,5 +1,3 @@
-using System;
-
 namespace Logical;
 
 public struct Level

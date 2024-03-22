@@ -18,7 +18,7 @@ namespace Logical;
 public class Game1 : Game
 {
 #region Instances
-    private GraphicsDeviceManager _graphics;
+    private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private Texture2D CursorTexture;
     private TextComponent Version;
@@ -37,16 +37,18 @@ public class Game1 : Game
         Window.AllowUserResizing = false;
         Window.IsBorderless = false;
         Configs.Initialize(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+        /*
         #if !DEBUG
         if (Configs.AutoUpdate)
             AutoUpdater();
-        #endif
+        #endif*/
     }
 
+    /*
     private async void AutoUpdater()
     {
         GitHubClient gc = new GitHubClient(new Octokit.ProductHeaderValue("BlurOne-GIT"));
-        gc.Credentials = new Credentials("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");
+        gc.Credentials = new Credentials("X");
         Release latestRelease = await gc.Repository.Release.GetLatest("BlurOne-GIT", "Input-is-not-real");
         if (latestRelease.Name == version)
             return;
@@ -69,12 +71,13 @@ public class Game1 : Game
         }
         Version.Text = $"{version.ToUpper().Replace('.', '_')} COULD NOT UPDATE";
     }
+    */
 
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
         base.Initialize();
-        ReloadScale(null, new EventArgs());
+        ReloadScale(null, EventArgs.Empty);
         if (Configs.Fullscreen)
             _graphics.ToggleFullScreen();
         Window.KeyDown += UpdateInputs;
@@ -93,8 +96,8 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
-        MediaPlayer.Volume = MathF.Pow((float)Configs.MusicVolume * 0.1f, 2);
-        MediaPlayer.IsMuted = m(Configs.MusicVolume);
+        MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2);
+        MediaPlayer.IsMuted = _m(Configs.MusicVolume);
         
         CursorTexture = Content.Load<Texture2D>("Cursor");
         Statics.LoadFonts();
@@ -206,8 +209,8 @@ public class Game1 : Game
 
     private void Fullscreen(object s, EventArgs e) => _graphics.ToggleFullScreen();
 
-    private void UpdateVolume(object s, EventArgs e) {MediaPlayer.Volume = MathF.Pow((float)Configs.MusicVolume * 0.1f, 2); MediaPlayer.IsMuted = m(Configs.MusicVolume);}
+    private void UpdateVolume(object s, EventArgs e) {MediaPlayer.Volume = MathF.Pow((float)Configs.MusicVolume * 0.1f, 2); MediaPlayer.IsMuted = _m(Configs.MusicVolume);}
     
-    private Func<int, bool> m = x => x == 0;
+    private readonly Func<int, bool> _m = x => x == 0;
 #endregion
 }

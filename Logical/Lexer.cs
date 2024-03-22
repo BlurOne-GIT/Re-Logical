@@ -12,29 +12,29 @@ public class Lexer
 {
     public Lexer()
     {
-        hexFile = File.ReadAllBytes(Statics.Set);
-        if (hexFile[0] is not 0x00 && hexFile[1] is not 0x00)
+        _hexFile = File.ReadAllBytes(Statics.Set);
+        if (_hexFile[0] is not 0x00 && _hexFile[1] is not 0x00)
             throw new Exception("Not Logical Set File.");
     }
 
     #region Fields
-    private readonly byte[] hexFile;
-    private List<byte> stack = new List<byte>();
+    private readonly byte[] _hexFile;
+    private List<byte> _stack = new();
     #endregion
 
     public Block[,] GetLevelBlocks(int level, out int oTime, out int time, out bool isTimed, out string name)
     {
-        Block[,] tempBlocks = new Block[8,5];
+        var tempBlocks = new Block[8,5];
         int btr = (level - 1) * 100 + 2;
         for (int i = 0; i < 39; i++)
         {
-            tempBlocks[i % 8, i / 8] = GetBlockType(new Point(i % 8, i / 8), hexFile[btr], hexFile[btr+1]);
+            tempBlocks[i % 8, i / 8] = GetBlockType(new Point(i % 8, i / 8), _hexFile[btr], _hexFile[btr+1]);
             btr += 2;
         }
-        tempBlocks[7,4] = GetBlockType(new Point(7, 4), hexFile[btr], (byte)(hexFile[btr+1] % 4));
+        tempBlocks[7,4] = GetBlockType(new Point(7, 4), _hexFile[btr], (byte)(_hexFile[btr+1] % 4));
         btr++;
-        oTime = hexFile[btr++];
-        time = hexFile[btr++];
+        oTime = _hexFile[btr++];
+        time = _hexFile[btr++];
         isTimed = tempBlocks.OfType<Block>().Any(b => b is Sandclock);
         name = GetLevelName(level);
         return tempBlocks;
@@ -45,7 +45,7 @@ public class Lexer
         string r = "";
         int btr = (level - 1) * 100 + 83;
         for (int i = 0; i < 15; i++)
-            r += $"{(CharEncode)hexFile[btr + i]}";
+            r += $"{(CharEncode)_hexFile[btr + i]}";
         return r.Replace("space", " ").TrimEnd();
     }
 
@@ -56,7 +56,7 @@ public class Lexer
             string r = "";
             int btr = i * 100 + 83;
             for (int j = 0; j < 15; j++)
-                r += $"{(CharEncode)hexFile[btr + j]}";
+                r += $"{(CharEncode)_hexFile[btr + j]}";
             if (name == r.Replace("space", " ").TrimEnd())
                 return i;
         }

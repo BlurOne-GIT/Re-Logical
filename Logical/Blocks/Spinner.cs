@@ -73,23 +73,23 @@ public class Spinner : Block, IUpdateable, IReloadable
         _texture = LevelTextures.Spinner;
         spinButton = new Button(_position, new Point(36), sfx: LevelTextures.Spin, soundClickTypes: 1);
         spinButton.RightClicked += Spin;
-        registers[1] = pos.Y == 0 ? new Vector2(13f, -13f) : new Vector2(13f, 0f);
+        registers[1] = Pos.Y == 0 ? new Vector2(13f, -13f) : new Vector2(13f, 0f);
         explodedSpinners.Capacity++;
     }
 
     public void Reload(Block[,] blocks)
     {
-        closedLeft = pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[pos.X-1, pos.Y].FileValue);
-        closedUp = pos.Y != 0 && !Statics.VerticalAttachables.Contains(blocks[pos.X, pos.Y-1].FileValue);
-        closedRight = pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[pos.X+1, pos.Y].FileValue);
-        closedDown = pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[pos.X, pos.Y+1].FileValue);
+        closedLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
+        closedUp = Pos.Y != 0 && !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
+        closedRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
+        closedDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
         
         if (!closedLeft)
         {
             slotButtons[0] = new Button(_position + new Vector2(4f, 13f), new Point(10, 9), enable: false);
             slotButtons[0].LeftClicked += PopOut;
         }
-        if (!closedUp && pos.Y != 0 && blocks[pos.X, pos.Y-1].FileValue is not 0x16)
+        if (!closedUp && Pos.Y != 0 && blocks[Pos.X, Pos.Y-1].FileValue is not 0x16)
         {
             slotButtons[1] = new Button(_position + new Vector2(13f, 4f), new Point(9, 10), enable: false);
             slotButtons[1].LeftClicked += PopOut;
@@ -99,7 +99,7 @@ public class Spinner : Block, IUpdateable, IReloadable
             slotButtons[2] = new Button(_position + new Vector2(23f, 13f), new Point(10, 9), enable: false);
             slotButtons[2].LeftClicked += PopOut;
         }
-        if (!closedDown && blocks[pos.X, pos.Y+1].FileValue is not 0x16)
+        if (!closedDown && blocks[Pos.X, Pos.Y+1].FileValue is not 0x16)
         {
             slotButtons[3] = new Button(_position + new Vector2(13f, 23f), new Point(9, 10), enable: false);
             slotButtons[3].LeftClicked += PopOut;
@@ -170,7 +170,7 @@ public class Spinner : Block, IUpdateable, IReloadable
     {
         for (int i = 0; i < 4; i++)
         {
-            foreach (Ball ball in Ball.allBalls.ToArray())
+            foreach (Ball ball in Ball.AllBalls.ToArray())
             {
                 if (ball.Position != registers[i] + _position || ball.MovementDirection == (Direction)i)
                     continue;
@@ -184,7 +184,7 @@ public class Spinner : Block, IUpdateable, IReloadable
                     ball.Dispose();
                     Check();
                 }
-                else if (pos.Y != 0 || i != 1)
+                else if (Pos.Y != 0 || i != 1)
                     ball.Bounce();
             }
         }

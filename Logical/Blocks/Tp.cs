@@ -64,7 +64,7 @@ public class Tp : Block, IUpdateable, IReloadable, IOverlayable
 
     public void Update(GameTime gameTime)
     {
-        foreach(Ball ball in Ball.allBalls)
+        foreach(Ball ball in Ball.AllBalls)
         {
             if (ball.Position == Statics.DetectionPoint + _position)
             {
@@ -87,10 +87,10 @@ public class Tp : Block, IUpdateable, IReloadable, IOverlayable
 
     public void Reload(Block[,] blocks)
     {
-        closedPipeLeft = pos.X == 0 || (!Statics.HorizontalAttachables.Contains(blocks[pos.X-1, pos.Y].FileValue) && FileValue is 0x08 or 0x0A);
-        closedPipeUp = pos.Y == 0 || (!Statics.VerticalAttachables.Contains(blocks[pos.X, pos.Y-1].FileValue) && FileValue is 0x09 or 0x0A);
-        closedPipeRight = pos.X == 7 || (!Statics.HorizontalAttachables.Contains(blocks[pos.X+1, pos.Y].FileValue) && FileValue is 0x08 or 0x0A);
-        closedPipeDown = pos.Y == 4 || (!Statics.VerticalAttachables.Contains(blocks[pos.X, pos.Y+1].FileValue) && FileValue is 0x09 or 0x0A);
+        closedPipeLeft = Pos.X == 0 || (!Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue) && FileValue is 0x08 or 0x0A);
+        closedPipeUp = Pos.Y == 0 || (!Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue) && FileValue is 0x09 or 0x0A);
+        closedPipeRight = Pos.X == 7 || (!Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue) && FileValue is 0x08 or 0x0A);
+        closedPipeDown = Pos.Y == 4 || (!Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue) && FileValue is 0x09 or 0x0A);
     }
 
     public override void Dispose()
@@ -180,5 +180,5 @@ public class Tp : Block, IUpdateable, IReloadable, IOverlayable
         );*/
     }
 
-    public Component[] GetOverlayables() => new Component[] {Overlay};
+    public IEnumerable<Component> GetOverlayables() => new Component[] {Overlay};
 }

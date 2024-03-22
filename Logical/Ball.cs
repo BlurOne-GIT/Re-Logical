@@ -13,11 +13,11 @@ public class Ball : Component, IUpdateable
     public static event EventHandler BallDestroyed;
     private BallColors _ballColor;
     private Direction _direction;
-    private Vector2 movement;
+    private Vector2 _movement;
     public List<Component> a;
-    private bool shallSound;
-    private bool justTped;
-    public static List<Ball> allBalls = new List<Ball>(5);
+    private readonly bool _shallSound;
+    private bool _justTeleported;
+    public static readonly List<Ball> AllBalls = new(5);
     #endregion
 
     #region Properties
@@ -26,7 +26,7 @@ public class Ball : Component, IUpdateable
         set
         {
             _ballColor = value;
-            if (shallSound)
+            if (_shallSound)
                 LevelTextures.ColorChange.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
             _texture = LevelTextures.Ball[(int)_ballColor];
         }
@@ -37,14 +37,14 @@ public class Ball : Component, IUpdateable
         set
         {
             _direction = value;
-            if (shallSound)
+            if (_shallSound)
                 LevelTextures.Bounce.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
             switch (_direction)
             {
-                case Direction.Left: movement = new Vector2(-1f, 0f); break;
-                case Direction.Up: movement = new Vector2(0f, -1f); break;
-                case Direction.Right: movement = new Vector2(1f, 0f); break;
-                case Direction.Down: movement = new Vector2(0f, 1f); break;
+                case Direction.Left: _movement = new Vector2(-1f, 0f); break;
+                case Direction.Up: _movement = new Vector2(0f, -1f); break;
+                case Direction.Right: _movement = new Vector2(1f, 0f); break;
+                case Direction.Down: _movement = new Vector2(0f, 1f); break;
             }
         }
     }
@@ -53,10 +53,10 @@ public class Ball : Component, IUpdateable
         get => _position;
         set 
         {
-            if (!justTped)
+            if (!_justTeleported)
             {
-                justTped = true;
-                if (shallSound)
+                _justTeleported = true;
+                if (_shallSound)
                     LevelTextures.Tp.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
                 _position = value; 
             }    
@@ -66,13 +66,13 @@ public class Ball : Component, IUpdateable
 
     public Ball(Vector2 position, Direction direction, BallColors ballColor, bool willSound)
     {
-        shallSound = false;
+        _shallSound = false;
         _position = position;
         MovementDirection = direction;
         BallColor = ballColor;
-        allBalls.Add(this);
-        shallSound = willSound;
-        BallCreated.Invoke(this, new EventArgs());
+        AllBalls.Add(this);
+        _shallSound = willSound;
+        BallCreated?.Invoke(this, EventArgs.Empty);
         zIndex = 7;
         IsEnabled = true;
     }
@@ -81,19 +81,19 @@ public class Ball : Component, IUpdateable
 
     public override void Dispose()
     {
-        BallDestroyed?.Invoke(this, new EventArgs());
-        allBalls.Remove(this);
+        BallDestroyed?.Invoke(this, EventArgs.Empty);
+        AllBalls.Remove(this);
     }
 
     public void Update(GameTime gameTime)
     {
-        _position += movement;
+        _position += _movement;
         if (_position.X is < -10 or > 320 || _position.Y is < -10 or > 256)
         {
-            LevelTextures.Explode.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
-            this.Dispose();
+            LevelTextures.Explode.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+            Dispose();
         }
-        if (justTped)
-            justTped = false;
+        if (_justTeleported)
+            _justTeleported = false;
     }
 }

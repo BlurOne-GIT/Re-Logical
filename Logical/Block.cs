@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,7 +11,7 @@ public class Block : Component
     public readonly byte FileValue;
     public readonly bool HasArgument = false;
     public readonly byte Argument;
-    protected Point pos;
+    protected Point Pos;
     #endregion
 
     #region Properties
@@ -19,9 +20,9 @@ public class Block : Component
 
     public Block(Point arrayPosition, byte xx, byte yy = 0)
     {
-        pos = arrayPosition;
+        Pos = arrayPosition;
         zIndex = 0;
-        _position = new Vector2(16 + pos.X * 36, 46 + pos.Y * 36);
+        _position = new Vector2(16 + Pos.X * 36, 46 + Pos.Y * 36);
         FileValue = xx;
         if (yy != 0)
         {
@@ -31,9 +32,9 @@ public class Block : Component
         IsEnabled = true;
     }
 
-    public override void Render(SpriteBatch _spriteBatch)
+    public override void Render(SpriteBatch spriteBatch)
     {
-        _spriteBatch.Draw(
+        spriteBatch.Draw(
             _texture,
             _position * Configs.Scale,
             null,
@@ -59,5 +60,5 @@ public interface IReloadable
 
 public interface IOverlayable
 {
-    public abstract Component[] GetOverlayables();
+    public abstract IEnumerable<Component> GetOverlayables();
 }

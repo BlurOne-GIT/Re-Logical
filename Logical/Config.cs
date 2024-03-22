@@ -33,7 +33,7 @@ public static class Configs
     #endregion
 
     // Instances
-    private static FileStream fileStream;
+    private static FileStream _fileStream;
 
     #region Properties
     public static int Width { get => _width; }
@@ -94,10 +94,10 @@ public static class Configs
         _width = width; _height = height;
         try
         {
-            fileStream = File.Open(file, FileMode.Open);
+            _fileStream = File.Open(file, FileMode.Open);
         } catch
         {
-            fileStream = File.Create(file);
+            _fileStream = File.Create(file);
             /* 0 */ Scale = 2;
             /* 1 */ Fullscreen = false;
             /* 2 */ MusicVolume = 10;
@@ -110,20 +110,20 @@ public static class Configs
             /* B */ AutoUpdate = true;
             return;
         }
-        /* 0 */ _scale = (byte)fileStream.ReadByte();
-        /* 1 */ _fullscreen = Convert.ToBoolean(fileStream.ReadByte());
-        /* 2 */ _musicVolume = (byte)fileStream.ReadByte();
-        /* 3 */ _sfxVolume = (byte)fileStream.ReadByte();
-        /* 4 */ _graphicSet = (byte)fileStream.ReadByte();
-        /* 5 */ _stereoSeparation = (byte)fileStream.ReadByte();
-        /* 6 */ _stage = (byte)fileStream.ReadByte();
-        byte[] b = new byte[4];
-        fileStream.Read(b, 1, 3);
+        /* 0 */ _scale = (byte)_fileStream.ReadByte();
+        /* 1 */ _fullscreen = Convert.ToBoolean(_fileStream.ReadByte());
+        /* 2 */ _musicVolume = (byte)_fileStream.ReadByte();
+        /* 3 */ _sfxVolume = (byte)_fileStream.ReadByte();
+        /* 4 */ _graphicSet = (byte)_fileStream.ReadByte();
+        /* 5 */ _stereoSeparation = (byte)_fileStream.ReadByte();
+        /* 6 */ _stage = (byte)_fileStream.ReadByte();
+        var b = new byte[4];
+        _fileStream.Read(b, 1, 3);
         if (BitConverter.IsLittleEndian)
             Array.Reverse(b);
         /*7-9*/ _score = BitConverter.ToInt32(b, 0);
-        /* A */ _lives = fileStream.ReadByte();
-        /* B */ _autoUpdate = Convert.ToBoolean(fileStream.ReadByte());
+        /* A */ _lives = _fileStream.ReadByte();
+        /* B */ _autoUpdate = Convert.ToBoolean(_fileStream.ReadByte());
         Fixer();
     }
 
@@ -132,28 +132,28 @@ public static class Configs
     {
         switch (name)
         {
-            case "Scale": fileStream.Position = 0; break;
-            case "Fullscreen": fileStream.Position = 1; break;
-            case "MusicVolume": fileStream.Position = 2; break;
-            case "SfxVolume": fileStream.Position = 3; break;
-            case "GraphicSet": fileStream.Position = 4; break;
-            case "StereoSeparation": fileStream.Position = 5; break;
-            case "Stage": fileStream.Position = 6; break;
+            case "Scale": _fileStream.Position = 0; break;
+            case "Fullscreen": _fileStream.Position = 1; break;
+            case "MusicVolume": _fileStream.Position = 2; break;
+            case "SfxVolume": _fileStream.Position = 3; break;
+            case "GraphicSet": _fileStream.Position = 4; break;
+            case "StereoSeparation": _fileStream.Position = 5; break;
+            case "Stage": _fileStream.Position = 6; break;
             case "Score":
-                fileStream.Position = 7;
+                _fileStream.Position = 7;
                 byte[] b = BitConverter.GetBytes((int)value);
                 if (BitConverter.IsLittleEndian) 
                     Array.Reverse(b);
-                fileStream.Write(b, 1, 3);
+                _fileStream.Write(b, 1, 3);
                 return;
-            case "Lives": fileStream.Position = 0x0A; break;
-            case "AutoUpdate": fileStream.Position = 0x0B; break;
+            case "Lives": _fileStream.Position = 0x0A; break;
+            case "AutoUpdate": _fileStream.Position = 0x0B; break;
         }
 
-        fileStream.WriteByte(Convert.ToByte(value));
+        _fileStream.WriteByte(Convert.ToByte(value));
     }
 
-    public static void CloseFile() => fileStream.Close();
+    public static void CloseFile() => _fileStream.Close();
 
     private static void Fixer()
     {

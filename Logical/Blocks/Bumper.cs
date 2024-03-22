@@ -37,7 +37,7 @@ public class Bumper : Block, IUpdateable, IReloadable, IOverlayable
 
     public void Update(GameTime gameTime)
     {
-        foreach (Ball ball in Ball.allBalls)
+        foreach (Ball ball in Ball.AllBalls)
         {
             if (ball.Position == Statics.DetectionPoint + _position)
                 ball.MovementDirection = _direction;
@@ -46,10 +46,10 @@ public class Bumper : Block, IUpdateable, IReloadable, IOverlayable
 
     public void Reload(Block[,] blocks)
     {
-        closedPipeLeft = pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[pos.X-1, pos.Y].FileValue);
-        closedPipeUp = pos.Y == 0 || !Statics.VerticalAttachables.Contains(blocks[pos.X, pos.Y-1].FileValue);
-        closedPipeRight = pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[pos.X+1, pos.Y].FileValue);
-        closedPipeDown = pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[pos.X, pos.Y+1].FileValue);
+        closedPipeLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
+        closedPipeUp = Pos.Y == 0 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
+        closedPipeRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
+        closedPipeDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
 
         _shadow = !closedPipeRight && !closedPipeDown ? LevelTextures.HolderShadowCross : !closedPipeRight ? LevelTextures.HolderShadowHorizontal : !closedPipeDown ? LevelTextures.HolderShadowVertical : LevelTextures.HolderShadowEmpty;
     }
@@ -126,5 +126,5 @@ public class Bumper : Block, IUpdateable, IReloadable, IOverlayable
         );
     }
 
-    public Component[] GetOverlayables() => new Component[] {new SimpleImage(LevelTextures.Holder, _position + new Vector2(9f), 8), new SimpleImage(LevelTextures.Bumper[(int)_direction], _position + new Vector2(14f), 9)};
+    public IEnumerable<Component> GetOverlayables() => new Component[] {new SimpleImage(LevelTextures.Holder, _position + new Vector2(9f), 8), new SimpleImage(LevelTextures.Bumper[(int)_direction], _position + new Vector2(14f), 9)};
 }

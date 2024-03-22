@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -39,7 +40,7 @@ public class Changer : Block, IUpdateable, IOverlayable
 
     public void Update(GameTime gameTime)
     {
-        foreach (Ball ball in Ball.allBalls)
+        foreach (Ball ball in Ball.AllBalls)
             if (ball.Position == Statics.DetectionPoint + _position)
                 ball.BallColor = _color;
     }
@@ -71,5 +72,5 @@ public class Changer : Block, IUpdateable, IOverlayable
         );
     }
     
-    public Component[] GetOverlayables() => new Component[] {new SimpleImage(LevelTextures.Changer[Argument-1], _position + ciPos, 9)};
+    public IEnumerable<Component> GetOverlayables() => new Component[] {new SimpleImage(LevelTextures.Changer[Argument-1], _position + ciPos, 9)};
 }

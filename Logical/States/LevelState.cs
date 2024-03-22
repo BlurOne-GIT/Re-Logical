@@ -14,7 +14,7 @@ public class LevelState : GameState
     #region Fields
     private bool finished;
     public static int ColorJobsFinished;
-    public static int MovesLeft { get => 5 - Ball.allBalls.Count; }
+    public static int MovesLeft { get => 5 - Ball.AllBalls.Count; }
     public static List<BallColors> TrafficLights = new List<BallColors>(3);
     private SimpleImage oTimeBar = new SimpleImage(LevelTextures.MainPipeBar, new Vector2(304f, 35f), 1);
     private int oTimeLeft = 145;
@@ -124,13 +124,13 @@ public class LevelState : GameState
     private async void Win(object s, EventArgs e)
     {
         finished = true;
-        int ballsLeft = Ball.allBalls.Count - 1;
+        int ballsLeft = Ball.AllBalls.Count - 1;
 
         foreach (Spinner spinner in s as List<Spinner>)
             ballsLeft += await spinner.FinalBoom();
 
         Statics.ShowCursor = false;
-        foreach (Ball ball in Ball.allBalls.ToArray())
+        foreach (Ball ball in Ball.AllBalls.ToArray())
             ball.Dispose();
 
         Configs.Stage++;
@@ -206,7 +206,7 @@ public class LevelState : GameState
     {
         finished = true;
         Statics.ShowCursor = false;
-        foreach (Ball ball in Ball.allBalls.ToArray())
+        foreach (Ball ball in Ball.AllBalls.ToArray())
             ball.Dispose();
         failSfx.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
         await Task.Delay(failSfx.Duration - new TimeSpan(0,0,0,0,280));

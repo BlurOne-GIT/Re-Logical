@@ -19,10 +19,10 @@ public class Dropper : Block, IUpdateable
 
     public void Update(GameTime gameTime)
     {
-        if (pos.Y != 0)
+        if (Pos.Y != 0)
             return;
 
-        foreach (Ball ball in Ball.allBalls.ToArray())
+        foreach (Ball ball in Ball.AllBalls.ToArray())
         {
             if (LevelState.MovesLeft > 1 && ball.Position == inRegister + _position)
             {
