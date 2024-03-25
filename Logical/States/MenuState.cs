@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Logical;
+namespace Logical.States;
 
 public class MenuState : GameState
 {
