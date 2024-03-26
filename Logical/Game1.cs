@@ -7,12 +7,13 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Logical.States;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Octokit;
+//using Octokit;
 
 namespace Logical;
 
@@ -21,10 +22,10 @@ public class Game1 : Game
 #region Instances
     private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private Texture2D CursorTexture;
-    private TextComponent Version;
+    private Texture2D _cursorTexture;
+    private TextComponent _version;
     private GameState _currentGameState;
-    private readonly string version = (System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)[0] as System.Reflection.AssemblyInformationalVersionAttribute).InformationalVersion;
+    private readonly string _versionString = ((AssemblyInformationalVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)[0]).InformationalVersion;
 #endregion
 
 #region Default Methods
@@ -100,9 +101,9 @@ public class Game1 : Game
         MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2);
         MediaPlayer.IsMuted = _m(Configs.MusicVolume);
         
-        CursorTexture = Content.Load<Texture2D>("Cursor");
+        _cursorTexture = Content.Load<Texture2D>("Cursor");
         Statics.LoadFonts();
-        Version = new TextComponent(Statics.LightFont, new Vector2(0, 248), Color.White, version.ToUpper().Replace('.', '_'), 1);
+        _version = new TextComponent(Statics.LightFont, new Vector2(0, 248), Color.White, _versionString.ToUpper().Replace('.', '_'), 1);
 
         SwitchGameState(new TitleState());
     }
@@ -126,7 +127,7 @@ public class Game1 : Game
         if (Statics.ShowCursor)
         {
             _spriteBatch.Draw(
-                CursorTexture,
+                _cursorTexture,
                 new Vector2((int)(Statics.MousePoint.X / Configs.Scale) * Configs.Scale, (int)(Statics.MousePoint.Y / Configs.Scale) * Configs.Scale),
                 null,
                 Color.White * Statics.Opacity,
@@ -137,7 +138,7 @@ public class Game1 : Game
                 1f
             );
         }
-        Version.Render(_spriteBatch);
+        _version.Render(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);

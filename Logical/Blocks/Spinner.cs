@@ -71,7 +71,7 @@ public class Spinner : Block, IUpdateable, IReloadable
 
     public Spinner(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
     {
-        _texture = LevelTextures.Spinner;
+        Texture = LevelTextures.Spinner;
         spinButton = new Button(_position, new Point(36), sfx: LevelTextures.Spin, soundClickTypes: 1);
         spinButton.RightClicked += Spin;
         registers[1] = Pos.Y == 0 ? new Vector2(13f, -13f) : new Vector2(13f, 0f);

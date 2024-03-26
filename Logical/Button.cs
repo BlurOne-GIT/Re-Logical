@@ -18,7 +18,7 @@ public class Button : Component
     #endregion
 
     #region Properties
-    private Rectangle rectangle;
+    private Rectangle _rectangle;
     #endregion
 
     //Constructor
@@ -26,7 +26,7 @@ public class Button : Component
     {
         _position = position;
         _size = size;
-        _texture = texture;
+        Texture = texture;
         _layer = layer;
         _sound = sfx;
         IsEnabled = enable;
@@ -44,12 +44,12 @@ public class Button : Component
     }
 
     #region Methods
-    public override void Render(SpriteBatch _spriteBatch)
+    public override void Render(SpriteBatch spriteBatch)
     {
-        if (_texture == null)
+        if (Texture == null)
             return;
 
-        base.Render(_spriteBatch);
+        base.Render(spriteBatch);
     }
 
     private void Check(object s, ButtonEventArgs e)
@@ -59,18 +59,18 @@ public class Button : Component
 
         Rectangle mouseRectangle = new Rectangle(e.Position, new Point(1, 1));
 
-        if (mouseRectangle.Intersects(rectangle))
+        if (mouseRectangle.Intersects(_rectangle))
         {
             if (e.Button == "LeftButton")
-                LeftClicked?.Invoke(this, new EventArgs());
+                LeftClicked?.Invoke(this, EventArgs.Empty);
             else if (e.Button == "RightButton")
-                RightClicked?.Invoke(this, new EventArgs());
+                RightClicked?.Invoke(this, EventArgs.Empty);
         }
     }
 
     private void PlaySound(object s, EventArgs e) => _sound.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
 
-    private void ResetRectangle(object s, EventArgs e) => rectangle = new Rectangle((int)_position.X * Configs.Scale + Configs.XOffset, (int)_position.Y * Configs.Scale + Configs.YOffset, _size.X * Configs.Scale, _size.Y * Configs.Scale);
+    private void ResetRectangle(object s, EventArgs e) => _rectangle = new Rectangle((int)_position.X * Configs.Scale + Configs.XOffset, (int)_position.Y * Configs.Scale + Configs.YOffset, _size.X * Configs.Scale, _size.Y * Configs.Scale);
 
     public override void Dispose()
     {

@@ -16,7 +16,7 @@ public class Moves : Block
 
     public Moves(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
     {
-        _texture = LevelTextures.Moves;
+        Texture = LevelTextures.Moves;
     }
 
     public override void Render(SpriteBatch _spriteBatch)

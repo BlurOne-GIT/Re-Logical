@@ -22,7 +22,7 @@ public class ColorJob : Block
 
     public ColorJob(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
     {
-        _texture = LevelTextures.ColorJob;
+        Texture = LevelTextures.ColorJob;
         if (SteveJobs is not null)
             SteveJobs.DisableJobs = true;
         

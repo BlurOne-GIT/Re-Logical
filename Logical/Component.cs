@@ -7,16 +7,16 @@ namespace Logical;
 public abstract class Component : IDisposable
 {
     public bool IsEnabled { get; set; }
-    protected Texture2D _texture;
+    protected Texture2D Texture;
     protected Vector2 _position;
     public int zIndex;
     public virtual void OnNotify(GameEvents eventType) { }
-    public virtual void Render(SpriteBatch _spriteBatch)
+    public virtual void Render(SpriteBatch spriteBatch)
     {
-        _spriteBatch.Draw
+        spriteBatch.Draw
         (
-            _texture,
-            (_position * Configs.Scale) + new Vector2(Configs.XOffset, Configs.YOffset),
+            Texture,
+            _position * Configs.Scale + new Vector2(Configs.XOffset, Configs.YOffset),
             null,
             Color.White * Statics.Opacity,
             0,

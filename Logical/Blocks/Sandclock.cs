@@ -26,7 +26,7 @@ public class Sandclock : Block, IUpdateable
 
         bruceCook = this;
 
-        _texture = LevelTextures.Sandclock;
+        Texture = LevelTextures.Sandclock;
         _usedSand = LevelTextures.UsedSand[0];
         _sandLeft = LevelTextures.SandLeft[0];
     }

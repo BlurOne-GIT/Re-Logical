@@ -65,7 +65,7 @@ public class Lexer
 
     public Level[] GetAllLevels()
     {
-        Level[] levels = new Level[99];
+        var levels = new Level[99];
         for (int i = 0; i < 99; i++)
         {
             levels[i] = new Level();

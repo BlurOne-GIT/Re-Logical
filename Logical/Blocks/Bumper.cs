@@ -32,7 +32,7 @@ public class Bumper : Block, IUpdateable, IReloadable, IOverlayable
             case 0x11: _direction = Direction.Down; break;
             default: throw new Exception("Unhandeled");
         }
-        _texture = LevelTextures.PipeCross;
+        Texture = LevelTextures.PipeCross;
     }
 
     public void Update(GameTime gameTime)

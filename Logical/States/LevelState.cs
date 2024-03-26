@@ -205,7 +205,7 @@ public class LevelState : GameState
         Statics.ShowCursor = false;
         foreach (Ball ball in Ball.AllBalls.ToArray())
             ball.Dispose();
-        _failSfx.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
+        _failSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         await Task.Delay(_failSfx.Duration - new TimeSpan(0,0,0,0,280));
         FadeOut(() => SwitchState(new LoadingState(reason)));
     }

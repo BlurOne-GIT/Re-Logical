@@ -12,7 +12,7 @@ namespace Logical;
 public static class Statics
 {
     #region Fields
-    public const string standardSet = @".\alf.dat";
+    public const string StandardSet = "./alf.dat";
     public static readonly byte[] VerticalAttachables = {
         0x01,
         0x03,
@@ -47,7 +47,7 @@ public static class Statics
     #endregion
 
     #region Properties
-    public static string Set { get; set; } = standardSet;
+    public static string Set { get; set; } = StandardSet;
     public static SpriteFont TextureFont { get; private set; }
     public static SpriteFont BoldFont { get; private set; }
     public static SpriteFont LightFont { get; private set; }

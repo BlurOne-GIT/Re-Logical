@@ -8,7 +8,7 @@ public class SimpleImage : Component
 {
     public SimpleImage(Texture2D texture, Vector2 position, int layer, bool enable = true)
     {
-        _texture = texture;
+        Texture = texture;
         _position = position;
         zIndex = layer;
         IsEnabled = enable;
@@ -16,6 +16,6 @@ public class SimpleImage : Component
 
     public override void Dispose() {}
 
-    public void ChangeTexture(Texture2D texture) => _texture = texture;
+    public void ChangeTexture(Texture2D texture) => Texture = texture;
     public void ChangePosition(Vector2 position) => _position = position;
 }

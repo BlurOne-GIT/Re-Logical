@@ -15,7 +15,7 @@ public class NextBall : Block
 
     public NextBall(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
     {
-        _texture = LevelTextures.EmptyBlock;
+        Texture = LevelTextures.EmptyBlock;
     }
 
     public override void Render(SpriteBatch _spriteBatch)

@@ -20,15 +20,15 @@ public class Filter : Block, IUpdateable, IOverlayable
         switch (xx)
         {
             case 0x05:
-                _texture = LevelTextures.PipeHorizontal;
+                Texture = LevelTextures.PipeHorizontal;
                 _shadow = LevelTextures.FilterShadowHorizontal;
                 break;
             case 0x06:
-                _texture = LevelTextures.PipeVertical;
+                Texture = LevelTextures.PipeVertical;
                 _shadow = LevelTextures.FilterShadowVertical;
                 break;
             case 0x07:
-                _texture = LevelTextures.PipeCross;
+                Texture = LevelTextures.PipeCross;
                 _shadow = LevelTextures.FilterShadowCross;
                 break;
             default: throw new Exception("Unhandeled");

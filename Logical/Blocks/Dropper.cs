@@ -15,7 +15,7 @@ public class Dropper : Block, IUpdateable
 
     public Dropper(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
     {
-        _texture = LevelTextures.PipeVertical;
+        Texture = LevelTextures.PipeVertical;
     }
 
     public void Update(GameTime gameTime)

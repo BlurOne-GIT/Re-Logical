@@ -21,15 +21,15 @@ public class Changer : Block, IUpdateable, IOverlayable
         switch (xx)
         {
             case 0x0B:
-                _texture = LevelTextures.PipeHorizontal;
+                Texture = LevelTextures.PipeHorizontal;
                 _shadow = LevelTextures.ChangerShadowHorizontal;
                 break;
             case 0x0C:
-                _texture = LevelTextures.PipeVertical;
+                Texture = LevelTextures.PipeVertical;
                 _shadow = LevelTextures.ChangerShadowVertical;
                 break;
             case 0x0D:
-                _texture = LevelTextures.PipeCross;
+                Texture = LevelTextures.PipeCross;
                 _shadow = LevelTextures.ChangerShadowCross;
                 break;
             default: throw new Exception("Unhandeled");

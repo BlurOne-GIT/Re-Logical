@@ -22,7 +22,7 @@ public class TrafficLight : Block
 
     public TrafficLight(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
     {
-        _texture = LevelTextures.TrafficLight;
+        Texture = LevelTextures.TrafficLight;
         if (theChosenOne is not null)
             theChosenOne.DisableTraffic = true;
         

@@ -35,7 +35,7 @@ public class Block : Component
     public override void Render(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(
-            _texture,
+            Texture,
             _position * Configs.Scale,
             null,
             Color.White * Statics.Opacity,
@@ -43,7 +43,7 @@ public class Block : Component
             Vector2.Zero,
             Configs.Scale,
             SpriteEffects.None,
-            (float)zIndex * 0.1f
+            zIndex * 0.1f
         );
     }
 

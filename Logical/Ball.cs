@@ -14,7 +14,6 @@ public class Ball : Component, IUpdateable
     private BallColors _ballColor;
     private Direction _direction;
     private Vector2 _movement;
-    public List<Component> a;
     private readonly bool _shallSound;
     private bool _justTeleported;
     public static readonly List<Ball> AllBalls = new(5);
@@ -28,7 +27,7 @@ public class Ball : Component, IUpdateable
             _ballColor = value;
             if (_shallSound)
                 LevelTextures.ColorChange.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
-            _texture = LevelTextures.Ball[(int)_ballColor];
+            Texture = LevelTextures.Ball[(int)_ballColor];
         }
     }
     public Direction MovementDirection

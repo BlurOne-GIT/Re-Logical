@@ -31,7 +31,7 @@ public class Tp : Block, IUpdateable, IReloadable, IOverlayable
         switch (xx)
         {
             case 0x08:
-                _texture = LevelTextures.PipeHorizontal;
+                Texture = LevelTextures.PipeHorizontal;
                 Overlay = new SimpleImage(LevelTextures.TpHorizontal, (_position + new Vector2(7, 7)), 9);
                 if (FirstHorizontalTp is null)
                     FirstHorizontalTp = this;
@@ -39,7 +39,7 @@ public class Tp : Block, IUpdateable, IReloadable, IOverlayable
                     SecondHorizontalTp = this;
                 break;
             case 0x09:
-                _texture = LevelTextures.PipeVertical;
+                Texture = LevelTextures.PipeVertical;
                 Overlay = new SimpleImage(LevelTextures.TpVertical, (_position + new Vector2(7, 7)), 9);
                 if (FirstVerticalTp is null)
                     FirstVerticalTp = this;
@@ -47,7 +47,7 @@ public class Tp : Block, IUpdateable, IReloadable, IOverlayable
                     SecondVerticalTp = this;
                 break;
             case 0x0A:
-                _texture = LevelTextures.PipeCross;
+                Texture = LevelTextures.PipeCross;
                 Overlay = new SimpleImage(LevelTextures.TpCross, (_position + new Vector2(7, 7)), 9);
                 if (FirstHorizontalTp is null)
                     FirstHorizontalTp = this;

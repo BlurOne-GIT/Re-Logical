@@ -22,9 +22,9 @@ public abstract class GameState : IDisposable
         foreach (Component gameObject in _gameObjects)
             gameObject.Dispose();
     }
-    private readonly List<Component> _gameObjects = new List<Component>();
-    public abstract void LoadContent(ContentManager Content);
-    public abstract void UnloadContent(ContentManager Content);
+    private readonly List<Component> _gameObjects = new();
+    public abstract void LoadContent(ContentManager content);
+    public abstract void UnloadContent(ContentManager content);
     public abstract void HandleInput(object s, ButtonEventArgs e);
     public abstract void HandleInput(object s, InputKeyEventArgs e);
     public event EventHandler<GameState> OnStateSwitched;
@@ -58,12 +58,12 @@ public abstract class GameState : IDisposable
                 (gameObject as IUpdateable).Update(gameTime);
         }
     }
-    public void Render(SpriteBatch _spriteBatch)
+    public void Render(SpriteBatch spriteBatch)
     {
         foreach (Component gameObject in _gameObjects.OrderBy(a => a.zIndex))
         {
             if (gameObject.IsEnabled)
-                gameObject.Render(_spriteBatch);
+                gameObject.Render(spriteBatch);
         }
     }
  }

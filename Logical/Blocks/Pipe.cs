@@ -12,17 +12,17 @@ public class Pipe : Block
         {
             case 0x02:
                 if (Statics.Brandom.Next(0, 2) == 0) 
-                    _texture = LevelTextures.PipeHorizontal;
+                    Texture = LevelTextures.PipeHorizontal;
                 else
-                    _texture = LevelTextures.PipeHorizontalAlt;
+                    Texture = LevelTextures.PipeHorizontalAlt;
                 break;
             case 0x03:
                 if (Statics.Brandom.Next(0, 2) == 0)
-                    _texture = LevelTextures.PipeVertical;
+                    Texture = LevelTextures.PipeVertical;
                 else
-                    _texture = LevelTextures.PipeVerticalAlt;
+                    Texture = LevelTextures.PipeVerticalAlt;
                 break;
-            case 0x04: _texture = LevelTextures.PipeCross; break;
+            case 0x04: Texture = LevelTextures.PipeCross; break;
             default: throw new Exception("Unhandeled");
         }
     }
