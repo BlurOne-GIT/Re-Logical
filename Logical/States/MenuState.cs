@@ -162,6 +162,7 @@ public class MenuState : GameState
         _stereoSplitDownButton.LeftClicked += StereoSplitDown;
         _backButton.LeftClicked += Back;
     }
+    
     private async void FadeIn()
     {
         await Task.Delay(660);
@@ -173,6 +174,7 @@ public class MenuState : GameState
         Statics.Opacity = 1;
         ButtonSubscriber();
     }
+    
     private async void FadeOut()
     {
         MediaPlayer.Stop();
@@ -191,6 +193,7 @@ public class MenuState : GameState
     {
         throw new NotImplementedException();
     }
+    
     private void Password(object s, EventArgs e)
     {
         Console.Write("Insert stage key: ");
@@ -250,6 +253,8 @@ public class MenuState : GameState
     }
     private void StartGame(object s, EventArgs e)
     {
+        if (Configs.Stage is 0)
+            Configs.Stage = 1;
         FadeOut();
     }
 
