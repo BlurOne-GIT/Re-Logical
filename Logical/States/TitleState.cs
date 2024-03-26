@@ -9,37 +9,30 @@ namespace Logical.States;
 
 public class TitleState : GameState
 {
-    public TitleState():base()
-    {
-        Statics.ShowCursor = false;
-    }
+    public TitleState() => Statics.ShowCursor = false;
 
     #region Fields
-    private Song titel;
-    private SimpleImage Background;
-    #endregion
-
-    #region Properties
-
+    private Song _titel;
+    private SimpleImage _background;
     #endregion
 
     #region Default Methods
 
-    public override void LoadContent(ContentManager Content)
+    public override void LoadContent(ContentManager content)
     {
-        titel = Content.Load<Song>("Titel");
-        Background = new SimpleImage(Content.Load<Texture2D>("Credit"), Vector2.Zero, 0);
-        AddGameObject(Background);
-        MediaPlayer.Play(titel);
+        _titel = content.Load<Song>("Titel");
+        _background = new SimpleImage(content.Load<Texture2D>("Credit"), Vector2.Zero, 0);
+        AddGameObject(_background);
+        MediaPlayer.Play(_titel);
         MediaPlayer.MediaStateChanged += EndCaller;
     }
 
     public override void Update(GameTime gameTime) {}
 
-    public override void UnloadContent(ContentManager Content)
+    public override void UnloadContent(ContentManager content)
     {
-        Content.UnloadAsset("Titel");
-        Content.UnloadAsset("Credit");
+        content.UnloadAsset("Titel");
+        content.UnloadAsset("Credit");
     }
 
     public override void HandleInput(object s, InputKeyEventArgs e) => EndScreen();
@@ -55,7 +48,7 @@ public class TitleState : GameState
         MediaPlayer.MediaStateChanged -= EndCaller;
         for (float i = 1; i > 0; i -= 0.0125f)
         {
-            MediaPlayer.Volume = MathF.Pow((float)Configs.MusicVolume * 0.1f, 2) * i;
+            MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2) * i;
             await Task.Delay(100);
         }
         Statics.Opacity = 0;
