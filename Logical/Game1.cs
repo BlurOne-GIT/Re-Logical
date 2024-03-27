@@ -23,9 +23,11 @@ public class Game1 : Game
     private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private Texture2D _cursorTexture;
-    private TextComponent _version;
     private GameState _currentGameState;
+    #if DEBUG
     private readonly string _versionString = ((AssemblyInformationalVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)[0]).InformationalVersion;
+    private TextComponent _version;
+    #endif
 #endregion
 
 #region Default Methods
@@ -103,8 +105,10 @@ public class Game1 : Game
         
         _cursorTexture = Content.Load<Texture2D>("Cursor");
         Statics.LoadFonts();
+        #if DEBUG
         _version = new TextComponent(Statics.LightFont, new Vector2(0, 248), Color.White, _versionString.ToUpper().Replace('.', '_'), 1);
-
+        #endif
+        
         SwitchGameState(new TitleState());
     }
 
@@ -138,7 +142,9 @@ public class Game1 : Game
                 1f
             );
         }
+        #if DEBUG
         _version.Render(_spriteBatch);
+        #endif
         _spriteBatch.End();
 
         base.Draw(gameTime);
