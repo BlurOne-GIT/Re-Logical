@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logical", "Logical\Logical.csproj", "{96A638CA-1C55-4262-9390-DC3DE317121C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MmgEngine", "MmgEngine\MmgEngine\MmgEngine.csproj", "{0B746D2B-DE81-4DC7-857A-F20070627BCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{96A638CA-1C55-4262-9390-DC3DE317121C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96A638CA-1C55-4262-9390-DC3DE317121C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96A638CA-1C55-4262-9390-DC3DE317121C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B746D2B-DE81-4DC7-857A-F20070627BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B746D2B-DE81-4DC7-857A-F20070627BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B746D2B-DE81-4DC7-857A-F20070627BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B746D2B-DE81-4DC7-857A-F20070627BCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

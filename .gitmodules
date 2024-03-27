@@ -1,0 +1,3 @@
+[submodule "MmgEngine"]
+	path = MmgEngine
+	url = https://github.com/BlurOne-GIT/MmgEngine.git
