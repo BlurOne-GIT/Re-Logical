@@ -54,74 +54,19 @@ public class Bumper : Block, IReloadable, IOverlayable
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
         if (_closedPipeLeft)
-        {
-            spriteBatch.Draw(
-                LevelResources.PipeClosedLeft,
-                (Position + _cplPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+            DrawAnotherTexture(LevelResources.PipeClosedLeft, _cplPos, 1);
+        
         if (_closedPipeUp)
-        {
-            spriteBatch.Draw(
-                LevelResources.PipeClosedUp,
-                (Position + _cpuPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+            DrawAnotherTexture(LevelResources.PipeClosedUp, _cpuPos, 1);
+        
         if (_closedPipeRight)
-        {
-            spriteBatch.Draw(
-                LevelResources.PipeClosedRight,
-                (Position + _cprPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+            DrawAnotherTexture(LevelResources.PipeClosedRight, _cprPos, 1);
+        
         if (_closedPipeDown)
-        {
-            spriteBatch.Draw(
-                LevelResources.PipeClosedDown,
-                (Position + _cpdPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        spriteBatch.Draw(
-            _shadow,
-            (Position + _shadowPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.2f
-        );
+            DrawAnotherTexture(LevelResources.PipeClosedDown, _cpdPos, 1);
+        
+        DrawAnotherTexture(_shadow, _shadowPos, 2);
     }
 
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(Game, LevelResources.Holder, Position + new Vector2(9f), 8), new SimpleImage(Game, LevelResources.Bumper[(int)_direction], Position + new Vector2(14f), 9)};

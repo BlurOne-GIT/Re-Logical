@@ -64,48 +64,18 @@ public class TrafficLight : Block
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
-        if (LevelState.TrafficLights.Count == 3 || DisableTraffic)
+        
+        switch (DisableTraffic ? 3 : LevelState.TrafficLights.Count)
         {
-            spriteBatch.Draw(
-                _ball1,
-                (Position + _b1Pos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (LevelState.TrafficLights.Count > 1 || DisableTraffic)
-        {
-            spriteBatch.Draw(
-                _ball2,
-                (Position + _b2Pos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (LevelState.TrafficLights.Count > 0 || DisableTraffic)
-        {
-            spriteBatch.Draw(
-                _ball3,
-                (Position + _b3Pos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
+            case 3:
+                DrawAnotherTexture(_ball1, _b1Pos, 1);
+                goto case 2;
+            case 2:
+                DrawAnotherTexture(_ball2, _b2Pos, 1);
+                goto case 1;
+            case 1:
+                DrawAnotherTexture(_ball3, _b3Pos, 1);
+                break;
         }
     }
 

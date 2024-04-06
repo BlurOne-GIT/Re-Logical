@@ -101,63 +101,15 @@ public class Tp : Pipe, IReloadable, IOverlayable
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
-        if (_closedPipeLeft)
-        {
-            spriteBatch.Draw(
-                LevelResources.PipeClosedLeft,
-                (Position + _cplPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (_closedPipeUp)
-        {
-            spriteBatch.Draw(
-                LevelResources.PipeClosedUp,
-                (Position + _cpuPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (_closedPipeRight)
-        {
-            spriteBatch.Draw(
-                LevelResources.PipeClosedRight,
-                (Position + _cprPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (_closedPipeDown)
-        {
-            spriteBatch.Draw(
-                LevelResources.PipeClosedDown,
-                (Position + _cpdPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+        
+        if (_closedPipeLeft) DrawAnotherTexture(LevelResources.PipeClosedLeft, _cplPos, 1);
+        
+        if (_closedPipeUp) DrawAnotherTexture(LevelResources.PipeClosedUp, _cpuPos, 1);
+        
+        if (_closedPipeRight) DrawAnotherTexture(LevelResources.PipeClosedRight, _cprPos, 1);
+        
+        if (_closedPipeDown) DrawAnotherTexture(LevelResources.PipeClosedDown, _cpdPos, 1);
+        
         /* DISABLED
         _spriteBatch.Draw(
             _shadow,

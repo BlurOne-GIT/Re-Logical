@@ -50,7 +50,8 @@ public class Spinner : Block, IReloadable
         new(11f, 22f),
         new(14f, 23f)
     }, false);
-    private readonly Animation<Texture2D> _spinAnimation = new(LevelResources.SpinnerSpin, false);
+    //private readonly Animation<Texture2D> _spinAnimation = new(LevelResources.SpinnerSpin, false);
+    private readonly Animation<Rectangle> _spinAnimation = Animation<Rectangle>.TextureAnimation(new Point(26), new Point(78, 26), false, 1);
     private readonly Animation<Texture2D> _explodeAnimation = new(LevelResources.SpinnerExplode, false);
     private readonly Vector2 _spinPos = new(5f);
     private readonly Vector2 _explodePos = new(4f);
@@ -67,6 +68,8 @@ public class Spinner : Block, IReloadable
         null,
         null
     };
+
+    private Texture2D _spinningTexture;
     #endregion
 
     public Spinner(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.Spinner, arrayPosition, xx, yy)
@@ -75,6 +78,12 @@ public class Spinner : Block, IReloadable
         _spinButton.RightClicked += Spin;
         _registers[1] = Pos.Y == 0 ? new Vector2(13f, -13f) : new Vector2(13f, 0f);
         ExplodedSpinners.Capacity++;
+    }
+
+    protected override void LoadContent()
+    {
+        _spinningTexture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerSpin");
+        base.LoadContent();
     }
 
     public void Reload(Block[,] blocks)
@@ -259,202 +268,53 @@ public class Spinner : Block, IReloadable
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
+        
+        // Spinning Animation
         if (!_spinAnimation.IsAtEnd)
-        {
-            spriteBatch.Draw(
-                _spinAnimation.NextFrame(),
-                (Position + _spinPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+            DrawAnotherTexture(_spinningTexture, _spinPos, 1, _spinAnimation);
+        
+        // Left Slot
         if (_slotBalls[0] is not null)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerBall[(int)_slotBalls[0]],
-                (Position + _blPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[0]], _blPos.NextFrame(), 2);
         else if (_exploded)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerBallExploded,
-                (Position + _blPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerBallExploded, _blPos.NextFrame(), 2);
+        
+        // Up Slot
         if (_slotBalls[1] is not null)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerBall[(int)_slotBalls[1]],
-                (Position + _buPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[1]], _buPos.NextFrame(), 2);
         else if (_exploded)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerBallExploded,
-                (Position + _buPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerBallExploded, _buPos.NextFrame(), 2);
+        
+        // Right Slot
         if (_slotBalls[2] is not null)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerBall[(int)_slotBalls[2]],
-                (Position + _brPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[2]], _brPos.NextFrame(), 2);
         else if (_exploded)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerBallExploded,
-                (Position + _brPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerBallExploded, _brPos.NextFrame(), 2);
+        
+        // Down Slot
         if (_slotBalls[3] is not null)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerBall[(int)_slotBalls[3]],
-                (Position + _bdPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[3]], _bdPos.NextFrame(), 2);
         else if (_exploded)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerBallExploded,
-                (Position + _bdPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerBallExploded, _bdPos.NextFrame(), 2);
+        
+        // Closed Pipe Left
         if (_closedLeft)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerClosedLeft,
-                (Position + _cplPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerClosedLeft, _cplPos, 1);
+        
+        // Closed Pipe Up
         if (_closedUp)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerClosedUp,
-                (Position + _cpuPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerClosedUp, _cpuPos, 1);
+        
+        // Closed Pipe Right
         if (_closedRight)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerClosedRight,
-                (Position + _cprPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerClosedRight, _cprPos, 1);
+        
+        // Closed Pipe Down
         if (_closedDown)
-        {
-            spriteBatch.Draw(
-                LevelResources.SpinnerClosedDown,
-                (Position + _cpdPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
+            DrawAnotherTexture(LevelResources.SpinnerClosedDown, _cpdPos, 1);
+        
+        // Explode Animation
         if (!_explodeAnimation.IsAtEnd)
-        {
-            spriteBatch.Draw(
-                _explodeAnimation.NextFrame(),
-                (Position + _explodePos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.3f
-            );
-        }
+            DrawAnotherTexture(_explodeAnimation.NextFrame(), _explodePos, 3);
     }
 }

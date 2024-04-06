@@ -42,53 +42,13 @@ public class ColorJob : Block
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
         if (LevelState.ColorJobs.Count == 0 || DisableJobs)
             return;
-        spriteBatch.Draw(
-            _ballLeft,
-            (Position + _blPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
-        spriteBatch.Draw(
-            _ballRight,
-            (Position + _brPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
-        spriteBatch.Draw(
-            _ballDown,
-            (Position + _bdPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
-        spriteBatch.Draw(
-            _ballUp,
-            (Position + _buPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
+        
+        DrawAnotherTexture(_ballLeft, _bdPos, 1);
+        DrawAnotherTexture(_ballUp, _buPos, 1);
+        DrawAnotherTexture(_ballRight, _brPos, 1);
+        DrawAnotherTexture(_ballDown, _bdPos, 1);
     }
     
     public new void Dispose()

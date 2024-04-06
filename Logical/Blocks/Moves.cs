@@ -18,60 +18,19 @@ public class Moves : Block
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
         switch (LevelState.MovesLeft)
         {
             case 0:
-                spriteBatch.Draw(
-                    LevelResources.MovesBlue,
-                    (Position + _bluePos4) * Configs.Scale,
-                    null,
-                    Color.White * Statics.Opacity,
-                    0,
-                    Vector2.Zero,
-                    Configs.Scale,
-                    SpriteEffects.None,
-                    0.1f
-                );
+                DrawAnotherTexture(LevelResources.MovesBlue, _bluePos4, 1);
                 goto case 1;
             case 1:
-                spriteBatch.Draw(
-                    LevelResources.MovesBlue,
-                    (Position + _bluePos3) * Configs.Scale,
-                    null,
-                    Color.White * Statics.Opacity,
-                    0,
-                    Vector2.Zero,
-                    Configs.Scale,
-                    SpriteEffects.None,
-                    0.1f
-                );
+                DrawAnotherTexture(LevelResources.MovesBlue, _bluePos3, 1);
                 goto case 2;
             case 2:
-                spriteBatch.Draw(
-                    LevelResources.MovesBlue,
-                    (Position + _bluePos2) * Configs.Scale,
-                    null,
-                    Color.White * Statics.Opacity,
-                    0,
-                    Vector2.Zero,
-                    Configs.Scale,
-                    SpriteEffects.None,
-                    0.1f
-                );
+                DrawAnotherTexture(LevelResources.MovesBlue, _bluePos2, 1);
                 goto case 3;
             case 3:
-                spriteBatch.Draw(
-                    LevelResources.MovesBlue,
-                    (Position + _bluePos1) * Configs.Scale,
-                    null,
-                    Color.White * Statics.Opacity,
-                    0,
-                    Vector2.Zero,
-                    Configs.Scale,
-                    SpriteEffects.None,
-                    0.1f
-                );
+                DrawAnotherTexture(LevelResources.MovesBlue, _bluePos1, 1);
                 break;
         }
     }

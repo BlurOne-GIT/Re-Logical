@@ -18,39 +18,9 @@ public class NextBall : Block
     
     {
         base.Draw(gameTime);
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
-        spriteBatch.Draw(
-            LevelResources.HolderShadowEmpty,
-            (Position + _shadowPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
-        spriteBatch.Draw(
-            LevelResources.Holder,
-            (Position + _holderPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.2f
-        );
-        spriteBatch.Draw(
-            LevelResources.Indicator[(int)LevelState.NextBall],
-            (Position + _indicatorPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.3f
-        );
+        
+        DrawAnotherTexture(LevelResources.HolderShadowEmpty, _shadowPos, 1);
+        DrawAnotherTexture(LevelResources.Holder, _holderPos, 2);
+        DrawAnotherTexture(LevelResources.Indicator[(int)LevelState.NextBall], _indicatorPos, 3);
     }
 }

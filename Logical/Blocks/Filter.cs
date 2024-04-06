@@ -39,29 +39,9 @@ public class Filter : Pipe, IOverlayable
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
-        spriteBatch.Draw(
-            _ball,
-            (Position + _ballPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0f,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
-        spriteBatch.Draw(
-            _shadow,
-            (Position + _shadowPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
+        
+        DrawAnotherTexture(_ball, _ballPos, 1);
+        DrawAnotherTexture(_shadow, _shadowPos, 1);
     }
 
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(Game, LevelResources.Filter[Argument-1], Position + new Vector2(7f), 9)};

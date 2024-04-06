@@ -273,6 +273,7 @@ public static class LevelResources
     public static Texture2D TrafficLight; // DONE
     #endregion
 
+    // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
         PopIn = Statics.Content.Load<SoundEffect>("PopIn");
@@ -293,9 +294,11 @@ public static class LevelResources
         EmptyBlock = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\EmptyBlock");
         EmptyBlockAlt = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\EmptyBlockAlt");
         Spinner = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\Spinner");
+        /*
         SpinnerSpin[0] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin0");
         SpinnerSpin[1] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin1");
         SpinnerSpin[2] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin2");
+        */
         SpinnerExplode[0] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode2");
         SpinnerExplode[1] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode0");
         SpinnerExplode[2] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode1");
@@ -411,7 +414,7 @@ public static class LevelResources
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeVertical");
         if (Configs.GraphicSet is not 1)
             Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeHorizontalAlt");
-        if (Configs.GraphicSet is not 1 or 3)
+        if (Configs.GraphicSet is not 1 and 3)
             Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeVerticalAlt");
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeCross");
         Statics.Content.UnloadAsset("FilterPink");

@@ -53,11 +53,11 @@ public class Sandclock : Block
         spriteBatch.DrawString(
             Statics.LightFont,
             $"{LevelState.TimeSpanLeft.Minutes}:{LevelState.TimeSpanLeft.Seconds:00}",
-            (Position - new Vector2(2f, 0f)) * Configs.Scale,
-            Color.White * Statics.Opacity,
+            Position - new Vector2(2f, 0f),
+            Color,
             0f,
             Vector2.Zero,
-            Configs.Scale,
+            1f,
             SpriteEffects.None,
             0.1f
         );
