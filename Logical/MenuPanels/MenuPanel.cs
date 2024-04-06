@@ -6,7 +6,6 @@ namespace Logical.MenuPanels;
 
 public abstract class MenuPanel : DrawableGameComponent
 {
-    protected static readonly Vector2 PanelOffset = new(108f, 84f);
     private readonly SoundEffect _clickSfx;
 
     protected MenuPanel(Game game) : base(game)
