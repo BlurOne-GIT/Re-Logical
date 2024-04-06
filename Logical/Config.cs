@@ -202,7 +202,7 @@ public static class Configs
         /* 5 */ StereoSeparation = (byte)_fileStream.ReadByte();
         /* 6 */ Stage = (byte)_fileStream.ReadByte();
         var b = new byte[4];
-        _fileStream.Read(b, 1, 3);
+        _ = _fileStream.Read(b, 1, 3);
         if (BitConverter.IsLittleEndian)
             Array.Reverse(b);
         /*7-9*/ Score = BitConverter.ToInt32(b, 0);

@@ -23,7 +23,7 @@ public class Dropper : Block
         {
             if (LevelState.MovesLeft > 1 && ball.Position == _inRegister + Position)
             {
-                new Ball(Game, _inSpawn + Position, Direction.Down, ball.BallColor, true);
+                _ = new Ball(Game, _inSpawn + Position, Direction.Down, ball.BallColor, true);
                 LevelResources.PopIn.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
                 ball.Dispose();
                 continue;
