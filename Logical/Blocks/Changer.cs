@@ -7,7 +7,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Changer : Pipe, IUpdateable, IOverlayable
+public class Changer : Pipe, IOverlayable
 {
     #region Fields
 

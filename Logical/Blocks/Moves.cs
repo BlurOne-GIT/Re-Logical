@@ -1,6 +1,5 @@
 using Logical.States;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
