@@ -78,7 +78,7 @@ public class LogicalGame : EngineGame
         GraphicsDevice.Clear(Color.Black);
 
         // TODO: Add your drawing code here
-        SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Matrix.CreateScale(new Vector3(EngineStatics.Scale, 0f))/*ViewportMatrix*/);
+        SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: ViewportMatrix);
         CurrentGameState.Draw(gameTime);
         if (Statics.ShowCursor)
             SpriteBatch.Draw(
