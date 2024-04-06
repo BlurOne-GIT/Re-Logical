@@ -54,8 +54,7 @@ public class Spinner : Block, IReloadable
     private readonly Animation<Texture2D> _explodeAnimation = new(LevelResources.SpinnerExplode, false);
     private readonly Vector2 _spinPos = new(5f);
     private readonly Vector2 _explodePos = new(4f);
-    private readonly Vector2[] _registers = new Vector2[]
-    {
+    private readonly Vector2[] _registers = {
         new(0f, 13f),  // Left
         new(13f, 0f),  // Up
         new(26f, 13f), // Right
@@ -87,22 +86,22 @@ public class Spinner : Block, IReloadable
         
         if (!_closedLeft)
         {
-            _slotButtons[0] = new Button(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9)), enabled: false);
+            _slotButtons[0] = new Button(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
             _slotButtons[0].LeftClicked += PopOut;
         }
         if (!_closedUp && Pos.Y != 0 && blocks[Pos.X, Pos.Y-1].FileValue is not 0x16)
         {
-            _slotButtons[1] = new Button(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10)), enabled: false);
+            _slotButtons[1] = new Button(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10))) {Enabled = false};
             _slotButtons[1].LeftClicked += PopOut;
         }
         if (!_closedRight)
         {
-            _slotButtons[2] = new Button(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9)), enabled: false);
+            _slotButtons[2] = new Button(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
             _slotButtons[2].LeftClicked += PopOut;
         }
         if (!_closedDown && blocks[Pos.X, Pos.Y+1].FileValue is not 0x16)
         {
-            _slotButtons[3] = new Button(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10)), enabled: false);
+            _slotButtons[3] = new Button(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10))) {Enabled = false};
             _slotButtons[3].LeftClicked += PopOut;
         }
     }

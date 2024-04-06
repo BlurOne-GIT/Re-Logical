@@ -54,7 +54,6 @@ public static class Statics
     public static int Lives { get; set; }
     public static bool ShowCursor { get; set; }
     public static bool WindowFocused { get; set; }
-    public static Point MousePoint { get; set; }
     public static float Opacity { get; set; } = 1;
     public static ContentManager Content { get; private set;}
     public static Vector2 DetectionPoint { get; } = new(13f);

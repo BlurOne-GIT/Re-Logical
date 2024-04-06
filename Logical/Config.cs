@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework;
 using MmgEngine;
 
 namespace Logical;
@@ -69,7 +70,7 @@ public static class Configs
         {
             SetConfig(value);
             _scale = value;
-            EngineStatics.PartialScale = value;
+            EngineStatics.Scale = new Vector2(value);
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
         } 
     }

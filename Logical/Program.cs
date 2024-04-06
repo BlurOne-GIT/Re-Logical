@@ -1,3 +1,3 @@
 ﻿
-using var game = new Logical.Game1();
+using var game = new Logical.LogicalGame();
 game.Run();

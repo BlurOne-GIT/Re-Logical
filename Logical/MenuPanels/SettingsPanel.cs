@@ -22,20 +22,20 @@ public class SettingsPanel : MenuPanel
     
     public SettingsPanel(Game game) : base(game)
     {
-        _scaleButton = new Button(Game, new Rectangle(108, 87,103, 16), new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Scale"), new Vector2(108, 87), 3), enabled: false);
-        _fullScreenButton = new Button(Game, new Rectangle(108, 109,103, 16), new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Fullscreen"), new Vector2(108, 109), 3), enabled: false);
+        _scaleButton = new Button(Game, new Rectangle(108, 87,103, 16), new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Scale"), new Vector2(108, 87), 3)) {Enabled = false};
+        _fullScreenButton = new Button(Game, new Rectangle(108, 109,103, 16), new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Fullscreen"), new Vector2(108, 109), 3)) {Enabled = false};
         var plus = Game.Content.Load<Texture2D>("Plus");
         var minus = Game.Content.Load<Texture2D>("Minus");
-        _bgmVolUpButton = new Button(Game, new Rectangle(108, 132, 10, 10), new SimpleImage(Game, plus, new Vector2(108, 132), 3), enabled: false);
-        _bgmVolDownButton = new Button(Game, new Rectangle(134, 132, 10, 10), new SimpleImage(Game, minus, new Vector2(134, 132), 3), enabled: false);
+        _bgmVolUpButton = new Button(Game, new Rectangle(108, 132, 10, 10), new SimpleImage(Game, plus, new Vector2(108, 132), 3)) {Enabled = false};
+        _bgmVolDownButton = new Button(Game, new Rectangle(134, 132, 10, 10), new SimpleImage(Game, minus, new Vector2(134, 132), 3)) {Enabled = false};
         _bgmVol = new TextComponent(Game, Statics.BoldFont, $"{Configs.MusicVolume:00}", new Vector2(118, 133), 3);
-        _sfxVolUpButton = new Button(Game, new Rectangle(108, 155, 10, 10), new SimpleImage(Game, plus, new Vector2(108, 155), 3), enabled: false);
-        _sfxVolDownButton = new Button(Game, new Rectangle(134, 155, 10, 10), new SimpleImage(Game, minus, new Vector2(134, 155), 3), enabled: false);
+        _sfxVolUpButton = new Button(Game, new Rectangle(108, 155, 10, 10), new SimpleImage(Game, plus, new Vector2(108, 155), 3)) {Enabled = false};
+        _sfxVolDownButton = new Button(Game, new Rectangle(134, 155, 10, 10), new SimpleImage(Game, minus, new Vector2(134, 155), 3)) {Enabled = false};
         _sfxVol = new TextComponent(Game, Statics.BoldFont, $"{Configs.SfxVolume:00}", new Vector2(118, 156), 3);
-        _stereoSplitUpButton = new Button(Game, new Rectangle(108, 179, 10, 10), new SimpleImage(Game, plus, new Vector2(108, 179), 3), enabled: false);
-        _stereoSplitDownButton = new Button(Game, new Rectangle(142, 179, 10, 10), new SimpleImage(Game, minus, new Vector2(142, 179), 3), enabled: false);
+        _stereoSplitUpButton = new Button(Game, new Rectangle(108, 179, 10, 10), new SimpleImage(Game, plus, new Vector2(108, 179), 3)) {Enabled = false};
+        _stereoSplitDownButton = new Button(Game, new Rectangle(142, 179, 10, 10), new SimpleImage(Game, minus, new Vector2(142, 179), 3)) {Enabled = false};
         _stereoSplit = new TextComponent(Game, Statics.BoldFont, $"{Configs.StereoSeparation:000}", new Vector2(118, 180), 3);
-        BackButton = new Button(Game, new Rectangle(108, 201, 103, 16), new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Back"), new Vector2(108, 201), 3), enabled: false);
+        BackButton = new Button(Game, new Rectangle(108, 201, 103, 16), new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Back"), new Vector2(108, 201), 3)) {Enabled = false};
         
         _scaleButton.LeftClicked += PlaySfx;
         _fullScreenButton.LeftClicked += PlaySfx;

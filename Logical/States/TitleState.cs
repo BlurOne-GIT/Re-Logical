@@ -44,7 +44,7 @@ public class TitleState : GameState
     private void EndCaller(object s, EventArgs e) => EndScreen();
     private async void EndScreen()
     {
-        Input.KeyDown -= HandleInput;
+        Game.Window.KeyDown -= HandleInput;
         Input.ButtonDown -= HandleInput;
         MediaPlayer.MediaStateChanged -= EndCaller;
         for (float i = 1; i > 0; i -= 0.0125f)
