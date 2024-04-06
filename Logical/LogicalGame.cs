@@ -73,17 +73,17 @@ public class LogicalGame : EngineGame
         GraphicsDevice.Clear(Color.Black);
 
         // TODO: Add your drawing code here
-        SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: ViewportMatrix);
+        SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Matrix.CreateScale(new Vector3(EngineStatics.Scale, 0f))/*ViewportMatrix*/);
         CurrentGameState.Draw(gameTime);
         if (Statics.ShowCursor)
             SpriteBatch.Draw(
                 _cursorTexture,
-                new Vector2(Input.MousePoint.X - Input.MousePoint.X % EngineStatics.Scale.X, Input.MousePoint.Y - Input.MousePoint.Y % EngineStatics.Scale.Y) / EngineStatics.Scale,
+                Input.MousePoint.ToVector2(),
                 null,
                 Color.White * Statics.Opacity,
                 0,
                 new Vector2(7, 7),
-                EngineStatics.Scale,
+                1f,
                 SpriteEffects.None,
                 1f
             );
