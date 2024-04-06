@@ -50,11 +50,11 @@ public class ColorJob : Block
         DrawAnotherTexture(_ballRight, _brPos, 1);
         DrawAnotherTexture(_ballDown, _bdPos, 1);
     }
-    
-    public new void Dispose()
+
+    protected override void Dispose(bool disposing)
     {
         if (SteveJobs.Equals(this))
             SteveJobs = null;
-        base.Dispose();
+        base.Dispose(disposing);
     }
 }

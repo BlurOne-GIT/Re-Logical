@@ -170,7 +170,7 @@ public class SettingsPanel : MenuPanel
         _stereoSplit.Text = $"{Configs.StereoSeparation:000}";
     }
 
-    public new void Dispose()
+    protected override void Dispose(bool disposing)
     {
         _scaleButton.LeftClicked -= PlaySfx;
         _fullScreenButton.LeftClicked -= PlaySfx;
@@ -203,6 +203,6 @@ public class SettingsPanel : MenuPanel
         _bgmVol.Dispose();
         _sfxVol.Dispose();
         _stereoSplit.Dispose();
-        base.Dispose();
+        base.Dispose(disposing);
     }
 }

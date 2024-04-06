@@ -76,10 +76,11 @@ public class Ball : SimpleImage
 
     public void Bounce() => MovementDirection = Statics.ReverseDirection[MovementDirection];
 
-    public new void Dispose()
+    protected override void Dispose(bool disposing)
     {
         BallDestroyed?.Invoke(this, EventArgs.Empty);
         AllBalls.Remove(this);
+        base.Dispose(disposing);
     }
 
     public override void Update(GameTime gameTime)

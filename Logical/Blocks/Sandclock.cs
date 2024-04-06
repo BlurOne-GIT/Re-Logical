@@ -102,10 +102,10 @@ public class Sandclock : Block
             );
         }*/
 
-    public new void Dispose()
+    protected override void Dispose(bool disposing)
     {
         if (_bruceCook.Equals(this))
             _bruceCook = null;
-        base.Dispose();
+        base.Dispose(disposing);
     }
 }

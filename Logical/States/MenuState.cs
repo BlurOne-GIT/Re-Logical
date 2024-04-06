@@ -73,14 +73,14 @@ public class MenuState : GameState
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/Back");
     }
 
-    public override void Dispose()
+    protected override void Dispose(bool disposing)
     {
         _defaultPanel.SettingsButton.LeftClicked -= Settings;
         _defaultPanel.StartButton.LeftClicked -= StartGame;
         _settingsPanel.BackButton.LeftClicked -= Back;
         _defaultPanel.Dispose();
         _settingsPanel.Dispose();
-        base.Dispose();
+        base.Dispose(disposing);
     }
     #endregion
 

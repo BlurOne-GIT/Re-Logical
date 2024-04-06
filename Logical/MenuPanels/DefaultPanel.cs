@@ -107,7 +107,6 @@ public class DefaultPanel : MenuPanel
 
     protected override void Dispose(bool disposing)
     {
-        Console.WriteLine("DisposedDefaultPanel");
         _ownSetButton.LeftClicked -= PlaySfx;
         _passwordButton.LeftClicked -= PlaySfx;
         _aboutButton.LeftClicked -= PlaySfx;

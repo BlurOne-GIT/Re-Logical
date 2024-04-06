@@ -208,7 +208,7 @@ public class LevelState : GameState
         FadeOut(() => SwitchState(new LoadingState(Game, reason)));
     }
 
-    public override void Dispose()
+    protected override void Dispose(bool disposing)
     {
         ColorJobs.Clear();
         TrafficLights.Clear();
@@ -217,6 +217,6 @@ public class LevelState : GameState
         Spinner.ConditionClear -= RecheckConditioned;
         Ball.BallCreated -= AddBall;
         Ball.BallDestroyed -= RemoveBall;
-        base.Dispose();
+        base.Dispose(disposing);
     }
 }

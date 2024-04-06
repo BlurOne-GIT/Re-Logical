@@ -79,10 +79,10 @@ public class TrafficLight : Block
         }
     }
 
-    public new void Dispose()
+    protected override void Dispose(bool disposing)
     {
         if (_theChosenOne.Equals(this))
             _theChosenOne = null;
-        base.Dispose();
+        base.Dispose(disposing);
     }
 }

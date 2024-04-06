@@ -84,9 +84,8 @@ public class Tp : Pipe, IReloadable, IOverlayable
         _closedPipeDown = Pos.Y == 4 || (!Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue) && FileValue is 0x09 or 0x0A);
     }
 
-    public new void Dispose()
+    protected override void Dispose(bool disposing)
     {
-        base.Dispose();
         if (FirstHorizontalTp == this)
             FirstHorizontalTp = null;
         else if (SecondHorizontalTp == this)
@@ -96,6 +95,7 @@ public class Tp : Pipe, IReloadable, IOverlayable
             FirstVerticalTp = null;
         else if (SecondVerticalTp == this)
             SecondHorizontalTp = null;
+        base.Dispose(disposing);
     }
 
     public override void Draw(GameTime gameTime)

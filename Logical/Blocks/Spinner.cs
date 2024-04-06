@@ -252,9 +252,8 @@ public class Spinner : Block, IReloadable
         ExplodedSpinners.Capacity = 0;
     }
 
-    public new void Dispose()
+    protected override void Dispose(bool disposing)
     {
-        base.Dispose();
         _spinButton.RightClicked -= Spin;
         _spinButton.Dispose();
         foreach (var button in _slotButtons)
@@ -263,6 +262,7 @@ public class Spinner : Block, IReloadable
                 button.LeftClicked -= PopOut;
             button?.Dispose();
         }
+        base.Dispose(disposing);
     }
 
     public override void Draw(GameTime gameTime)
