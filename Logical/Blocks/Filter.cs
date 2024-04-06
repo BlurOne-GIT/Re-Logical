@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MmgEngine;
@@ -31,9 +32,8 @@ public class Filter : Pipe, IOverlayable
 
     public override void Update(GameTime gameTime)
     {
-        foreach (var ball in Ball.AllBalls)
-            if (ball.Position == Statics.DetectionPoint + Position && ball.BallColor != _ballColor)
-                ball.Bounce();
+        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == Statics.DetectionPoint + Position && ball.BallColor != _ballColor))
+            ball.Bounce();
     }
 
     public override void Draw(GameTime gameTime)
