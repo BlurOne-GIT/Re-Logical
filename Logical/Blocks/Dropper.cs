@@ -1,39 +1,35 @@
 using System;
 using Logical.States;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace Logical;
+namespace Logical.Blocks;
 
-public class Dropper : Block, IUpdateable
+public class Dropper : Block
 {
     #region Fields
-    private readonly Vector2 inRegister = new Vector2(13f, -13f);
-    private readonly Vector2 inSpawn = new Vector2(13f, -4f);
-    private readonly Vector2 bumpRegister = new Vector2(13f, 0f);
+    private readonly Vector2 _inRegister = new(13f, -13f);
+    private readonly Vector2 _inSpawn = new(13f, -4f);
+    private readonly Vector2 _bumpRegister = new(13f, 0f);
     #endregion
 
-    public Dropper(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
-    {
-        Texture = LevelTextures.PipeVertical;
-    }
+    public Dropper(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.PipeVertical, arrayPosition, xx, yy) { }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
         if (Pos.Y != 0)
             return;
 
-        foreach (Ball ball in Ball.AllBalls.ToArray())
+        foreach (var ball in Ball.AllBalls) // This had .ToArray()
         {
-            if (LevelState.MovesLeft > 1 && ball.Position == inRegister + _position)
+            if (LevelState.MovesLeft > 1 && ball.Position == _inRegister + Position)
             {
-                new Ball(inSpawn + _position, Direction.Down, ball.BallColor, true);
-                LevelTextures.PopIn.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
+                new Ball(Game, _inSpawn + Position, Direction.Down, ball.BallColor, true);
+                LevelResources.PopIn.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
                 ball.Dispose();
                 continue;
             }
 
-            if (ball.MovementDirection is Direction.Up && ball.Position == bumpRegister + _position)
+            if (ball.MovementDirection is Direction.Up && ball.Position == _bumpRegister + Position)
                 ball.Bounce();
         }
     }

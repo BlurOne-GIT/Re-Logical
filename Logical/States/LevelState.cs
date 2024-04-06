@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Logical.Blocks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using MmgEngine;
 
 namespace Logical.States;
 
@@ -15,7 +16,7 @@ public class LevelState : GameState
     public static int ColorJobsFinished;
     public static int MovesLeft => 5 - Ball.AllBalls.Count;
     public static readonly List<BallColors> TrafficLights = new(3);
-    private readonly SimpleImage _oTimeBar = new(LevelTextures.MainPipeBar, new Vector2(304f, 35f), 1);
+    private readonly SimpleImage _oTimeBar;
     private int _oTimeLeft = 145;
     private readonly int _oTime;
     private int _oTimeLoopCounter;
@@ -32,47 +33,48 @@ public class LevelState : GameState
     private SoundEffect _failSfx;
     #endregion
 
-    public LevelState()
+    public LevelState(Game game) : base(game)
     {
         ColorJobsFinished = 0;
         Ball.BallCreated += AddBall;
         Ball.BallDestroyed += RemoveBall;
-        var lexer = new Lexer();
-        _tileset = lexer.GetLevelBlocks(Configs.Stage, out _oTime, out TimeLeft, out _isTimed, out string _);
+        var lexer = new Lexer(game);
+        _tileset = lexer.GetLevelBlocks(Configs.Stage, out _oTime, out TimeLeft, out _isTimed, out _);
         _oTime++;
         _initialTimeSpan = new TimeSpan(0, 1, 30) * (TimeLeft + 1);
         TimeSpanLeft = _initialTimeSpan;
-        foreach (Block gameObject in _tileset)
+        foreach (var gameObject in _tileset)
         {
             if (gameObject is IReloadable reloadable)
                 reloadable.Reload(_tileset); 
             if (gameObject is IOverlayable overlayable)
-                foreach (Component component in overlayable.GetOverlayables())
-                    AddGameObject(component);
-            AddGameObject(gameObject);
+                foreach (var component in overlayable.GetOverlayables())
+                    Components.Add(component);
+            Components.Add(gameObject);
         }
 
-        AddGameObject(new SimpleImage(LevelTextures.MainPipe, new Vector2(16, 30), 0));
-        AddGameObject(_oTimeBar);
+        Components.Add(new SimpleImage(Game, LevelResources.MainPipe, new Vector2(16, 30), 0));
+        _oTimeBar = new SimpleImage(Game, LevelResources.MainPipeBar, new Vector2(304f, 35f), 1);
+        Components.Add(_oTimeBar);
         for (int i = 0; i < 8; i++)
             if (_tileset[i, 0].FileValue is 0x01 or 0x16)
-                AddGameObject(new SimpleImage(LevelTextures.MainPipeOpen, new Vector2(26 + 36 * i, 41), 1));
+                Components.Add(new SimpleImage(Game, LevelResources.MainPipeOpen, new Vector2(26 + 36 * i, 41), 1));
 
         Spinner.AllDone += Win;
         Statics.ShowCursor = true;
         _oTimeLoopCounter = _oTime;
-        ColorJob.SteveJobs?.Reload();
+        ColorJob.SteveJobs?.Recharge();
 
         if (ColorJobs.Count != 0 || TrafficLights.Count != 0)
             Spinner.ConditionClear += RecheckConditioned;
 
     }
 
-    public override void LoadContent(ContentManager content)
+    public override void LoadContent()
     {
-        _mainPipeBall = new Ball(new Vector2(295, 33), Direction.Left, (BallColors)Statics.Brandom.Next(0, 4), false);
-        _successSfx = content.Load<SoundEffect>("1Success"); // DEBUG //
-        _failSfx = content.Load<SoundEffect>("1Fail"); // DEBUG //
+        _successSfx = Game.Content.Load<SoundEffect>("1Success"); // DEBUG //
+        _failSfx = Game.Content.Load<SoundEffect>("1Fail"); // DEBUG //
+        _mainPipeBall = new Ball(Game, new Vector2(295, 33), Direction.Left, (BallColors)Statics.Brandom.Next(0, 4), false);
         FadeIn();
     }
 
@@ -99,46 +101,47 @@ public class LevelState : GameState
         action();
     }
 
-    private void AddBall(object s, EventArgs e) => AddGameObject(s as Component);
+    private void AddBall(object s, EventArgs e) => Components.Add(s as Ball);
+    
     private void RemoveBall(object s, EventArgs e)
     {
         if (!_finished && _mainPipeBall.Equals(s))
         {
-            _mainPipeBall = new Ball(new Vector2(295, 33), Direction.Left, NextBall, false);
+            _mainPipeBall = new Ball(Game, new Vector2(295, 33), Direction.Left, NextBall, false);
             NextBall = (BallColors)Statics.Brandom.Next(0, 4);
             _oTimeLoopCounter = _oTime;
             _oTimeLeft = 145;
-            _oTimeBar.ChangePosition(new Vector2(304f, 35f));
+            _oTimeBar.Position = new Vector2(304f, 35f);
         }
-        RemoveGameObject(s as Component);
+        Components.Remove(s as Ball);
     }
 
     private void RecheckConditioned(object s, EventArgs e)
     {
-        foreach (Block block in _tileset)
-            if (block is Spinner)
-                (block as Spinner).Check();
+        foreach (var block in _tileset)
+            if (block is Spinner spinner)
+                spinner.Check();
     }
 
     private async void Win(object s, EventArgs e)
     {
         _finished = true;
-        int ballsLeft = Ball.AllBalls.Count - 1;
+        var ballsLeft = Ball.AllBalls.Count - 1;
 
-        foreach (Spinner spinner in (List<Spinner>)s)
+        foreach (var spinner in (List<Spinner>)s)
             ballsLeft += await spinner.FinalBoom();
 
         Statics.ShowCursor = false;
-        foreach (Ball ball in Ball.AllBalls.ToArray())
+        foreach (var ball in Ball.AllBalls.ToArray())
             ball.Dispose();
 
         Configs.Stage++;
 
-        int timeLeft = _isTimed ? (int)(TimeSpanLeft.Ticks * 100 / _initialTimeSpan.Ticks) : 100;
+        var timeLeft = _isTimed ? (int)(TimeSpanLeft.Ticks * 100 / _initialTimeSpan.Ticks) : 100;
 
         _successSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         await Task.Delay(_successSfx.Duration - new TimeSpan(0,0,0,0,280));
-        FadeOut(() => SwitchState(new LoadingState(timeLeft, ballsLeft, ColorJobsFinished)));
+        FadeOut(() => SwitchState(new LoadingState(Game, timeLeft, ballsLeft, ColorJobsFinished)));
     }
 
 
@@ -154,7 +157,7 @@ public class LevelState : GameState
         if (_oTimeLoopCounter is 0)
         {
             _oTimeLeft--;
-            _oTimeBar.ChangePosition(new Vector2(14f + _oTimeLeft * 2, 35f));
+            _oTimeBar.Position = new Vector2(14f + _oTimeLeft * 2, 35f);
         }
         
         if (_oTimeLeft is 0)
@@ -168,11 +171,6 @@ public class LevelState : GameState
         base.Update(gameTime);
     }
 
-    public override void HandleInput(object s, ButtonEventArgs e)
-    {
-        
-    }
-
     public override void HandleInput(object s, InputKeyEventArgs e)
     {
         switch (e.Key)
@@ -182,17 +180,17 @@ public class LevelState : GameState
         }
     }
 
-    public override void UnloadContent(ContentManager content)
+    public override void UnloadContent()
     {
-        content.UnloadAsset("1Success"); // DEBUG //
-        content.UnloadAsset("1Fail"); // DEBUG //
+        Game.Content.UnloadAsset("1Success"); // DEBUG //
+        Game.Content.UnloadAsset("1Fail"); // DEBUG //
     }
 
     private void Pause()
     {
         _paused ^= true;
         Statics.ShowCursor = !_paused;
-        foreach (Block block in _tileset)
+        foreach (var block in _tileset)
             if (block is Spinner spinner)
                 spinner.Pause(_paused);
 
@@ -203,11 +201,11 @@ public class LevelState : GameState
     {
         _finished = true;
         Statics.ShowCursor = false;
-        foreach (Ball ball in Ball.AllBalls.ToArray())
+        foreach (var ball in Ball.AllBalls.ToArray())
             ball.Dispose();
         _failSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         await Task.Delay(_failSfx.Duration - new TimeSpan(0,0,0,0,280));
-        FadeOut(() => SwitchState(new LoadingState(reason)));
+        FadeOut(() => SwitchState(new LoadingState(Game, reason)));
     }
 
     public override void Dispose()

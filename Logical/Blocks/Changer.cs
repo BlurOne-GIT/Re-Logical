@@ -2,55 +2,49 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MmgEngine;
 
-namespace Logical;
+namespace Logical.Blocks;
 
-public class Changer : Block, IUpdateable, IOverlayable
+public class Changer : Pipe, IUpdateable, IOverlayable
 {
     #region Fields
 
-    private readonly BallColors _color;
+    private readonly BallColors _ballColors;
     private readonly Texture2D _shadow;
     private readonly Texture2D _indicator;
-    private readonly Vector2 ciPos = new Vector2(12f);
-    private readonly Vector2 shadowPos = new Vector2(18f);
+    private readonly Vector2 _ciPos = new(12f);
+    private readonly Vector2 _shadowPos = new(18f);
     #endregion
 
-    public Changer(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
+    public Changer(Game game, Point arrayPosition, byte xx, byte yy):base(game, arrayPosition, xx, yy, false)
     {
-        switch (xx)
+        _shadow = xx switch
         {
-            case 0x0B:
-                Texture = LevelTextures.PipeHorizontal;
-                _shadow = LevelTextures.ChangerShadowHorizontal;
-                break;
-            case 0x0C:
-                Texture = LevelTextures.PipeVertical;
-                _shadow = LevelTextures.ChangerShadowVertical;
-                break;
-            case 0x0D:
-                Texture = LevelTextures.PipeCross;
-                _shadow = LevelTextures.ChangerShadowCross;
-                break;
-            default: throw new Exception("Unhandeled");
-        }
-        _color = (BallColors)Argument-1;
-        _indicator = LevelTextures.Indicator[Argument-1];
+            0x0B => LevelResources.ChangerShadowHorizontal,
+            0x0C => LevelResources.ChangerShadowVertical,
+            0x0D => LevelResources.ChangerShadowCross,
+            _ => throw new ArgumentException("Invalid Pipe direction")
+        };
+        _ballColors = (BallColors)Argument-1;
+        _indicator = LevelResources.Indicator[Argument-1];
+    }
+    
+    public override void Update(GameTime gameTime)
+    {
+        foreach (var ball in Ball.AllBalls)
+            if (ball.Position == Statics.DetectionPoint + Position)
+                ball.BallColor = _ballColors;
     }
 
-    public void Update(GameTime gameTime)
-    {
-        foreach (Ball ball in Ball.AllBalls)
-            if (ball.Position == Statics.DetectionPoint + _position)
-                ball.BallColor = _color;
-    }
 
-    public override void Render(SpriteBatch _spriteBatch)
+    public override void Draw(GameTime gameTime)
     {
-        base.Render(_spriteBatch);
-        _spriteBatch.Draw(
+        base.Draw(gameTime);
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
+        spriteBatch.Draw(
             _indicator,
-            (_position + ciPos) * Configs.Scale,
+            (Position + _ciPos) * Configs.Scale,
             null,
             Color.White * Statics.Opacity,
             0,
@@ -59,9 +53,9 @@ public class Changer : Block, IUpdateable, IOverlayable
             SpriteEffects.None,
             0.1f
         );
-        _spriteBatch.Draw(
+        spriteBatch.Draw(
             _shadow,
-            (_position + shadowPos) * Configs.Scale,
+            (Position + _shadowPos) * Configs.Scale,
             null,
             Color.White * Statics.Opacity,
             0,
@@ -72,5 +66,5 @@ public class Changer : Block, IUpdateable, IOverlayable
         );
     }
     
-    public IEnumerable<Component> GetOverlayables() => new Component[] {new SimpleImage(LevelTextures.Changer[Argument-1], _position + ciPos, 9)};
+    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(Game, LevelResources.Changer[Argument-1], Position + _ciPos, 9)};
 }

@@ -1,74 +1,75 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Logical.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Logical;
+namespace Logical.Blocks;
 
 public class TrafficLight : Block
 {
     #region Field
-    private static TrafficLight theChosenOne;
+    private static TrafficLight _theChosenOne;
     private readonly Texture2D _ball1;
     private readonly Texture2D _ball2;
     private readonly Texture2D _ball3;
     public bool DisableTraffic;
-    private readonly Vector2 b1Pos = new Vector2(14f, 5f);
-    private readonly Vector2 b2Pos = new Vector2(14f, 14f);
-    private readonly Vector2 b3Pos = new Vector2(14f, 23f);
+    private readonly Vector2 _b1Pos = new(14f, 5f);
+    private readonly Vector2 _b2Pos = new(14f, 14f);
+    private readonly Vector2 _b3Pos = new(14f, 23f);
     #endregion
 
-    public TrafficLight(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
+    public TrafficLight(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.TrafficLight, arrayPosition, xx, yy)
     {
-        Texture = LevelTextures.TrafficLight;
-        if (theChosenOne is not null)
-            theChosenOne.DisableTraffic = true;
+        if (_theChosenOne is not null)
+            _theChosenOne.DisableTraffic = true;
         
-        theChosenOne = this;
+        _theChosenOne = this;
 
         LevelState.TrafficLights.Clear();
 
-        switch(yy)
+        LevelState.TrafficLights.AddRange(yy switch
         {
-            case 1:
-                LevelState.TrafficLights.Add(BallColors.Pink);
-                LevelState.TrafficLights.Add(BallColors.Yellow);
-                LevelState.TrafficLights.Add(BallColors.Blue);
-                break;
-            case 2:
-                LevelState.TrafficLights.Add(BallColors.Yellow);
-                LevelState.TrafficLights.Add(BallColors.Blue);
-                LevelState.TrafficLights.Add(BallColors.Green);
-                break;
-            case 3:
-                LevelState.TrafficLights.Add(BallColors.Blue);
-                LevelState.TrafficLights.Add(BallColors.Green);
-                LevelState.TrafficLights.Add(BallColors.Pink);
-                break;
-            case 4:
-                LevelState.TrafficLights.Add(BallColors.Green);
-                LevelState.TrafficLights.Add(BallColors.Pink);
-                LevelState.TrafficLights.Add(BallColors.Yellow);
-                break;
-            default:
-                throw new Exception("Unhandled");
-        }
-
-        _ball1 = LevelTextures.SpinnerBall[(int)LevelState.TrafficLights[0]];
-        _ball2 = LevelTextures.SpinnerBall[(int)LevelState.TrafficLights[1]];
-        _ball3 = LevelTextures.SpinnerBall[(int)LevelState.TrafficLights[2]];
+            1 => new[]
+            {
+                BallColors.Pink,
+                BallColors.Yellow,
+                BallColors.Blue
+            },
+            2 => new[]
+            {
+                BallColors.Yellow,
+                BallColors.Blue,
+                BallColors.Green
+            },
+            3 => new[]
+            {
+                BallColors.Blue,
+                BallColors.Green,
+                BallColors.Pink
+            },
+            4 => new[]
+            {
+                BallColors.Green,
+                BallColors.Pink,
+                BallColors.Yellow
+            },
+            _ => throw new ArgumentException("Invalid TrafficLight colors")
+        });
+        
+        _ball1 = LevelResources.SpinnerBall[(int)LevelState.TrafficLights[0]];
+        _ball2 = LevelResources.SpinnerBall[(int)LevelState.TrafficLights[1]];
+        _ball3 = LevelResources.SpinnerBall[(int)LevelState.TrafficLights[2]];
     }
 
-    public override void Render(SpriteBatch _spriteBatch)
+    public override void Draw(GameTime gameTime)
     {
-        base.Render(_spriteBatch);
+        base.Draw(gameTime);
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
         if (LevelState.TrafficLights.Count == 3 || DisableTraffic)
         {
-            _spriteBatch.Draw(
+            spriteBatch.Draw(
                 _ball1,
-                (_position + b1Pos) * Configs.Scale,
+                (Position + _b1Pos) * Configs.Scale,
                 null,
                 Color.White * Statics.Opacity,
                 0,
@@ -80,9 +81,9 @@ public class TrafficLight : Block
         }
         if (LevelState.TrafficLights.Count > 1 || DisableTraffic)
         {
-            _spriteBatch.Draw(
+            spriteBatch.Draw(
                 _ball2,
-                (_position + b2Pos) * Configs.Scale,
+                (Position + _b2Pos) * Configs.Scale,
                 null,
                 Color.White * Statics.Opacity,
                 0,
@@ -94,9 +95,9 @@ public class TrafficLight : Block
         }
         if (LevelState.TrafficLights.Count > 0 || DisableTraffic)
         {
-            _spriteBatch.Draw(
+            spriteBatch.Draw(
                 _ball3,
-                (_position + b3Pos) * Configs.Scale,
+                (Position + _b3Pos) * Configs.Scale,
                 null,
                 Color.White * Statics.Opacity,
                 0,
@@ -108,10 +109,10 @@ public class TrafficLight : Block
         }
     }
 
-    public override void Dispose()
+    public new void Dispose()
     {
-        if (theChosenOne.Equals(this))
-            theChosenOne = null;
+        if (_theChosenOne.Equals(this))
+            _theChosenOne = null;
         base.Dispose();
     }
 }

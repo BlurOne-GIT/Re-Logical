@@ -2,28 +2,18 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Logical;
+namespace Logical.Blocks;
 
 public class Pipe : Block
 {
-    public Pipe(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
+    public Pipe(Game game, Point arrayPosition, byte xx, byte yy, bool randomize = true) 
+        : base(game, TextureSwitcher(xx, randomize), arrayPosition, xx, yy) { }
+
+    private static Texture2D TextureSwitcher(byte xx, bool randomize) => xx switch
     {
-        switch (xx)
-        {
-            case 0x02:
-                if (Statics.Brandom.Next(0, 2) == 0) 
-                    Texture = LevelTextures.PipeHorizontal;
-                else
-                    Texture = LevelTextures.PipeHorizontalAlt;
-                break;
-            case 0x03:
-                if (Statics.Brandom.Next(0, 2) == 0)
-                    Texture = LevelTextures.PipeVertical;
-                else
-                    Texture = LevelTextures.PipeVerticalAlt;
-                break;
-            case 0x04: Texture = LevelTextures.PipeCross; break;
-            default: throw new Exception("Unhandeled");
-        }
-    }
+        0x02 => !randomize || Statics.Brandom.Next(0, 2) == 0 ? LevelResources.PipeHorizontal : LevelResources.PipeHorizontalAlt,
+        0x03 => !randomize || Statics.Brandom.Next(0, 2) == 0 ? LevelResources.PipeVertical : LevelResources.PipeVerticalAlt,
+        0x04 => LevelResources.PipeCross,
+        _ => throw new ArgumentException("Invalid Pipe direction")
+    };
 }

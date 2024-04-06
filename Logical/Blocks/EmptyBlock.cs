@@ -1,16 +1,9 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace Logical;
+namespace Logical.Blocks;
 
 public class EmptyBlock : Block
 {
-    public EmptyBlock(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
-    {
-        if (Statics.Brandom.Next(0, 2) == 0)
-            Texture = LevelTextures.EmptyBlock;
-        else
-            Texture = LevelTextures.EmptyBlockAlt;
-    }
+    public EmptyBlock(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, Statics.Brandom.Next(0, 2) == 0 ? LevelResources.EmptyBlock : LevelResources.EmptyBlockAlt, arrayPosition, xx, yy) { }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Logical.Blocks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,8 +11,11 @@ namespace Logical;
 
 public class Lexer
 {
-    public Lexer()
+    private readonly Game _game;
+    
+    public Lexer(Game game)
     {
+        _game = game;
         _hexFile = File.ReadAllBytes(Statics.Set);
         if (_hexFile[0] is not 0x00 && _hexFile[1] is not 0x00)
             throw new Exception("Not Logical Set File.");
@@ -53,7 +57,7 @@ public class Lexer
     {
         for (int i = 0; i < 99; i++)
         {
-            string r = "";
+            var r = "";
             int btr = i * 100 + 83;
             for (int j = 0; j < 15; j++)
                 r += $"{(CharEncode)_hexFile[btr + j]}";
@@ -76,20 +80,20 @@ public class Lexer
 
     private Block GetBlockType(Point index, byte fileValue, byte arguments) => fileValue switch
     {
-        0x00 => new EmptyBlock(index, fileValue, arguments),
-        0x01 => new Spinner(index, fileValue, arguments),
-        <= 0x04 => new Pipe(index, fileValue, arguments),
-        <= 0x07 => new Filter(index, fileValue, arguments),
-        <= 0x0A => new Tp(index, fileValue, arguments),
-        <= 0x0D => new Changer(index, fileValue, arguments),
-        <= 0x11 => new Bumper(index, fileValue, arguments),
-        0x12 => new Moves(index, fileValue, arguments),
-        0x13 => new Sandclock(index, fileValue, arguments),
-        0x14 => new ColorJob(index, fileValue, arguments),
-        0x15 => new TrafficLight(index, fileValue, arguments),
-        0x16 => new Dropper(index, fileValue, arguments),
-        0x17 => new NextBall(index, fileValue, arguments),
-        _ => new EmptyBlock(index, fileValue, arguments)
+        0x00 => new EmptyBlock(_game, index, fileValue, arguments),
+        0x01 => new Spinner(_game, index, fileValue, arguments),
+        <= 0x04 => new Pipe(_game, index, fileValue, arguments),
+        <= 0x07 => new Filter(_game, index, fileValue, arguments),
+        <= 0x0A => new Tp(_game, index, fileValue, arguments),
+        <= 0x0D => new Changer(_game, index, fileValue, arguments),
+        <= 0x11 => new Bumper(_game, index, fileValue, arguments),
+        0x12 => new Moves(_game, index, fileValue, arguments),
+        0x13 => new Sandclock(_game, index, fileValue, arguments),
+        0x14 => new ColorJob(_game, index, fileValue, arguments),
+        0x15 => new TrafficLight(_game, index, fileValue, arguments),
+        0x16 => new Dropper(_game, index, fileValue, arguments),
+        0x17 => new NextBall(_game, index, fileValue, arguments),
+        _ => new EmptyBlock(_game, index, fileValue, arguments)
     };
 }
 
@@ -121,7 +125,7 @@ public enum CharEncode
     X = 0x1C,
     Y = 0x1D,
     Z = 0x1E,
-    space = 0xE4
+    Space = 0xE4
 }
 
 /*

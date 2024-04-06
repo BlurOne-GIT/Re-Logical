@@ -3,57 +3,57 @@ using Logical.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Logical;
+namespace Logical.Blocks;
 
-public class Sandclock : Block, IUpdateable
+public class Sandclock : Block
 {
     #region Field
-    private static Sandclock bruceCook;
-    public bool stuck;
+    private static Sandclock _bruceCook;
+    public bool Stuck;
     private Texture2D _usedSand;
     private Texture2D _sandLeft;
-    private readonly Vector2 usPos = new Vector2(10f, 18f);
-    private readonly Vector2 slPos = new Vector2(10f, 5f);
+    private readonly Vector2 _usPos = new(10f, 18f);
+    private readonly Vector2 _slPos = new(10f, 5f);
     //private Vector2 fsPos;
-    private TimeSpan timeSpan = new TimeSpan(0, 0, 0);
-    private readonly TimeSpan clockCycle = new TimeSpan(0, 1, 30);
+    private TimeSpan _timeSpan = new(0, 0, 0);
+    private readonly TimeSpan _clockCycle = new(0, 1, 30);
     #endregion
 
-    public Sandclock(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
+    public Sandclock(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.Sandclock, arrayPosition, xx, yy)
     {
-        if (bruceCook is not null)
-            bruceCook.stuck = true;
+        if (_bruceCook is not null)
+            _bruceCook.Stuck = true;
 
-        bruceCook = this;
+        _bruceCook = this;
 
-        Texture = LevelTextures.Sandclock;
-        _usedSand = LevelTextures.UsedSand[0];
-        _sandLeft = LevelTextures.SandLeft[0];
+        Texture = LevelResources.Sandclock;
+        _usedSand = LevelResources.UsedSand[0];
+        _sandLeft = LevelResources.SandLeft[0];
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
-        if (stuck)
+        if (Stuck)
             return;
 
-        timeSpan += gameTime.ElapsedGameTime;
+        _timeSpan += gameTime.ElapsedGameTime;
         LevelState.TimeSpanLeft -= gameTime.ElapsedGameTime;
-        if (timeSpan >= clockCycle)
-        {
-            timeSpan = new TimeSpan(0, 0, 0);
-            LevelState.TimeLeft--;
-            ColorJob.SteveJobs?.Reload();
-        }
+        if (_timeSpan < _clockCycle) return;
+        
+        _timeSpan = new TimeSpan(0, 0, 0);
+        LevelState.TimeLeft--;
+        ColorJob.SteveJobs?.Recharge();
     }
 
     // DEBUG //
-    public override void Render(SpriteBatch _spriteBatch)
-    {
-        base.Render(_spriteBatch);
-        _spriteBatch.DrawString(
+
+    public override void Draw(GameTime gameTime){
+        base.Draw(gameTime);
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
+        spriteBatch.DrawString(
             Statics.LightFont,
-            $"{LevelState.TimeSpanLeft.Minutes}:{LevelState.TimeSpanLeft.Seconds}",
-            (_position - new Vector2(2f, 0f)) * Configs.Scale,
+            $"{LevelState.TimeSpanLeft.Minutes}:{LevelState.TimeSpanLeft.Seconds:00}",
+            (Position - new Vector2(2f, 0f)) * Configs.Scale,
             Color.White * Statics.Opacity,
             0f,
             Vector2.Zero,
@@ -102,10 +102,10 @@ public class Sandclock : Block, IUpdateable
             );
         }*/
 
-    public override void Dispose()
+    public new void Dispose()
     {
-        if (bruceCook.Equals(this))
-            bruceCook = null;
+        if (_bruceCook.Equals(this))
+            _bruceCook = null;
         base.Dispose();
     }
 }

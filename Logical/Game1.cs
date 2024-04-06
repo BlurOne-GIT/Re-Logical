@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
 using Logical.States;
 using System.Reflection;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using MmgEngine;
+
 //using Octokit;
 
 namespace Logical;
@@ -35,8 +29,8 @@ public class Game1 : Game
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
-        IsMouseVisible = false;
         Statics.Initialize(Content);
+        IsMouseVisible = false;
         Window.AllowAltF4 = true;
         Window.AllowUserResizing = false;
         Window.IsBorderless = false;
@@ -90,14 +84,15 @@ public class Game1 : Game
         Configs.ResolutionChanged += ReloadScale;
         Configs.FullscreenChanged += Fullscreen;
         Configs.MusicVolumeChanged += UpdateVolume;
-        Activated += Statics.Focus;
-        Deactivated += Statics.UnFocus;
-        Statics.Focus(null, null);
+        Activated += EngineStatics.Focus;
+        Deactivated += EngineStatics.UnFocus;
+        EngineStatics.Focus(null, null);
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        Services.AddService(_spriteBatch);
 
         // TODO: use this.Content to load your game content here
         MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2);
@@ -106,19 +101,19 @@ public class Game1 : Game
         _cursorTexture = Content.Load<Texture2D>("Cursor");
         Statics.LoadFonts();
         #if DEBUG
-        _version = new TextComponent(Statics.LightFont, new Vector2(0, 248), Color.White, _versionString.ToUpper().Replace('.', '_'), 1);
+        _version = new TextComponent(this, Statics.LightFont, _versionString.ToUpper().Replace('.', '_'), new Vector2(0, 248), 1, color: Color.White);
         #endif
         
-        SwitchGameState(new TitleState());
+        SwitchGameState(new TitleState(this));
     }
 
     protected override void Update(GameTime gameTime)
     {
         // TODO: Add your update logic here
-
         Input.UpdateInputs(Mouse.GetState());
         Statics.MousePoint = Mouse.GetState().Position;
         _currentGameState.Update(gameTime);
+        base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
@@ -127,9 +122,8 @@ public class Game1 : Game
 
         // TODO: Add your drawing code here
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        _currentGameState.Render(_spriteBatch);
+        _currentGameState.Draw(gameTime);
         if (Statics.ShowCursor)
-        {
             _spriteBatch.Draw(
                 _cursorTexture,
                 new Vector2((int)(Statics.MousePoint.X / Configs.Scale) * Configs.Scale, (int)(Statics.MousePoint.Y / Configs.Scale) * Configs.Scale),
@@ -141,9 +135,8 @@ public class Game1 : Game
                 SpriteEffects.None,
                 1f
             );
-        }
         #if DEBUG
-        _version.Render(_spriteBatch);
+        _version.Draw(gameTime);
         #endif
         _spriteBatch.End();
 
@@ -165,9 +158,9 @@ public class Game1 : Game
         Configs.FullscreenChanged -= Fullscreen;
         Configs.MusicVolumeChanged -= UpdateVolume;
         _currentGameState.OnStateSwitched -= OnStateSwitched;
-        _currentGameState.OnEventNotification -= OnEventNotification;
         Activated -= Statics.Focus;
         Deactivated -= Statics.UnFocus;
+        base.OnExiting(sender, args);
     }
 #endregion
 
@@ -177,38 +170,31 @@ public class Game1 : Game
         if (_currentGameState is not null)
         {
             _currentGameState.OnStateSwitched -= OnStateSwitched;
-            _currentGameState.OnEventNotification -= OnEventNotification;
-            _currentGameState.UnloadContent(Content);
+            _currentGameState.UnloadContent();
             _currentGameState.Dispose();
         }
 
         _currentGameState = newGameState;
 
-        _currentGameState.LoadContent(Content);
+        _currentGameState.LoadContent();
+        _currentGameState.Initialize();
 
         _currentGameState.OnStateSwitched += OnStateSwitched;
-        _currentGameState.OnEventNotification += OnEventNotification;
     }
 
     private void OnStateSwitched(object s, GameState e) => SwitchGameState(e);
-
-    private void OnEventNotification(object s, GameEvents e)
-    {
-        switch (e)
-        {
-            case GameEvents.Exit: Exit(); break;
-        }
-    }
 
     private void ReloadScale(object s, EventArgs e)
     {
         if (Configs.Fullscreen)
         {
-            _graphics.PreferredBackBufferWidth = Configs.Width; _graphics.PreferredBackBufferHeight = Configs.Height;
+            _graphics.PreferredBackBufferWidth = Configs.Width;
+            _graphics.PreferredBackBufferHeight = Configs.Height;
         }
         else
         {
-            _graphics.PreferredBackBufferWidth = Configs.NativeWidth * Configs.Scale; _graphics.PreferredBackBufferHeight = Configs.NativeHeight * Configs.Scale;
+            _graphics.PreferredBackBufferWidth = Configs.NativeWidth * Configs.Scale;
+            _graphics.PreferredBackBufferHeight = Configs.NativeHeight * Configs.Scale;
         }
         _graphics.ApplyChanges();
     }
@@ -217,7 +203,7 @@ public class Game1 : Game
 
     private void Fullscreen(object s, EventArgs e) => _graphics.ToggleFullScreen();
 
-    private void UpdateVolume(object s, EventArgs e) {MediaPlayer.Volume = MathF.Pow((float)Configs.MusicVolume * 0.1f, 2); MediaPlayer.IsMuted = _m(Configs.MusicVolume);}
+    private void UpdateVolume(object s, EventArgs e) {MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2); MediaPlayer.IsMuted = _m(Configs.MusicVolume);}
     
     private readonly Func<int, bool> _m = x => x == 0;
 #endregion
