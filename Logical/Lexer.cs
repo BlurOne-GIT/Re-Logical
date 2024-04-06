@@ -50,7 +50,7 @@ public class Lexer
         int btr = (level - 1) * 100 + 83;
         for (int i = 0; i < 15; i++)
             r += $"{(CharEncode)_hexFile[btr + i]}";
-        return r.Replace("space", " ").TrimEnd();
+        return r.Replace("Space", " ").TrimEnd();
     }
 
     public int GetLevelNumber(string name)
@@ -61,7 +61,7 @@ public class Lexer
             int btr = i * 100 + 83;
             for (int j = 0; j < 15; j++)
                 r += $"{(CharEncode)_hexFile[btr + j]}";
-            if (name == r.Replace("space", " ").TrimEnd())
+            if (name == r.Replace("Space", " ").TrimEnd())
                 return i;
         }
         return 0;
