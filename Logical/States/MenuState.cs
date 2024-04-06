@@ -95,24 +95,24 @@ public class MenuState : GameState
     private async void FadeIn()
     {
         await Task.Delay(660);
-        for (float i = 0; i < 1; i += 0.05f)
+        for (float i = 1; i > 0; i -= 0.05f)
         {
-            Statics.Opacity = i;
+            Statics.BackdropOpacity = i;
             await Task.Delay(14);
         }
-        Statics.Opacity = 1;
+        Statics.BackdropOpacity = 0;
         ButtonSubscriber();
     }
     
     private async void FadeOut()
     {
         MediaPlayer.Stop();
-        for (float i = 1; i > 0; i -= 0.05f)
+        for (float i = 0; i < 1; i += 0.05f)
         {
-            Statics.Opacity = i;
+            Statics.BackdropOpacity = i;
             await Task.Delay(14);
         }
-        Statics.Opacity = 0;
+        Statics.BackdropOpacity = 1;
         _beginSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         await Task.Delay(660);
         SwitchState(new LoadingState(Game));

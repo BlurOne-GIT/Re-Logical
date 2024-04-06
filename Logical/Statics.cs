@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Audio;
@@ -54,7 +52,7 @@ public static class Statics
     public static int Lives { get; set; }
     public static bool ShowCursor { get; set; }
     public static bool WindowFocused { get; set; }
-    public static float Opacity { get; set; } = 1;
+    public static float BackdropOpacity { get; set; }
     public static ContentManager Content { get; private set;}
     public static Vector2 DetectionPoint { get; } = new(13f);
     public static Random Brandom = new();

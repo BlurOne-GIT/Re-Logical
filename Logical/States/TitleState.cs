@@ -52,7 +52,7 @@ public class TitleState : GameState
             MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2) * i;
             await Task.Delay(100);
         }
-        Statics.Opacity = 0;
+        Statics.BackdropOpacity = 1;
         MediaPlayer.Stop(); MediaPlayer.Volume = Configs.MusicVolume * 0.1f;
         await Task.Delay(720);
         SwitchState(new MenuState(Game));

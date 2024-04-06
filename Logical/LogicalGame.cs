@@ -13,6 +13,8 @@ public class LogicalGame : EngineGame
 {
 #region Instances
     private Texture2D _cursorTexture;
+    private Texture2D _backdropTexture;
+    private Vector2 _backdropSize;
     #if DEBUG
     private readonly string _versionString = ((AssemblyInformationalVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)[0]).InformationalVersion;
     private TextComponent _version;
@@ -52,6 +54,9 @@ public class LogicalGame : EngineGame
         MediaPlayer.IsMuted = _m(Configs.MusicVolume);
         
         _cursorTexture = Content.Load<Texture2D>("Cursor");
+        _backdropTexture = new Texture2D(Graphics.GraphicsDevice, 1, 1);
+        _backdropTexture.SetData(new[] { Color.Black });
+        _backdropSize = new Vector2(Configs.NativeWidth, Configs.NativeHeight);
         Statics.LoadFonts();
         #if DEBUG
         _version = new TextComponent(this, Statics.LightFont, _versionString.ToUpper().Replace('.', '_'), new Vector2(0, 248), 1);
@@ -80,13 +85,25 @@ public class LogicalGame : EngineGame
                 _cursorTexture,
                 Input.MousePoint.ToVector2(),
                 null,
-                Color.White * Statics.Opacity,
+                Color.White,
                 0,
                 new Vector2(7, 7),
                 1f,
                 SpriteEffects.None,
                 1f
             );
+        if (Statics.BackdropOpacity > 0)
+            SpriteBatch.Draw(
+                _backdropTexture,
+                Vector2.Zero,
+                null,
+                Color.White * Statics.BackdropOpacity,
+                0f,
+                Vector2.Zero,
+                _backdropSize,
+                SpriteEffects.None,
+                1f
+                );
         #if DEBUG
         _version.Draw(gameTime);
         #endif

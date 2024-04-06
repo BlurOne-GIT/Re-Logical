@@ -81,22 +81,22 @@ public class LevelState : GameState
     private async void FadeIn()
     {
         await Task.Delay(660);
-        for (float i = 0; i < 1; i += 0.05f)
+        for (float i = 1; i > 0; i -= 0.05f)
         {
-            Statics.Opacity = i;
+            Statics.BackdropOpacity = i;
             await Task.Delay(14);
         }
-        Statics.Opacity = 1;
+        Statics.BackdropOpacity = 0;
     }
 
     private async void FadeOut(Action action)
     {
-        for (float i = 1; i > 0; i -= 0.05f)
+        for (float i = 0; i < 1; i += 0.05f)
         {
-            Statics.Opacity = i;
+            Statics.BackdropOpacity = i;
             await Task.Delay(14);
         }
-        Statics.Opacity = 0;
+        Statics.BackdropOpacity = 1;
         await Task.Delay(660);
         action();
     }
