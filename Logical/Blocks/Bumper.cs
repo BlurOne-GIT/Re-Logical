@@ -3,128 +3,71 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MmgEngine;
 
-namespace Logical;
+namespace Logical.Blocks;
 
-public class Bumper : Block, IUpdateable, IReloadable, IOverlayable
+public class Bumper : Block, IReloadable, IOverlayable
 {
     #region Field
     private readonly Direction _direction;
     private Texture2D _shadow;
-    private bool closedPipeLeft;
-    private bool closedPipeUp;
-    private bool closedPipeRight;
-    private bool closedPipeDown;
-    private readonly Vector2 shadowPos = new Vector2(12f, 13f);
-    private readonly Vector2 cplPos = new Vector2(0f, 10f);
-    private readonly Vector2 cprPos = new Vector2(26f, 10f);
-    private readonly Vector2 cpdPos = new Vector2(10f, 26f);
-    private readonly Vector2 cpuPos = new Vector2(10f, 0f);
+    private bool _closedPipeLeft;
+    private bool _closedPipeUp;
+    private bool _closedPipeRight;
+    private bool _closedPipeDown;
+    private readonly Vector2 _shadowPos = new(12f, 13f);
+    private readonly Vector2 _cplPos = new(0f, 10f);
+    private readonly Vector2 _cprPos = new(26f, 10f);
+    private readonly Vector2 _cpdPos = new(10f, 26f);
+    private readonly Vector2 _cpuPos = new(10f, 0f);
     #endregion
 
-    public Bumper(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
+    public Bumper(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.PipeCross, arrayPosition, xx, yy)
     {
-        switch (xx)
+        _direction = xx switch
         {
-            case 0x0E: _direction = Direction.Right; break;
-            case 0x0F: _direction = Direction.Left; break;
-            case 0x10: _direction = Direction.Up; break;
-            case 0x11: _direction = Direction.Down; break;
-            default: throw new Exception("Unhandeled");
-        }
-        Texture = LevelTextures.PipeCross;
+            0x0E => Direction.Right,
+            0x0F => Direction.Left,
+            0x10 => Direction.Up,
+            0x11 => Direction.Down,
+            _ => throw new ArgumentException("Invalid Bumper direction")
+        };
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
-        foreach (Ball ball in Ball.AllBalls)
-        {
-            if (ball.Position == Statics.DetectionPoint + _position)
-                ball.MovementDirection = _direction;
-        }
+        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == Statics.DetectionPoint + Position))
+            ball.MovementDirection = _direction;
     }
 
     public void Reload(Block[,] blocks)
     {
-        closedPipeLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
-        closedPipeUp = Pos.Y == 0 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
-        closedPipeRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
-        closedPipeDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
+        _closedPipeLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
+        _closedPipeUp = Pos.Y == 0 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
+        _closedPipeRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
+        _closedPipeDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
 
-        _shadow = !closedPipeRight && !closedPipeDown ? LevelTextures.HolderShadowCross : !closedPipeRight ? LevelTextures.HolderShadowHorizontal : !closedPipeDown ? LevelTextures.HolderShadowVertical : LevelTextures.HolderShadowEmpty;
+        _shadow = !_closedPipeRight && !_closedPipeDown ? LevelResources.HolderShadowCross : !_closedPipeRight ? LevelResources.HolderShadowHorizontal : !_closedPipeDown ? LevelResources.HolderShadowVertical : LevelResources.HolderShadowEmpty;
     }
 
-    public override void Render(SpriteBatch _spriteBatch)
+    public override void Draw(GameTime gameTime)
     {
-        base.Render(_spriteBatch);
-        if (closedPipeLeft)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.PipeClosedLeft,
-                (_position + cplPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (closedPipeUp)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.PipeClosedUp,
-                (_position + cpuPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (closedPipeRight)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.PipeClosedRight,
-                (_position + cprPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (closedPipeDown)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.PipeClosedDown,
-                (_position + cpdPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        _spriteBatch.Draw(
-            _shadow,
-            (_position + shadowPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.2f
-        );
+        base.Draw(gameTime);
+        if (_closedPipeLeft)
+            DrawAnotherTexture(LevelResources.PipeClosedLeft, _cplPos, 1);
+        
+        if (_closedPipeUp)
+            DrawAnotherTexture(LevelResources.PipeClosedUp, _cpuPos, 1);
+        
+        if (_closedPipeRight)
+            DrawAnotherTexture(LevelResources.PipeClosedRight, _cprPos, 1);
+        
+        if (_closedPipeDown)
+            DrawAnotherTexture(LevelResources.PipeClosedDown, _cpdPos, 1);
+        
+        DrawAnotherTexture(_shadow, _shadowPos, 2);
     }
 
-    public IEnumerable<Component> GetOverlayables() => new Component[] {new SimpleImage(LevelTextures.Holder, _position + new Vector2(9f), 8), new SimpleImage(LevelTextures.Bumper[(int)_direction], _position + new Vector2(14f), 9)};
+    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(Game, LevelResources.Holder, Position + new Vector2(9f), 8), new SimpleImage(Game, LevelResources.Bumper[(int)_direction], Position + new Vector2(14f), 9)};
 }

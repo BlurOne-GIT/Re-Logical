@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MmgEngine;
 
 namespace Logical;
 
-public class Ball : Component, IUpdateable
+public class Ball : SimpleImage
 {
     #region Fields
     public static event EventHandler BallCreated;
@@ -26,8 +27,8 @@ public class Ball : Component, IUpdateable
         {
             _ballColor = value;
             if (_shallSound)
-                LevelTextures.ColorChange.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
-            Texture = LevelTextures.Ball[(int)_ballColor];
+                LevelResources.ColorChange.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+            ChangeTexture(LevelResources.Ball[(int)_ballColor]);
         }
     }
     public Direction MovementDirection
@@ -37,59 +38,57 @@ public class Ball : Component, IUpdateable
         {
             _direction = value;
             if (_shallSound)
-                LevelTextures.Bounce.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
-            switch (_direction)
+                LevelResources.Bounce.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+            _movement = _direction switch
             {
-                case Direction.Left: _movement = new Vector2(-1f, 0f); break;
-                case Direction.Up: _movement = new Vector2(0f, -1f); break;
-                case Direction.Right: _movement = new Vector2(1f, 0f); break;
-                case Direction.Down: _movement = new Vector2(0f, 1f); break;
-            }
+                Direction.Left => new Vector2(-1f, 0f),
+                Direction.Up => new Vector2(0f, -1f),
+                Direction.Right => new Vector2(1f, 0f),
+                Direction.Down => new Vector2(0f, 1f),
+                _ => _movement
+            };
         }
     }
-    public Vector2 Position
+    public new Vector2 Position
     { 
-        get => _position;
-        set 
+        get => base.Position;
+        set
         {
-            if (!_justTeleported)
-            {
-                _justTeleported = true;
-                if (_shallSound)
-                    LevelTextures.Tp.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
-                _position = value; 
-            }    
+            if (_justTeleported) return;
+            
+            _justTeleported = true;
+            if (_shallSound)
+                LevelResources.Tp.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+            base.Position = value;
         }
     }
     #endregion
 
-    public Ball(Vector2 position, Direction direction, BallColors ballColor, bool willSound)
+    public Ball(Game game, Vector2 position, Direction direction, BallColors ballColor, bool willSound) : base(game, LevelResources.Ball[(int)ballColor], position, 7)
     {
         _shallSound = false;
-        _position = position;
         MovementDirection = direction;
         BallColor = ballColor;
         AllBalls.Add(this);
         _shallSound = willSound;
         BallCreated?.Invoke(this, EventArgs.Empty);
-        zIndex = 7;
-        IsEnabled = true;
     }
 
     public void Bounce() => MovementDirection = Statics.ReverseDirection[MovementDirection];
 
-    public override void Dispose()
+    protected override void Dispose(bool disposing)
     {
         BallDestroyed?.Invoke(this, EventArgs.Empty);
         AllBalls.Remove(this);
+        base.Dispose(disposing);
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
-        _position += _movement;
-        if (_position.X is < -10 or > 320 || _position.Y is < -10 or > 256)
+        base.Position += _movement;
+        if (Position.X is < -10 or > 320 || Position.Y is < -10 or > 256)
         {
-            LevelTextures.Explode.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+            LevelResources.Explode.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
             Dispose();
         }
         if (_justTeleported)

@@ -4,12 +4,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using MmgEngine;
 
 namespace Logical.States;
 
 public class TitleState : GameState
 {
-    public TitleState() => Statics.ShowCursor = false;
+    public TitleState(Game game) : base(game) => Statics.ShowCursor = false;
 
     #region Fields
     private Song _titel;
@@ -18,21 +19,21 @@ public class TitleState : GameState
 
     #region Default Methods
 
-    public override void LoadContent(ContentManager content)
+    public override void LoadContent()
     {
-        _titel = content.Load<Song>("Titel");
-        _background = new SimpleImage(content.Load<Texture2D>("Credit"), Vector2.Zero, 0);
-        AddGameObject(_background);
+        _titel = Game.Content.Load<Song>("Titel");
+        _background = new SimpleImage(Game, Game.Content.Load<Texture2D>("Credit"), Vector2.Zero, 0);
+        Components.Add(_background);
         MediaPlayer.Play(_titel);
         MediaPlayer.MediaStateChanged += EndCaller;
     }
 
     public override void Update(GameTime gameTime) {}
 
-    public override void UnloadContent(ContentManager content)
+    public override void UnloadContent()
     {
-        content.UnloadAsset("Titel");
-        content.UnloadAsset("Credit");
+        Game.Content.UnloadAsset("Titel");
+        Game.Content.UnloadAsset("Credit");
     }
 
     public override void HandleInput(object s, InputKeyEventArgs e) => EndScreen();
@@ -43,7 +44,7 @@ public class TitleState : GameState
     private void EndCaller(object s, EventArgs e) => EndScreen();
     private async void EndScreen()
     {
-        Input.KeyDown -= HandleInput;
+        Game.Window.KeyDown -= HandleInput;
         Input.ButtonDown -= HandleInput;
         MediaPlayer.MediaStateChanged -= EndCaller;
         for (float i = 1; i > 0; i -= 0.0125f)
@@ -51,10 +52,10 @@ public class TitleState : GameState
             MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2) * i;
             await Task.Delay(100);
         }
-        Statics.Opacity = 0;
+        Statics.BackdropOpacity = 1;
         MediaPlayer.Stop(); MediaPlayer.Volume = Configs.MusicVolume * 0.1f;
         await Task.Delay(720);
-        SwitchState(new MenuState());
+        SwitchState(new MenuState(Game));
     }
     #endregion
 }

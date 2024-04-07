@@ -5,145 +5,151 @@ using System.Threading.Tasks;
 using Logical.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MmgEngine;
 
-namespace Logical;
+namespace Logical.Blocks;
 
-public class Spinner : Block, IUpdateable, IReloadable
+public class Spinner : Block, IReloadable
 {
     #region Fields
-    private static List<Spinner> explodedSpinners = new List<Spinner>(0);
+    private static readonly List<Spinner> ExplodedSpinners = new(0);
     public static event EventHandler AllDone;
     public static event EventHandler ConditionClear;
-    private readonly Button spinButton;
-    private bool exploded = false;
-    private Button[] slotButtons = new Button[4];
-    private bool closedLeft;
-    private bool closedUp;
-    private bool closedRight;
-    private bool closedDown;
-    private readonly Vector2 cplPos = new Vector2(0f, 10f);
-    private readonly Vector2 cpuPos = new Vector2(10f, 0f);
-    private readonly Vector2 cprPos = new Vector2(32f, 10f);
-    private readonly Vector2 cpdPos = new Vector2(10f, 32f);
-    private readonly Animation<Vector2> blPos = new Animation<Vector2>(new Vector2[4]{
-        new Vector2(11f, 6f),
-        new Vector2(8f),
-        new Vector2(6f, 11f),
-        new Vector2(5f, 14f)
+    private readonly Button _spinButton;
+    private bool _exploded;
+    private readonly Button[] _slotButtons = new Button[4];
+    private bool _closedLeft;
+    private bool _closedUp;
+    private bool _closedRight;
+    private bool _closedDown;
+    private readonly Vector2 _cplPos = new(0f, 10f);
+    private readonly Vector2 _cpuPos = new(10f, 0f);
+    private readonly Vector2 _cprPos = new(32f, 10f);
+    private readonly Vector2 _cpdPos = new(10f, 32f);
+    private readonly Animation<Vector2> _blPos = new(new Vector2[]{
+        new(11f, 6f),
+        new(8f),
+        new(6f, 11f),
+        new(5f, 14f)
         }, false);
-    private readonly Animation<Vector2> buPos = new Animation<Vector2>(new Vector2[4]{
-        new Vector2(22f, 11f),
-        new Vector2(20f, 8f),
-        new Vector2(17f, 6f),
-        new Vector2(14f, 5f)
+    private readonly Animation<Vector2> _buPos = new(new Vector2[]{
+        new(22f, 11f),
+        new(20f, 8f),
+        new(17f, 6f),
+        new(14f, 5f)
     }, false);
-    private readonly Animation<Vector2> brPos = new Animation<Vector2>(new Vector2[4]{
-        new Vector2(17f, 22f),
-        new Vector2(20f),
-        new Vector2(22f, 17f),
-        new Vector2(23f, 14f)
+    private readonly Animation<Vector2> _brPos = new(new Vector2[]{
+        new(17f, 22f),
+        new(20f),
+        new(22f, 17f),
+        new(23f, 14f)
     }, false);
-    private readonly Animation<Vector2> bdPos = new Animation<Vector2>(new Vector2[4]{
-        new Vector2(6f, 17f),
-        new Vector2(8f, 20f),
-        new Vector2(11f, 22f),
-        new Vector2(14f, 23f)
+    private readonly Animation<Vector2> _bdPos = new(new Vector2[]{
+        new(6f, 17f),
+        new(8f, 20f),
+        new(11f, 22f),
+        new(14f, 23f)
     }, false);
-    private readonly Animation<Texture2D> spinAnimation = new Animation<Texture2D>(LevelTextures.SpinnerSpin, false);
-    private readonly Animation<Texture2D> explodeAnimation = new Animation<Texture2D>(LevelTextures.SpinnerExplode, false);
-    private readonly Vector2 spinPos = new Vector2(5f);
-    private readonly Vector2 explodePos = new Vector2(4f);
-    private readonly Vector2[] registers = new Vector2[4]
-        {
-            new Vector2(0f, 13f),  // Left
-            new Vector2(13f, 0f),  // Up
-            new Vector2(26f, 13f), // Right
-            new Vector2(13f, 26f)  // Down
-        };
-    private List<BallColors?> slotBalls = new List<BallColors?>(4)
+    //private readonly Animation<Texture2D> _spinAnimation = new(LevelResources.SpinnerSpin, false);
+    private readonly Animation<Rectangle> _spinAnimation = Animation<Rectangle>.TextureAnimation(new Point(26), new Point(78, 26), false, 1);
+    private readonly Animation<Texture2D> _explodeAnimation = new(LevelResources.SpinnerExplode, false);
+    private readonly Vector2 _spinPos = new(5f);
+    private readonly Vector2 _explodePos = new(4f);
+    private readonly Vector2[] _registers = {
+        new(0f, 13f),  // Left
+        new(13f, 0f),  // Up
+        new(26f, 13f), // Right
+        new(13f, 26f)  // Down
+    };
+    private readonly List<BallColors?> _slotBalls = new(4)
     {
         null,
         null,
         null,
         null
     };
+
+    private Texture2D _spinningTexture;
     #endregion
 
-    public Spinner(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
+    public Spinner(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.Spinner, arrayPosition, xx, yy)
     {
-        Texture = LevelTextures.Spinner;
-        spinButton = new Button(_position, new Point(36), sfx: LevelTextures.Spin, soundClickTypes: 1);
-        spinButton.RightClicked += Spin;
-        registers[1] = Pos.Y == 0 ? new Vector2(13f, -13f) : new Vector2(13f, 0f);
-        explodedSpinners.Capacity++;
+        _spinButton = new Button(game, new Rectangle(Position.ToPoint(), new Point(36)));
+        _spinButton.RightClicked += Spin;
+        _registers[1] = Pos.Y == 0 ? new Vector2(13f, -13f) : new Vector2(13f, 0f);
+        ExplodedSpinners.Capacity++;
+    }
+
+    protected override void LoadContent()
+    {
+        _spinningTexture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerSpin");
+        base.LoadContent();
     }
 
     public void Reload(Block[,] blocks)
     {
-        closedLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
-        closedUp = Pos.Y != 0 && !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
-        closedRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
-        closedDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
+        _closedLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
+        _closedUp = Pos.Y != 0 && !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
+        _closedRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
+        _closedDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
         
-        if (!closedLeft)
+        if (!_closedLeft)
         {
-            slotButtons[0] = new Button(_position + new Vector2(4f, 13f), new Point(10, 9), enable: false);
-            slotButtons[0].LeftClicked += PopOut;
+            _slotButtons[0] = new Button(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
+            _slotButtons[0].LeftClicked += PopOut;
         }
-        if (!closedUp && Pos.Y != 0 && blocks[Pos.X, Pos.Y-1].FileValue is not 0x16)
+        if (!_closedUp && Pos.Y != 0 && blocks[Pos.X, Pos.Y-1].FileValue is not 0x16)
         {
-            slotButtons[1] = new Button(_position + new Vector2(13f, 4f), new Point(9, 10), enable: false);
-            slotButtons[1].LeftClicked += PopOut;
+            _slotButtons[1] = new Button(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10))) {Enabled = false};
+            _slotButtons[1].LeftClicked += PopOut;
         }
-        if (!closedRight)
+        if (!_closedRight)
         {
-            slotButtons[2] = new Button(_position + new Vector2(23f, 13f), new Point(10, 9), enable: false);
-            slotButtons[2].LeftClicked += PopOut;
+            _slotButtons[2] = new Button(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
+            _slotButtons[2].LeftClicked += PopOut;
         }
-        if (!closedDown && blocks[Pos.X, Pos.Y+1].FileValue is not 0x16)
+        if (!_closedDown && blocks[Pos.X, Pos.Y+1].FileValue is not 0x16)
         {
-            slotButtons[3] = new Button(_position + new Vector2(13f, 23f), new Point(9, 10), enable: false);
-            slotButtons[3].LeftClicked += PopOut;
+            _slotButtons[3] = new Button(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10))) {Enabled = false};
+            _slotButtons[3].LeftClicked += PopOut;
         }
     }
 
     private void Spin(object s, EventArgs e)
     {
-        spinButton.IsEnabled = false;
-        foreach (Button button in slotButtons)
-        {
+        _spinButton.Enabled = false;
+        foreach (var button in _slotButtons)
             if (button is not null)
-                button.IsEnabled = false;
-        }
-        var f = slotBalls.First();
-        slotBalls.RemoveAt(0);
-        slotBalls.Add(f);
-        spinAnimation.Start();
-        if (exploded || slotBalls[0] is not null)
-            blPos.Start();
-        if (exploded || slotBalls[1] is not null)
-            buPos.Start();
-        if (exploded || slotBalls[2] is not null)
-            brPos.Start();
-        if (exploded || slotBalls[3] is not null)
-            bdPos.Start();
-        LevelTextures.Spin.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
+                button.Enabled = false;
+        var f = _slotBalls.First();
+        _slotBalls.RemoveAt(0);
+        _slotBalls.Add(f);
+        _spinAnimation.Start();
+        if (_exploded || _slotBalls[0] is not null)
+            _blPos.Start();
+        if (_exploded || _slotBalls[1] is not null)
+            _buPos.Start();
+        if (_exploded || _slotBalls[2] is not null)
+            _brPos.Start();
+        if (_exploded || _slotBalls[3] is not null)
+            _bdPos.Start();
+        LevelResources.Spin.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         Check();
     }
 
     public void Pause(bool paused)
     {
-        spinButton.IsEnabled = !paused;
+        _spinButton.Enabled = !paused;
         if (paused)
         {
-            foreach (Button button in slotButtons)
+            foreach (var button in _slotButtons)
                 if (button is not null)
-                    button.IsEnabled = false;
+                    button.Enabled = false;
         }
         else
             for (int i = 0; i < 4; i++)
-                if (slotBalls[i] is not null && slotButtons[i] is not null)
-                    slotButtons[i].IsEnabled = true;
+                if (_slotBalls[i] is not null && _slotButtons[i] is not null)
+                    _slotButtons[i].Enabled = true;
     }
 
     private void PopOut(object s, EventArgs e)
@@ -154,322 +160,161 @@ public class Spinner : Block, IUpdateable, IReloadable
         int index = 4;
         for (int i = 0; i < 4; i++)
         {
-            if (s.Equals(slotButtons[i]))
-            {
-                index = i;
-                break;
-            }
+            if (!s.Equals(_slotButtons[i])) continue;
+            
+            index = i;
+            break;
         }
 
-        slotButtons[index].IsEnabled = false;
-        new Ball(registers[index] + _position, (Direction)index, (BallColors)slotBalls[index], true);
-        slotBalls[index] = null;
-        LevelTextures.PopOut.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
+        _slotButtons[index].Enabled = false;
+        new Ball(Game, _registers[index] + Position, (Direction)index, (BallColors)_slotBalls[index], true);
+        _slotBalls[index] = null;
+        LevelResources.PopOut.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
         for (int i = 0; i < 4; i++)
-        {
-            foreach (Ball ball in Ball.AllBalls.ToArray())
-            {
-                if (ball.Position != registers[i] + _position || ball.MovementDirection == (Direction)i)
-                    continue;
-
-                if (slotBalls[i] is null && spinAnimation.IsFinished)
+            foreach (var ball in Ball.AllBalls.ToArray().Where(ball => ball.Position == _registers[i] + Position && ball.MovementDirection != (Direction)i))
+                if (_slotBalls[i] is null && _spinAnimation.IsAtEnd)
                 {
-                    slotBalls[i] = ball.BallColor;
-                    if (slotButtons[i] is not null)
-                        slotButtons[i].IsEnabled = true;
-                    LevelTextures.PopIn.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
+                    _slotBalls[i] = ball.BallColor;
+                    if (_slotButtons[i] is not null)
+                        _slotButtons[i].Enabled = true;
+                    LevelResources.PopIn.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
                     ball.Dispose();
                     Check();
                 }
                 else if (Pos.Y != 0 || i != 1)
                     ball.Bounce();
-            }
-        }
 
-        if(!spinButton.IsEnabled && spinAnimation.IsFinished)
-        {
-            spinButton.IsEnabled = true;
-            for (int i = 0; i < 4; i++)
-            {
-                if (slotButtons[i] is not null && slotBalls[i] is not null)
-                    slotButtons[i].IsEnabled = true;
-            }
-        }
+        if (_spinButton.Enabled || !_spinAnimation.IsAtEnd) return;
+        
+        _spinButton.Enabled = true;
+        for (int i = 0; i < 4; i++)
+            if (_slotButtons[i] is not null && _slotBalls[i] is not null)
+                _slotButtons[i].Enabled = true;
     }
 
     public async void Check()
     {
-        if (LevelState.ColorJobs.Count != 0 && slotBalls[0] == LevelState.ColorJobs[0] && slotBalls[1] == LevelState.ColorJobs[1] && slotBalls[2] == LevelState.ColorJobs[2] && slotBalls[3] == LevelState.ColorJobs[3])
+        if (LevelState.ColorJobs.Count != 0 && _slotBalls[0] == LevelState.ColorJobs[0] && _slotBalls[1] == LevelState.ColorJobs[1] && _slotBalls[2] == LevelState.ColorJobs[2] && _slotBalls[3] == LevelState.ColorJobs[3])
         {
             await Explode();
             LevelState.ColorJobs.Clear();
-            ConditionClear?.Invoke(this, new EventArgs());
+            ConditionClear?.Invoke(this, EventArgs.Empty);
             return;
         }
 
-        if (LevelState.ColorJobs.Count != 0 || LevelState.TrafficLights.Count != 0 && slotBalls[0] != LevelState.TrafficLights[0])
+        if (LevelState.ColorJobs.Count != 0 || LevelState.TrafficLights.Count != 0 && _slotBalls[0] != LevelState.TrafficLights[0])
             return;
 
-        if (slotBalls.All(a => a == slotBalls[0]) && slotBalls[0] is not null)
-        {
-            await Explode();
-            if (LevelState.TrafficLights.Count != 0)
-            {
-                LevelState.TrafficLights.RemoveAt(0);
-                ConditionClear.Invoke(this, new EventArgs());
-            }
-        }
+        if (_slotBalls.Any(a => a != _slotBalls[0]) || _slotBalls[0] is null) return;
+        
+        await Explode();
+        if (LevelState.TrafficLights.Count == 0) return;
+        
+        LevelState.TrafficLights.RemoveAt(0);
+        ConditionClear?.Invoke(this, EventArgs.Empty);
     }
 
     private async Task Explode(bool fb = false)
     {
-        explodeAnimation.Start();
-        exploded = true;
+        _explodeAnimation.Start();
+        _exploded = true;
         for (int i = 0; i < 4; i++)
-            slotBalls[i] = null;
-        if (!fb && !explodedSpinners.Contains(this))
-            explodedSpinners.Add(this);
-        LevelTextures.Explode.Play(MathF.Pow((float)Configs.SfxVolume * 0.1f, 2), 0, 0);
-        while (!explodeAnimation.IsFinished) {
+            _slotBalls[i] = null;
+        if (!fb && !ExplodedSpinners.Contains(this))
+            ExplodedSpinners.Add(this);
+        LevelResources.Explode.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+        while (!_explodeAnimation.IsAtEnd) {
             await Task.Delay(20);
         }
         await Task.Delay(fb ? 20 : 40);
-        if (!fb && explodedSpinners.Count == explodedSpinners.Capacity)
-            AllDone?.Invoke(explodedSpinners, new EventArgs());
+        if (!fb && ExplodedSpinners.Count == ExplodedSpinners.Capacity)
+            AllDone?.Invoke(ExplodedSpinners, EventArgs.Empty);
     }
 
     public async Task<int> FinalBoom()
     {
-        spinButton.IsEnabled = false;
-        foreach (Button button in slotButtons)
+        _spinButton.Enabled = false;
+        foreach (var button in _slotButtons)
             if (button is not null)
-                button.IsEnabled = false;
-        int r = slotBalls.Count(a => a is not null);
+                button.Enabled = false;
+        var r = _slotBalls.Count(a => a is not null);
         await Explode(true);
         return r;
     }
 
     public static void ClearList()
     {
-        explodedSpinners.Clear();
-        explodedSpinners.Capacity = 0;
+        ExplodedSpinners.Clear();
+        ExplodedSpinners.Capacity = 0;
     }
 
-    public override void Dispose()
+    protected override void Dispose(bool disposing)
     {
-        base.Dispose();
-        spinButton.RightClicked -= Spin;
-        spinButton.Dispose();
-        foreach (Button button in slotButtons)
+        _spinButton.RightClicked -= Spin;
+        _spinButton.Dispose();
+        foreach (var button in _slotButtons)
         {
             if (button is not null)
                 button.LeftClicked -= PopOut;
             button?.Dispose();
         }
+        base.Dispose(disposing);
     }
 
-    public override void Render(SpriteBatch _spriteBatch)
+    public override void Draw(GameTime gameTime)
     {
-        base.Render(_spriteBatch);
-        if (!spinAnimation.IsFinished)
-        {
-            _spriteBatch.Draw(
-                spinAnimation.NextFrame(),
-                (_position + spinPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (slotBalls[0] is not null)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerBall[(int)slotBalls[0]],
-                (_position + blPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
-        else if (exploded)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerBallExploded,
-                (_position + blPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
-        if (slotBalls[1] is not null)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerBall[(int)slotBalls[1]],
-                (_position + buPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
-        else if (exploded)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerBallExploded,
-                (_position + buPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
-        if (slotBalls[2] is not null)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerBall[(int)slotBalls[2]],
-                (_position + brPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
-        else if (exploded)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerBallExploded,
-                (_position + brPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
-        if (slotBalls[3] is not null)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerBall[(int)slotBalls[3]],
-                (_position + bdPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
-        else if (exploded)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerBallExploded,
-                (_position + bdPos.NextFrame()) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.2f
-            );
-        }
-        if (closedLeft)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerClosedLeft,
-                (_position + cplPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (closedUp)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerClosedUp,
-                (_position + cpuPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (closedRight)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerClosedRight,
-                (_position + cprPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (closedDown)
-        {
-            _spriteBatch.Draw(
-                LevelTextures.SpinnerClosedDown,
-                (_position + cpdPos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.1f
-            );
-        }
-        if (!explodeAnimation.IsFinished)
-        {
-            _spriteBatch.Draw(
-                explodeAnimation.NextFrame(),
-                (_position + explodePos) * Configs.Scale,
-                null,
-                Color.White * Statics.Opacity,
-                0f,
-                Vector2.Zero,
-                Configs.Scale,
-                SpriteEffects.None,
-                0.3f
-            );
-        }
+        base.Draw(gameTime);
+        
+        // Spinning Animation
+        if (!_spinAnimation.IsAtEnd)
+            DrawAnotherTexture(_spinningTexture, _spinPos, 1, _spinAnimation);
+        
+        // Left Slot
+        if (_slotBalls[0] is not null)
+            DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[0]], _blPos.NextFrame(), 2);
+        else if (_exploded)
+            DrawAnotherTexture(LevelResources.SpinnerBallExploded, _blPos.NextFrame(), 2);
+        
+        // Up Slot
+        if (_slotBalls[1] is not null)
+            DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[1]], _buPos.NextFrame(), 2);
+        else if (_exploded)
+            DrawAnotherTexture(LevelResources.SpinnerBallExploded, _buPos.NextFrame(), 2);
+        
+        // Right Slot
+        if (_slotBalls[2] is not null)
+            DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[2]], _brPos.NextFrame(), 2);
+        else if (_exploded)
+            DrawAnotherTexture(LevelResources.SpinnerBallExploded, _brPos.NextFrame(), 2);
+        
+        // Down Slot
+        if (_slotBalls[3] is not null)
+            DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[3]], _bdPos.NextFrame(), 2);
+        else if (_exploded)
+            DrawAnotherTexture(LevelResources.SpinnerBallExploded, _bdPos.NextFrame(), 2);
+        
+        // Closed Pipe Left
+        if (_closedLeft)
+            DrawAnotherTexture(LevelResources.SpinnerClosedLeft, _cplPos, 1);
+        
+        // Closed Pipe Up
+        if (_closedUp)
+            DrawAnotherTexture(LevelResources.SpinnerClosedUp, _cpuPos, 1);
+        
+        // Closed Pipe Right
+        if (_closedRight)
+            DrawAnotherTexture(LevelResources.SpinnerClosedRight, _cprPos, 1);
+        
+        // Closed Pipe Down
+        if (_closedDown)
+            DrawAnotherTexture(LevelResources.SpinnerClosedDown, _cpdPos, 1);
+        
+        // Explode Animation
+        if (!_explodeAnimation.IsAtEnd)
+            DrawAnotherTexture(_explodeAnimation.NextFrame(), _explodePos, 3);
     }
 }

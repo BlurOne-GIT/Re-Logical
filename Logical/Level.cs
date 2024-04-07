@@ -1,3 +1,5 @@
+using Logical.Blocks;
+
 namespace Logical;
 
 public struct Level

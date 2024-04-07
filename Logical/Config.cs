@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework;
+using MmgEngine;
 
 namespace Logical;
 
@@ -14,11 +16,9 @@ public static class Configs
     #endregion
 
     #region Fields
-    private const int nativeWidth = 320;
-    private const int nativeHeight = 256;
-    private const string file = ".\\config.lr";
-    private static int _width;
-    private static int _height;
+    public const int NativeWidth = 320;
+    public const int NativeHeight = 256;
+    private const string File = "./config.lr";
 
     /* 0 */ private static int _scale;
     /* 1 */ private static bool _fullscreen;
@@ -30,23 +30,18 @@ public static class Configs
     /*7-9*/ private static int _score;
     /* A */ private static int _lives;
     /* B */ private static bool _autoUpdate;
+    private static bool _initialized;
     #endregion
 
     // Instances
     private static FileStream _fileStream;
 
     #region Properties
-    public static int Width { get => _width; }
-    public static int Height { get => _height; }
-    public static int NativeWidth { get => nativeWidth; }
-    public static int NativeHeight { get => nativeHeight; }
-    public static int MaxScale
-    {
-        get
-        {
-            return Math.Min(_width / nativeWidth, _height / nativeHeight);
-        }
-    }
+    public static int Width { get; private set; }
+    public static int Height { get; private set; }
+
+    public static int MaxScale => Math.Min(Width / NativeWidth, Height / NativeHeight);
+
     public static int XOffset
     {
         get
@@ -54,7 +49,7 @@ public static class Configs
             if (!_fullscreen)
                 return 0;
             
-            return (_width - nativeWidth * MaxScale) / 2;
+            return (Width - NativeWidth * MaxScale) / 2;
         }
     }
     public static int YOffset
@@ -64,40 +59,130 @@ public static class Configs
             if (!_fullscreen)
                 return 0;
             
-            return (_height - nativeHeight * MaxScale) / 2;
+            return (Height - NativeHeight * MaxScale) / 2;
         }
     }
 
     /* 0 */ public static int Scale 
     { 
-        get 
+        get => !_fullscreen ? _scale : MaxScale;
+        set
         {
-            if (!_fullscreen) return _scale;
-            else return MaxScale;
+            if (_fullscreen) return;
+            SetConfig(value);
+            _scale = value;
+            
+            ResolutionChanged?.Invoke(null, EventArgs.Empty);
         } 
-        set {SetConfig(value); _scale = value; ResolutionChanged?.Invoke(null, new EventArgs());} 
     }
-    /* 1 */ public static bool Fullscreen { get => _fullscreen; set {SetConfig(value); _fullscreen = value; FullscreenChanged?.Invoke(null, new EventArgs()); ResolutionChanged?.Invoke(null, new EventArgs());}}
-    /* 2 */ public static int MusicVolume { get => _musicVolume; set {SetConfig(value); _musicVolume = value; MusicVolumeChanged?.Invoke(null, new EventArgs());}}
-    /* 3 */ public static int SfxVolume { get => _sfxVolume; set {SetConfig(value); _sfxVolume = value; SfxVolumeChaged?.Invoke(null, new EventArgs());}}
-    /* 4 */ public static int GraphicSet { get => _graphicSet; set {SetConfig(value); _graphicSet = value; }}
-    /* 5 */ public static int StereoSeparation { get => _stereoSeparation; set {SetConfig(value); _stereoSeparation = value; }}
-    /* 6 */ public static int Stage { get => _stage; set {SetConfig(value); _stage = value; }}
-    /*7-9*/ public static int Score { get => _score; set {SetConfig(value); _score = value; }}
-    /* A */ public static int Lives { get => _lives; set {SetConfig(value); _lives = value;}}
-    /* B */ public static bool AutoUpdate { get => _autoUpdate; set {SetConfig(value); _autoUpdate = value;}}
+    /* 1 */
+    public static bool Fullscreen
+    {
+        get => _fullscreen;
+        set
+        {
+            SetConfig(value);
+            _fullscreen = value;
+            FullscreenChanged?.Invoke(null, EventArgs.Empty);
+            ResolutionChanged?.Invoke(null, EventArgs.Empty);
+        }
+    }
+    /* 2 */
+    public static int MusicVolume
+    {
+        get => _musicVolume;
+        set
+        {
+            SetConfig(value);
+            _musicVolume = value;
+            MusicVolumeChanged?.Invoke(null, EventArgs.Empty);
+        }
+    }
+    /* 3 */
+    public static int SfxVolume
+    {
+        get => _sfxVolume;
+        set
+        {
+            SetConfig(value);
+            _sfxVolume = value;
+            SfxVolumeChaged?.Invoke(null, EventArgs.Empty);
+        }
+    }
+    /* 4 */
+    public static int GraphicSet
+    {
+        get => _graphicSet;
+        set
+        {
+            SetConfig(value);
+            _graphicSet = value;
+        }
+    }
+    /* 5 */
+    public static int StereoSeparation
+    {
+        get => _stereoSeparation;
+        set
+        {
+            SetConfig(value);
+            _stereoSeparation = value;
+        }
+    }
+    /* 6 */
+    public static int Stage
+    {
+        get => _stage;
+        set
+        {
+            SetConfig(value);
+            _stage = value;
+        }
+    }
+    /*7-9*/
+    public static int Score
+    {
+        get => _score;
+        set
+        {
+            SetConfig(value);
+            _score = value;
+        }
+    }
+    /* A */
+    public static int Lives
+    {
+        get => _lives;
+        set
+        {
+            SetConfig(value);
+            _lives = value;
+        }
+    }
+    /* B */
+    public static bool AutoUpdate
+    {
+        get => _autoUpdate;
+        set
+        {
+            SetConfig(value);
+            _autoUpdate = value;
+        }
+    }
+
     #endregion
 
     // Constructor
     public static void Initialize(int width, int height)
     {
-        _width = width; _height = height;
+        Width = width; Height = height;
         try
         {
-            _fileStream = File.Open(file, FileMode.Open);
+            _fileStream = System.IO.File.Open(File, FileMode.Open);
         } catch
         {
-            _fileStream = File.Create(file);
+            _fileStream = System.IO.File.Create(File);
+            _initialized = true;
             /* 0 */ Scale = 2;
             /* 1 */ Fullscreen = false;
             /* 2 */ MusicVolume = 10;
@@ -110,26 +195,30 @@ public static class Configs
             /* B */ AutoUpdate = true;
             return;
         }
-        /* 0 */ _scale = (byte)_fileStream.ReadByte();
-        /* 1 */ _fullscreen = Convert.ToBoolean(_fileStream.ReadByte());
-        /* 2 */ _musicVolume = (byte)_fileStream.ReadByte();
-        /* 3 */ _sfxVolume = (byte)_fileStream.ReadByte();
-        /* 4 */ _graphicSet = (byte)_fileStream.ReadByte();
-        /* 5 */ _stereoSeparation = (byte)_fileStream.ReadByte();
-        /* 6 */ _stage = (byte)_fileStream.ReadByte();
+        /* 0 */ Scale = (byte)_fileStream.ReadByte();
+        /* 1 */ Fullscreen = Convert.ToBoolean(_fileStream.ReadByte());
+        /* 2 */ MusicVolume = (byte)_fileStream.ReadByte();
+        /* 3 */ SfxVolume = (byte)_fileStream.ReadByte();
+        /* 4 */ GraphicSet = (byte)_fileStream.ReadByte();
+        /* 5 */ StereoSeparation = (byte)_fileStream.ReadByte();
+        /* 6 */ Stage = (byte)_fileStream.ReadByte();
         var b = new byte[4];
-        _fileStream.Read(b, 1, 3);
+        _ = _fileStream.Read(b, 1, 3);
         if (BitConverter.IsLittleEndian)
             Array.Reverse(b);
-        /*7-9*/ _score = BitConverter.ToInt32(b, 0);
-        /* A */ _lives = _fileStream.ReadByte();
-        /* B */ _autoUpdate = Convert.ToBoolean(_fileStream.ReadByte());
+        /*7-9*/ Score = BitConverter.ToInt32(b, 0);
+        /* A */ Lives = _fileStream.ReadByte();
+        /* B */ AutoUpdate = Convert.ToBoolean(_fileStream.ReadByte());
+        _initialized = true;
         Fixer();
     }
 
     #region Methods
     private static void SetConfig(object value, [CallerMemberName] string name = null)
     {
+        if (!_initialized)
+            return;
+        
         switch (name)
         {
             case "Scale": _fileStream.Position = 0; break;
@@ -141,7 +230,7 @@ public static class Configs
             case "Stage": _fileStream.Position = 6; break;
             case "Score":
                 _fileStream.Position = 7;
-                byte[] b = BitConverter.GetBytes((int)value);
+                var b = BitConverter.GetBytes((int)value);
                 if (BitConverter.IsLittleEndian) 
                     Array.Reverse(b);
                 _fileStream.Write(b, 1, 3);
@@ -158,7 +247,7 @@ public static class Configs
     private static void Fixer()
     {
         // 0
-        if (_scale == 0 || nativeWidth * _scale > _width || nativeHeight * _scale > _height)
+        if (_scale == 0 || NativeWidth * _scale > Width || NativeHeight * _scale > Height)
             Scale = 2;
         // 2
         if (_musicVolume > 10)
@@ -179,7 +268,7 @@ public static class Configs
         if (_score > 999999)
             Score = 0;
         // A
-        if (_lives <= 0 || _lives > 7)
+        if (_lives is <= 0 or > 7)
             Lives = 0;
     }
     #endregion

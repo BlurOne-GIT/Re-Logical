@@ -1,80 +1,48 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MmgEngine;
 
-namespace Logical;
+namespace Logical.Blocks;
 
-public class Filter : Block, IUpdateable, IOverlayable
+public class Filter : Pipe, IOverlayable
 {
     #region Fields
-    private readonly BallColors _color;
+    private readonly BallColors _ballColor;
     private readonly Texture2D _shadow;
     private readonly Texture2D _ball;
-    private readonly Vector2 ballPos = new Vector2(14f);
-    private readonly Vector2 shadowPos = new Vector2(10f, 11f);
+    private readonly Vector2 _ballPos = new(14f);
+    private readonly Vector2 _shadowPos = new(10f, 11f);
     #endregion
 
-    public Filter(Point arrayPosition, byte xx, byte yy):base(arrayPosition, xx, yy)
+    public Filter(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy, false)
     {
-        switch (xx)
+        _shadow = xx switch
         {
-            case 0x05:
-                Texture = LevelTextures.PipeHorizontal;
-                _shadow = LevelTextures.FilterShadowHorizontal;
-                break;
-            case 0x06:
-                Texture = LevelTextures.PipeVertical;
-                _shadow = LevelTextures.FilterShadowVertical;
-                break;
-            case 0x07:
-                Texture = LevelTextures.PipeCross;
-                _shadow = LevelTextures.FilterShadowCross;
-                break;
-            default: throw new Exception("Unhandeled");
-        }
-        _color = (BallColors)Argument-1;
-        _ball = LevelTextures.SpinnerBall[Argument-1];
+            0x05 => LevelResources.FilterShadowHorizontal,
+            0x06 => LevelResources.FilterShadowVertical,
+            0x07 => LevelResources.FilterShadowCross,
+            _ => throw new ArgumentException("Invalid Pipe direction")
+        };
+        _ballColor = (BallColors)Argument-1;
+        _ball = LevelResources.SpinnerBall[Argument-1];
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
-        foreach (Ball ball in Ball.AllBalls)
-        {
-            if (ball.Position != Statics.DetectionPoint + _position)
-                continue;
-
-            if (ball.BallColor != _color)
-                ball.Bounce();
-        }
+        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == Statics.DetectionPoint + Position && ball.BallColor != _ballColor))
+            ball.Bounce();
     }
 
-    public override void Render(SpriteBatch _spriteBatch)
+    public override void Draw(GameTime gameTime)
     {
-        base.Render(_spriteBatch);
-        _spriteBatch.Draw(
-            _ball,
-            (_position + ballPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0f,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
-        _spriteBatch.Draw(
-            _shadow,
-            (_position + shadowPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.1f
-        );
+        base.Draw(gameTime);
+        
+        DrawAnotherTexture(_ball, _ballPos, 1);
+        DrawAnotherTexture(_shadow, _shadowPos, 1);
     }
 
-    public IEnumerable<Component> GetOverlayables() => new Component[] {new SimpleImage(LevelTextures.Filter[Argument-1], _position + new Vector2(7f), 9)};
+    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(Game, LevelResources.Filter[Argument-1], Position + new Vector2(7f), 9)};
 }

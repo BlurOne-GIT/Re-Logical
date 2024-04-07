@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Audio;
@@ -54,12 +52,11 @@ public static class Statics
     public static int Lives { get; set; }
     public static bool ShowCursor { get; set; }
     public static bool WindowFocused { get; set; }
-    public static Point MousePoint { get; set; }
-    public static float Opacity { get; set; } = 1;
+    public static float BackdropOpacity { get; set; }
     public static ContentManager Content { get; private set;}
-    public static Vector2 DetectionPoint { get; } = new Vector2(13f);
-    public static Random Brandom = new Random();
-    public static Dictionary<Direction, Direction> ReverseDirection = new Dictionary<Direction, Direction>(4)
+    public static Vector2 DetectionPoint { get; } = new(13f);
+    public static Random Brandom = new();
+    public static readonly Dictionary<Direction, Direction> ReverseDirection = new(4)
     {
         {Direction.Left, Direction.Right},
         {Direction.Up, Direction.Down},
@@ -73,13 +70,14 @@ public static class Statics
     {
         Content = content;
     }
+    
     public static void LoadFonts()
     {
-        Texture2D fontTexture = Content.Load<Texture2D>("Fonts");
-        List<Vector3> kernings = new List<Vector3>();
-        List<Rectangle> glyphRectangles = new List<Rectangle>();
-        List<Rectangle> fontRectangles = new List<Rectangle>();
-        List<char> characters = new List<char>{
+        var fontTexture = Content.Load<Texture2D>("Fonts");
+        var kernings = new List<Vector3>();
+        var glyphRectangles = new List<Rectangle>();
+        var fontRectangles = new List<Rectangle>();
+        var characters = new List<char>{
             ' ',
             '!',
             '%',
@@ -178,7 +176,7 @@ public static class Statics
         kernings = new List<Vector3>();
         for (int i = 0; i < characters.Count; i++)
         {
-            Point p = new Point(i * 8, 7);
+            var p = new Point(i * 8, 7);
             glyphRectangles.Add(new Rectangle(p, new Point(8, 8)));
             fontRectangles.Add(new Rectangle(new Point(0, 0), new Point(8, 7)));
             kernings.Add(new Vector3(0, 8, 0));
@@ -205,7 +203,7 @@ public enum Direction
     Down
 }
 
-public static class LevelTextures
+public static class LevelResources
 {
     #region Sounds
     public static SoundEffect PopIn;
@@ -273,6 +271,7 @@ public static class LevelTextures
     public static Texture2D TrafficLight; // DONE
     #endregion
 
+    // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
         PopIn = Statics.Content.Load<SoundEffect>("PopIn");
@@ -293,9 +292,11 @@ public static class LevelTextures
         EmptyBlock = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\EmptyBlock");
         EmptyBlockAlt = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\EmptyBlockAlt");
         Spinner = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\Spinner");
+        /*
         SpinnerSpin[0] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin0");
         SpinnerSpin[1] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin1");
         SpinnerSpin[2] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin2");
+        */
         SpinnerExplode[0] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode2");
         SpinnerExplode[1] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode0");
         SpinnerExplode[2] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode1");
@@ -411,7 +412,7 @@ public static class LevelTextures
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeVertical");
         if (Configs.GraphicSet is not 1)
             Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeHorizontalAlt");
-        if (Configs.GraphicSet is not 1 or 3)
+        if (Configs.GraphicSet is not 1 and 3)
             Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeVerticalAlt");
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeCross");
         Statics.Content.UnloadAsset("FilterPink");

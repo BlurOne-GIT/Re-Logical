@@ -6,20 +6,22 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MmgEngine;
 
 namespace Logical.States;
 
 public class LoadingState : GameState
 {
     #region Constructors
-    public LoadingState() // Make it! 0
+    public LoadingState(Game game) : base(game) // Make it! 0
     {
         Statics.Lives = 3;
         _message = "MAKE IT!";
         _mode = Mode.Start;
-        LevelTextures.LoadTextures();
+        LevelResources.LoadTextures();
     }
-    public LoadingState(string deathReason) // You failed! 1
+    
+    public LoadingState(Game game, string deathReason) : base(game) // You failed! 1
     {
         if (Configs.Lives != 0)
             Configs.Lives--;
@@ -27,7 +29,8 @@ public class LoadingState : GameState
         _mode = Mode.Failed;
         _displayMessages.Add(deathReason);
     }
-    public LoadingState(int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false) // You made it! 2
+    
+    public LoadingState(Game game, int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false) : base(game) // You made it! 2
     {
         _message = "YOU MADE IT!";
         _mode = Mode.Complete;
@@ -62,7 +65,7 @@ public class LoadingState : GameState
             _bonuses.Add(10000);
         }
 
-        int points = _bonuses.Sum();
+        var points = _bonuses.Sum();
 
         _displayMessages.Add("POINTS:");
         _bonuses.Add(points);
@@ -87,28 +90,28 @@ public class LoadingState : GameState
     #endregion
 
     #region Default Methods
-    public override void LoadContent(ContentManager content)
+    public override void LoadContent()
     {
         Statics.ShowCursor = false;
-        AddGameObject(new SimpleImage(content.Load<Texture2D>($"{Configs.GraphicSet}/Loading"), new Vector2(0, 28), 0));
-        AddGameObject(new TextComponent(Statics.LightFont, new Vector2(84, 43), Color.White, _message, 1, TextComponent.Alignment.Center));
-        var pinkBall = content.Load<Texture2D>("SpinnerBallPink");
+        Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Loading"), new Vector2(0, 28), 0));
+        Components.Add(new TextComponent(Game, Statics.LightFont, _message, new Vector2(84, 43), 1, anchor: Alignment.TopCenter));
+        var pinkBall = Game.Content.Load<Texture2D>("SpinnerBallPink");
         for (int i = 0; i < Configs.Lives; i++)
-            AddGameObject(new SimpleImage(pinkBall, new Vector2(72 + 12 * i, 82), 1));
-        AddGameObject(new TextComponent(Statics.LightFont, new Vector2(16, 123), Color.White, $"{Configs.Stage:00} {/*Statics.LevelPassword*/ new Lexer().GetLevelName(Configs.Stage)}", 1));
+            Components.Add(new SimpleImage(Game, pinkBall, new Vector2(72 + 12 * i, 82), 1));
+        Components.Add(new TextComponent(Game, Statics.LightFont, $"{Configs.Stage:00} {/*Statics.LevelPassword*/ new Lexer(Game).GetLevelName(Configs.Stage)}", new Vector2(16, 123), 1));
         if (_mode is not Mode.Start)
         {
             // TODO: Implement changingDisplay with displayMessages
-            _changingDisplay = new TextComponent(Statics.LightFont, new Vector2(24, 163), Color.White, _displayMessages[0], 1);
-            AddGameObject(_changingDisplay);
+            _changingDisplay = new TextComponent(Game, Statics.LightFont, _displayMessages[0], new Vector2(24, 163), 1);
+            Components.Add(_changingDisplay);
             if (_mode is Mode.Complete)
             {
                 // TODO: Implement bonusMessag with bonuses
-                _bonusMessage = new TextComponent(Statics.LightFont, new Vector2(232, 163), Color.White, $"= {_bonuses[0]:000000}", 1);
-                AddGameObject(_bonusMessage);
+                _bonusMessage = new TextComponent(Game, Statics.LightFont, $"= {_bonuses[0]:000000}", new Vector2(232, 163), 1);
+                Components.Add(_bonusMessage);
             }
         }
-        AddGameObject(new TextComponent(Statics.BoldFont/*DEBUG TextureFont*/, new Vector2(209, 188), Color.White, $"{Configs.Score:000000}", 1));
+        Components.Add(new TextComponent(Game, Statics.BoldFont/*DEBUG TextureFont*/, $"{Configs.Score:000000}", new Vector2(209, 188), 1));
         FadeIn();
     }
 
@@ -116,8 +119,8 @@ public class LoadingState : GameState
     {
         if (e.Key is Keys.Escape)
             FadeOut(() => {
-                LevelTextures.UnloadTextures();
-                SwitchState(new MenuState());
+                LevelResources.UnloadTextures();
+                SwitchState(new MenuState(Game));
                 });
         else
             FadeOut(Exit);
@@ -129,8 +132,8 @@ public class LoadingState : GameState
             FadeOut(Exit);
     }
 
-    public override void UnloadContent(ContentManager content)
-        => content.UnloadAsset($"{Configs.GraphicSet}/Loading");
+    public override void UnloadContent()
+        => Game.Content.UnloadAsset($"{Configs.GraphicSet}/Loading");
 
     #endregion
 
@@ -138,21 +141,21 @@ public class LoadingState : GameState
     private async void FadeIn()
     {
         await Task.Delay(660);
-        for (float i = 0; i < 1; i += 0.05f)
+        for (float i = 1; i > 0; i -= 0.05f)
         {
-            Statics.Opacity = i;
+            Statics.BackdropOpacity = i;
             await Task.Delay(14);
         }
-        Statics.Opacity = 1;
+        Statics.BackdropOpacity = 0;
     }
     private async void FadeOut(Action action)
     {
-        for (float i = 1; i > 0; i -= 0.05f)
+        for (float i = 0; i < 1; i += 0.05f)
         {
-            Statics.Opacity = i;
+            Statics.BackdropOpacity = i;
             await Task.Delay(14);
         }
-        Statics.Opacity = 0;
+        Statics.BackdropOpacity = 1;
         await Task.Delay(660);
         action();
     }
@@ -160,18 +163,18 @@ public class LoadingState : GameState
     {
         switch (_mode)
         {
-            case Mode.Start: SwitchState(new LevelState()); break;
+            case Mode.Start: SwitchState(new LevelState(Game)); break;
             case Mode.Failed:
                 if (Statics.Lives == 0)
                 {
                     Configs.Score = 0;
-                    LevelTextures.UnloadTextures();
-                    SwitchState(new MenuState());
+                    LevelResources.UnloadTextures();
+                    SwitchState(new MenuState(Game));
                 }
                 else
-                    SwitchState(new LevelState());
+                    SwitchState(new LevelState(Game));
                 break;
-            case Mode.Complete: SwitchState(new LevelState()); break;
+            case Mode.Complete: SwitchState(new LevelState(Game)); break;
             default: throw new NotImplementedException();
         }
     }
