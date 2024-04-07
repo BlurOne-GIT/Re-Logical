@@ -124,7 +124,6 @@ public class LogicalGame : EngineGame
         Configs.ResolutionChanged -= ReloadScale;
         Configs.FullscreenChanged -= Fullscreen;
         Configs.MusicVolumeChanged -= UpdateVolume;
-        CurrentGameState.OnStateSwitched -= OnStateSwitched;
         Activated -= Statics.Focus;
         Deactivated -= Statics.UnFocus;
         base.OnExiting(sender, args);
@@ -132,9 +131,6 @@ public class LogicalGame : EngineGame
 #endregion
 
 #region Custom Methods
-
-    private void OnStateSwitched(object s, GameState e) => SwitchGameState(e);
-
     private void ReloadScale(object s, EventArgs e)
     {
         if (Configs.Fullscreen)
@@ -147,6 +143,8 @@ public class LogicalGame : EngineGame
             Graphics.PreferredBackBufferWidth = Configs.NativeWidth * Configs.Scale;
             Graphics.PreferredBackBufferHeight = Configs.NativeHeight * Configs.Scale;
         }
+        EngineStatics.Scale = new Vector2(Configs.Scale);
+        EngineStatics.Offset = new Vector2(Configs.XOffset, Configs.YOffset);
         Graphics.ApplyChanges();
     }
 

@@ -68,9 +68,10 @@ public static class Configs
         get => !_fullscreen ? _scale : MaxScale;
         set
         {
+            if (_fullscreen) return;
             SetConfig(value);
             _scale = value;
-            EngineStatics.Scale = new Vector2(value);
+            
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
         } 
     }
