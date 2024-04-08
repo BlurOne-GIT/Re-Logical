@@ -72,7 +72,7 @@ public class DefaultPanel : MenuPanel
             read = read.Remove(0, 10);
             try
             {
-                Configs.Stage = Convert.ToInt32(read[..(read.Length < 12 ? 1 : 2)]);
+                Configs.Stage = Convert.ToByte(read[..(read.Length < 12 ? 1 : 2)]);
             } catch (FormatException)
             {
                 throw new NotImplementedException();
@@ -81,7 +81,7 @@ public class DefaultPanel : MenuPanel
             return;
         }
 
-        int search = new Lexer(Game).GetLevelNumber(read);
+        var search = new Lexer(Game).GetLevelNumber(read);
         if (search is 0)
         {
             Console.WriteLine("WRONG PASSWORD");

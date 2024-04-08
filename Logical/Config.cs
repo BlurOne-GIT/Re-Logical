@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.Xna.Framework;
 using MmgEngine;
 
@@ -18,155 +22,114 @@ public static class Configs
     #region Fields
     public const int NativeWidth = 320;
     public const int NativeHeight = 256;
-    private const string File = "./config.lr";
-
-    /* 0 */ private static int _scale;
-    /* 1 */ private static bool _fullscreen;
-    /* 2 */ private static int _musicVolume;
-    /* 3 */ private static int _sfxVolume;
-    /* 4 */ private static int _graphicSet;
-    /* 5 */ private static int _stereoSeparation;
-    /* 6 */ private static int _stage;
-    /*7-9*/ private static int _score;
-    /* A */ private static int _lives;
-    /* B */ private static bool _autoUpdate;
-    private static bool _initialized;
+    private const string File = "./config.json";
+    private static byte _stage;
+    private static uint _score;
+    private static byte _lives;
+    private static Vector2 _nativeSize = new(NativeWidth, NativeHeight);
     #endregion
 
     // Instances
     private static FileStream _fileStream;
+    private static JsonNode _jsonNode;
 
     #region Properties
-    public static int Width { get; private set; }
-    public static int Height { get; private set; }
+    public static Vector2 ScreenSize { get; set; }
 
-    public static int MaxScale => Math.Min(Width / NativeWidth, Height / NativeHeight);
+    public static int MaxScale => Math.Min((int)ScreenSize.X / NativeWidth, (int)ScreenSize.Y / NativeHeight);
 
-    public static int XOffset
+    public static Vector2 ScreenOffset
     {
         get
         {
-            if (!_fullscreen)
-                return 0;
+            if (!Fullscreen)
+                return Vector2.Zero;
             
-            return (Width - NativeWidth * MaxScale) / 2;
+            return (ScreenSize - _nativeSize * MaxScale) / 2;
         }
     }
-    public static int YOffset
-    {
-        get
-        {
-            if (!_fullscreen)
-                return 0;
-            
-            return (Height - NativeHeight * MaxScale) / 2;
-        }
-    }
-
-    /* 0 */ public static int Scale 
+    
+    public static int Scale 
     { 
-        get => !_fullscreen ? _scale : MaxScale;
+        get => !Fullscreen ? _jsonNode[nameof(Scale)]!.GetValue<int>() : MaxScale;
         set
         {
-            if (_fullscreen) return;
-            SetConfig(value);
-            _scale = value;
-            
+            if (Fullscreen) return;
+            _jsonNode[nameof(Scale)] = value;
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
         } 
     }
-    /* 1 */
+    
     public static bool Fullscreen
     {
-        get => _fullscreen;
+        get => _jsonNode[nameof(Fullscreen)]!.GetValue<bool>();
         set
         {
-            SetConfig(value);
-            _fullscreen = value;
+            _jsonNode[nameof(Fullscreen)] = value;
             FullscreenChanged?.Invoke(null, EventArgs.Empty);
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
         }
     }
-    /* 2 */
+    
     public static int MusicVolume
     {
-        get => _musicVolume;
+        get => _jsonNode[nameof(MusicVolume)]!.GetValue<int>();
         set
         {
-            SetConfig(value);
-            _musicVolume = value;
+            _jsonNode[nameof(MusicVolume)] = value;
             MusicVolumeChanged?.Invoke(null, EventArgs.Empty);
         }
     }
-    /* 3 */
+    
     public static int SfxVolume
     {
-        get => _sfxVolume;
+        get => _jsonNode[nameof(SfxVolume)]!.GetValue<int>();
         set
         {
-            SetConfig(value);
-            _sfxVolume = value;
+            _jsonNode[nameof(SfxVolume)] = value;
             SfxVolumeChaged?.Invoke(null, EventArgs.Empty);
         }
     }
-    /* 4 */
+    
     public static int GraphicSet
     {
-        get => _graphicSet;
-        set
-        {
-            SetConfig(value);
-            _graphicSet = value;
-        }
+        get => _jsonNode[nameof(GraphicSet)]!.GetValue<int>();
+        set => _jsonNode[nameof(GraphicSet)] = value;
     }
-    /* 5 */
+    
     public static int StereoSeparation
     {
-        get => _stereoSeparation;
-        set
-        {
-            SetConfig(value);
-            _stereoSeparation = value;
-        }
+        get => _jsonNode[nameof(StereoSeparation)]!.GetValue<int>();
+        set => _jsonNode[nameof(StereoSeparation)] = value;
     }
-    /* 6 */
-    public static int Stage
+    
+    public static byte Stage
     {
         get => _stage;
         set
         {
-            SetConfig(value);
             _stage = value;
+            SaveGame();
         }
     }
-    /*7-9*/
-    public static int Score
+    
+    public static uint Score
     {
         get => _score;
         set
         {
-            SetConfig(value);
             _score = value;
+            SaveGame();
         }
     }
     /* A */
-    public static int Lives
+    public static byte Lives
     {
         get => _lives;
         set
         {
-            SetConfig(value);
             _lives = value;
-        }
-    }
-    /* B */
-    public static bool AutoUpdate
-    {
-        get => _autoUpdate;
-        set
-        {
-            SetConfig(value);
-            _autoUpdate = value;
+            SaveGame();
         }
     }
 
@@ -175,101 +138,150 @@ public static class Configs
     // Constructor
     public static void Initialize(int width, int height)
     {
-        Width = width; Height = height;
+        ScreenSize = new Vector2(width, height);
         try
         {
             _fileStream = System.IO.File.Open(File, FileMode.Open);
-        } catch
+            _jsonNode = JsonNode.Parse(_fileStream)!;
+        } 
+        catch
         {
+            _fileStream?.Close();
             _fileStream = System.IO.File.Create(File);
-            _initialized = true;
-            /* 0 */ Scale = 2;
-            /* 1 */ Fullscreen = false;
-            /* 2 */ MusicVolume = 10;
-            /* 3 */ SfxVolume = 10;
-            /* 4 */ GraphicSet = 0;
-            /* 5 */ StereoSeparation = 3;
-            /* 6 */ Stage = 0;
-            /*7-9*/ Score = 0;
-            /* A */ Lives = 0;
-            /* B */ AutoUpdate = true;
-            return;
+            _fileStream.Write(new[] {(byte)'{', (byte)'}'});
+            _fileStream.Flush();
+            _fileStream.Close();
+            _fileStream = System.IO.File.Open(File, FileMode.Open);
+            _jsonNode = JsonNode.Parse(_fileStream)!;
         }
-        /* 0 */ Scale = (byte)_fileStream.ReadByte();
-        /* 1 */ Fullscreen = Convert.ToBoolean(_fileStream.ReadByte());
-        /* 2 */ MusicVolume = (byte)_fileStream.ReadByte();
-        /* 3 */ SfxVolume = (byte)_fileStream.ReadByte();
-        /* 4 */ GraphicSet = (byte)_fileStream.ReadByte();
-        /* 5 */ StereoSeparation = (byte)_fileStream.ReadByte();
-        /* 6 */ Stage = (byte)_fileStream.ReadByte();
-        var b = new byte[4];
-        _ = _fileStream.Read(b, 1, 3);
-        if (BitConverter.IsLittleEndian)
-            Array.Reverse(b);
-        /*7-9*/ Score = BitConverter.ToInt32(b, 0);
-        /* A */ Lives = _fileStream.ReadByte();
-        /* B */ AutoUpdate = Convert.ToBoolean(_fileStream.ReadByte());
-        _initialized = true;
-        Fixer();
+        
+        if (_jsonNode[nameof(Fullscreen)] is null)
+            Fullscreen = false;
+        
+        if (_jsonNode[nameof(Scale)] is null)
+            Scale = 2;
+        _jsonNode[nameof(Scale)] = Math.Clamp(Scale, 1, MaxScale);
+        
+        if (_jsonNode[nameof(MusicVolume)] is null)
+            MusicVolume = 8;
+        _jsonNode[nameof(MusicVolume)] = Math.Clamp(MusicVolume, 0, 10);
+        
+        if (_jsonNode[nameof(SfxVolume)] is null)
+            SfxVolume = 8;
+        _jsonNode[nameof(SfxVolume)] = Math.Clamp(SfxVolume, 0, 10);
+        
+        if (_jsonNode[nameof(GraphicSet)] is null)
+            GraphicSet = 0;
+        _jsonNode[nameof(GraphicSet)] = Math.Clamp(GraphicSet, 0, 4);
+        
+        if (_jsonNode[nameof(StereoSeparation)] is null)
+            StereoSeparation = 3;
+        _jsonNode[nameof(StereoSeparation)] = Math.Clamp(StereoSeparation, 0, 10);
+        
+        LoadGame();
     }
 
     #region Methods
-    private static void SetConfig(object value, [CallerMemberName] string name = null)
-    {
-        if (!_initialized)
-            return;
-        
-        switch (name)
-        {
-            case "Scale": _fileStream.Position = 0; break;
-            case "Fullscreen": _fileStream.Position = 1; break;
-            case "MusicVolume": _fileStream.Position = 2; break;
-            case "SfxVolume": _fileStream.Position = 3; break;
-            case "GraphicSet": _fileStream.Position = 4; break;
-            case "StereoSeparation": _fileStream.Position = 5; break;
-            case "Stage": _fileStream.Position = 6; break;
-            case "Score":
-                _fileStream.Position = 7;
-                var b = BitConverter.GetBytes((int)value);
-                if (BitConverter.IsLittleEndian) 
-                    Array.Reverse(b);
-                _fileStream.Write(b, 1, 3);
-                return;
-            case "Lives": _fileStream.Position = 0x0A; break;
-            case "AutoUpdate": _fileStream.Position = 0x0B; break;
-        }
 
-        _fileStream.WriteByte(Convert.ToByte(value));
+    public static void SaveFile()
+    {
+        _fileStream.SetLength(0);
+        _fileStream.Seek(0, SeekOrigin.Begin);
+        _fileStream.Write(System.Text.Encoding.UTF8.GetBytes(_jsonNode.ToJsonString(new JsonSerializerOptions{ WriteIndented = true })));
+        _fileStream.Flush();
+    }
+    
+    public static void CloseFile()
+    {
+        SaveFile();
+        _fileStream.Close();
     }
 
-    public static void CloseFile() => _fileStream.Close();
-
-    private static void Fixer()
+    private static void SaveGame()
     {
-        // 0
-        if (_scale == 0 || NativeWidth * _scale > Width || NativeHeight * _scale > Height)
-            Scale = 2;
-        // 2
-        if (_musicVolume > 10)
-            MusicVolume = 10;
-        // 3
-        if (_sfxVolume > 10)
-            SfxVolume = 10;
-        // 4
-        if (_graphicSet > 4)
-            GraphicSet = 0;
-        // 5
-        if (_stereoSeparation > 10)
-            StereoSeparation = 3;
-        // 6
+        var availablePositions = new List<int>{0, 1, 2, 3, 4}; // 5 Left
+        var seed = Statics.Brandom.Next();
+        var random = new Random(seed);
+        var buffer = new char[9];
+        buffer[1] = (char)(byte)seed;
+        seed >>= 8;
+        buffer[5] = (char)(byte)seed;
+        seed >>= 8;
+        buffer[3] = (char)(byte)seed;
+        seed >>= 8;
+        buffer[7] = (char)(byte)seed;
+        
+        var masks = new byte[5];
+        random.NextBytes(masks); // Call 1
+        
+        var position = availablePositions[random.Next(0, 5)]; // Call 2
+        buffer[position * 2] = (char)(byte)(_stage ^ masks[position]);
+        availablePositions.Remove(position); // 4 Left
+        
+        position = availablePositions[random.Next(0, 4)]; // Call 3
+        buffer[position * 2] = (char)(byte)(_score ^ masks[position]);
+        availablePositions.Remove(position); // 3 Left
+
+        position = availablePositions[random.Next(0, 3)]; // Call 4
+        buffer[position * 2] = (char)(byte)(_score >> 8 ^ masks[position]);
+        availablePositions.Remove(position); // 2 Left
+
+        position = availablePositions[random.Next(0, 2)]; // Call 5
+        buffer[position * 2] = (char)(byte)(_score >> 16 ^ masks[position]);
+        availablePositions.Remove(position); // 1 Left
+
+        position = availablePositions[0];
+        buffer[position * 2] = (char)(byte)(_lives ^ masks[position]);
+        
+        _jsonNode["game"] = new string(buffer);
+    }
+
+    private static void LoadGame()
+    {
+        if (_jsonNode["game"] is null)
+            return;
+
+        var buffer = _jsonNode["game"]!.GetValue<string>().ToCharArray();
+        var availablePositions = new List<int>{0, 1, 2, 3, 4}; // 5 Left
+        var seed = (byte)buffer[1] | (byte)buffer[5] << 8 | (byte)buffer[3] << 16 | (byte)buffer[7] << 24;
+        var random = new Random(seed);
+        var masks = new byte[5];
+        random.NextBytes(masks); // Call 1
+
+        var position = availablePositions[random.Next(0, 5)]; // Call 2
+        _stage = (byte)((byte)buffer[position * 2] ^ masks[position]);
         if (_stage > 99)
-            Stage = 0;
-        // 7-9
+        {
+            _stage = 0;
+            return;
+        }
+        availablePositions.Remove(position); // 4 Left
+        
+        position = availablePositions[random.Next(0, 4)]; // Call 3
+        _score = (uint)((byte)buffer[position * 2] ^ masks[position]);
+        availablePositions.Remove(position); // 3 Left
+
+        position = availablePositions[random.Next(0, 3)]; // Call 4
+        _score |= (uint)((byte)buffer[position * 2] ^ masks[position]) << 8;
+        availablePositions.Remove(position); // 2 Left
+
+        position = availablePositions[random.Next(0, 2)]; // Call 5
+        _score |= (uint)((byte)buffer[position * 2] ^ masks[position]) << 16;
         if (_score > 999999)
-            Score = 0;
-        // A
-        if (_lives is <= 0 or > 7)
-            Lives = 0;
+        {
+            _stage = 0;
+            _score = 0;
+            return;
+        }
+        availablePositions.Remove(position); // 1 Left
+
+        position = availablePositions[0];
+        _lives = (byte)((byte)buffer[position * 2] ^ masks[position]);
+        
+        if (_lives <= 7) return;
+        _stage = 0;
+        _score = 0;
+        _lives = 0;
     }
     #endregion
 }

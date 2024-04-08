@@ -65,10 +65,10 @@ public class LoadingState : GameState
             _bonuses.Add(10000);
         }
 
-        var points = _bonuses.Sum();
+        var points = Convert.ToUInt32(_bonuses.Sum());
 
         _displayMessages.Add("POINTS:");
-        _bonuses.Add(points);
+        _bonuses.Add((int)points);
         Configs.Score += points;
     }
     #endregion
@@ -90,7 +90,7 @@ public class LoadingState : GameState
     #endregion
 
     #region Default Methods
-    public override void LoadContent()
+    protected override void LoadContent()
     {
         Statics.ShowCursor = false;
         Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Loading"), new Vector2(0, 28), 0));
@@ -132,7 +132,7 @@ public class LoadingState : GameState
             FadeOut(Exit);
     }
 
-    public override void UnloadContent()
+    protected override void UnloadContent()
         => Game.Content.UnloadAsset($"{Configs.GraphicSet}/Loading");
 
     #endregion

@@ -53,9 +53,9 @@ public class Lexer
         return r.Replace("Space", " ").TrimEnd();
     }
 
-    public int GetLevelNumber(string name)
+    public byte GetLevelNumber(string name)
     {
-        for (int i = 0; i < 99; i++)
+        for (byte i = 0; i < 99; i++)
         {
             var r = "";
             int btr = i * 100 + 83;

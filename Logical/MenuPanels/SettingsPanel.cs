@@ -34,7 +34,7 @@ public class SettingsPanel : MenuPanel
         _sfxVol = new TextComponent(Game, Statics.BoldFont, $"{Configs.SfxVolume:00}", new Vector2(118, 156), 3);
         _stereoSplitUpButton = new Button(Game, new Rectangle(108, 179, 10, 10), new SimpleImage(Game, plus, new Vector2(108, 179), 3)) {Enabled = false};
         _stereoSplitDownButton = new Button(Game, new Rectangle(142, 179, 10, 10), new SimpleImage(Game, minus, new Vector2(142, 179), 3)) {Enabled = false};
-        _stereoSplit = new TextComponent(Game, Statics.BoldFont, $"{Configs.StereoSeparation:000}", new Vector2(118, 180), 3);
+        _stereoSplit = new TextComponent(Game, Statics.BoldFont, $"{Configs.StereoSeparation:00}0", new Vector2(118, 180), 3);
         BackButton = new Button(Game, new Rectangle(108, 201, 103, 16), new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Back"), new Vector2(108, 201), 3)) {Enabled = false};
         
         _scaleButton.LeftClicked += PlaySfx;
@@ -118,56 +118,38 @@ public class SettingsPanel : MenuPanel
     
     private void BgmVolUp(object s, EventArgs e)
     {
-        if (Configs.MusicVolume == 10)
-            return;
-
-        Configs.MusicVolume++;
-        _bgmVol.Text = $"{Configs.MusicVolume:00}";
+        if (Configs.MusicVolume is not 10)
+            _bgmVol.Text = $"{++Configs.MusicVolume:00}";
     }
     
     private void BgmVolDown(object s, EventArgs e)
     {
-        if (Configs.MusicVolume == 0)
-            return;
-
-        Configs.MusicVolume--;
-        _bgmVol.Text = $"{Configs.MusicVolume:00}";
+        if (Configs.MusicVolume is not 0)
+            _bgmVol.Text = $"{--Configs.MusicVolume:00}";
     }
     
     private void SfxVolUp(object s, EventArgs e)
     {
-        if (Configs.SfxVolume == 10)
-            return;
-
-        Configs.SfxVolume++;
-        _sfxVol.Text = $"{Configs.SfxVolume:00}";
+        if (Configs.SfxVolume is not 10)
+            _sfxVol.Text = $"{++Configs.SfxVolume:00}";
     }
     
     private void SfxVolDown(object s, EventArgs e)
     {
-        if (Configs.SfxVolume == 0)
-            return;
-
-        Configs.SfxVolume--;
-        _sfxVol.Text = $"{Configs.SfxVolume:00}";
+        if (Configs.SfxVolume is not 0)
+            _sfxVol.Text = $"{--Configs.SfxVolume:00}";
     }
     
     private void StereoSplitUp(object s, EventArgs e)
     {
-        if (Configs.StereoSeparation == 100)
-            return;
-
-        Configs.StereoSeparation += 10;
-        _stereoSplit.Text = $"{Configs.StereoSeparation:000}";
+        if (Configs.StereoSeparation is not 10)
+            _stereoSplit.Text = $"{++Configs.StereoSeparation:00}0";
     }
     
     private void StereoSplitDown(object s, EventArgs e)
     {
-        if (Configs.StereoSeparation == 0)
-            return;
-
-        Configs.StereoSeparation -= 10;
-        _stereoSplit.Text = $"{Configs.StereoSeparation:000}";
+        if (Configs.StereoSeparation is not 0)
+            _stereoSplit.Text = $"{--Configs.StereoSeparation:00}0";
     }
 
     protected override void Dispose(bool disposing)

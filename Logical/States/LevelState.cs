@@ -70,12 +70,13 @@ public class LevelState : GameState
 
     }
 
-    public override void LoadContent()
+    protected override void LoadContent()
     {
         _successSfx = Game.Content.Load<SoundEffect>("1Success"); // DEBUG //
         _failSfx = Game.Content.Load<SoundEffect>("1Fail"); // DEBUG //
         _mainPipeBall = new Ball(Game, new Vector2(295, 33), Direction.Left, (BallColors)Statics.Brandom.Next(0, 4), false);
         FadeIn();
+        base.LoadContent();
     }
 
     private async void FadeIn()
@@ -180,10 +181,11 @@ public class LevelState : GameState
         }
     }
 
-    public override void UnloadContent()
+    protected override void UnloadContent()
     {
         Game.Content.UnloadAsset("1Success"); // DEBUG //
         Game.Content.UnloadAsset("1Fail"); // DEBUG //
+        base.UnloadContent();
     }
 
     private void Pause()
