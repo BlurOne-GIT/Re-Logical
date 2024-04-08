@@ -43,10 +43,10 @@ public class Bumper : Block, IReloadable, IOverlayable
 
     public void Reload(Block[,] blocks)
     {
-        _closedPipeLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
-        _closedPipeUp = Pos.Y == 0 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
-        _closedPipeRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
-        _closedPipeDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
+        _closedPipeLeft = Pos.X == 0 || !HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
+        _closedPipeUp = Pos.Y == 0 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
+        _closedPipeRight = Pos.X == 7 || !HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
+        _closedPipeDown = Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
 
         _shadow = !_closedPipeRight && !_closedPipeDown ? LevelResources.HolderShadowCross : !_closedPipeRight ? LevelResources.HolderShadowHorizontal : !_closedPipeDown ? LevelResources.HolderShadowVertical : LevelResources.HolderShadowEmpty;
     }

@@ -12,6 +12,37 @@ public abstract class Block : SimpleImage
     public readonly bool HasArgument = false;
     public readonly byte Argument;
     protected Point Pos;
+    public static readonly byte[] VerticalAttachables = {
+        0x01,
+        0x03,
+        0x04,
+        0x06,
+        0x07,
+        0x09,
+        0x0A,
+        0x0C,
+        0x0D,
+        0x0E,
+        0x0F,
+        0x10,
+        0x11,
+        0x16
+    };
+    public static readonly byte[] HorizontalAttachables = {
+        0x01,
+        0x02,
+        0x04,
+        0x05,
+        0x07,
+        0x08,
+        0x0A,
+        0x0B,
+        0x0D,
+        0x0E,
+        0x0F,
+        0x10,
+        0x11
+    };
     #endregion
 
     public Block(Game game, Texture2D texture2D, Point arrayPosition, byte xx, byte yy = 0)

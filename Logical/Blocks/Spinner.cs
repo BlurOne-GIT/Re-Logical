@@ -88,10 +88,10 @@ public class Spinner : Block, IReloadable
 
     public void Reload(Block[,] blocks)
     {
-        _closedLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
-        _closedUp = Pos.Y != 0 && !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
-        _closedRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
-        _closedDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
+        _closedLeft = Pos.X == 0 || !HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
+        _closedUp = Pos.Y != 0 && !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
+        _closedRight = Pos.X == 7 || !HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
+        _closedDown = Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
         
         if (!_closedLeft)
         {

@@ -76,10 +76,10 @@ public class Tp : Pipe, IReloadable, IOverlayable
 
     public void Reload(Block[,] blocks)
     {
-        _closedPipeLeft = Pos.X == 0 || (!Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue) && FileValue is 0x08 or 0x0A);
-        _closedPipeUp = Pos.Y == 0 || (!Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue) && FileValue is 0x09 or 0x0A);
-        _closedPipeRight = Pos.X == 7 || (!Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue) && FileValue is 0x08 or 0x0A);
-        _closedPipeDown = Pos.Y == 4 || (!Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue) && FileValue is 0x09 or 0x0A);
+        _closedPipeLeft = Pos.X == 0 || (!HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue) && FileValue is 0x08 or 0x0A);
+        _closedPipeUp = Pos.Y == 0 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue) && FileValue is 0x09 or 0x0A);
+        _closedPipeRight = Pos.X == 7 || (!HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue) && FileValue is 0x08 or 0x0A);
+        _closedPipeDown = Pos.Y == 4 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue) && FileValue is 0x09 or 0x0A);
     }
 
     protected override void Dispose(bool disposing)
