@@ -137,9 +137,7 @@ public class SettingsPanel : MenuPanel
     private void SfxVolDown(object s, EventArgs e)
     {
         if (Configs.SfxVolume is not 0)
-            return;
-
-        _sfxVol.Text = $"{--Configs.SfxVolume:00}";
+            _sfxVol.Text = $"{--Configs.SfxVolume:00}";
     }
     
     private void StereoSplitUp(object s, EventArgs e)
