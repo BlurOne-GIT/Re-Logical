@@ -167,7 +167,7 @@ public class Spinner : Block, IReloadable
         }
 
         _slotButtons[index].Enabled = false;
-        new Ball(Game, _registers[index] + Position, (Direction)index, (BallColors)_slotBalls[index], true);
+        _ = new Ball(Game, _registers[index] + Position, (Direction)index, (BallColors)_slotBalls[index]!, true);
         _slotBalls[index] = null;
         LevelResources.PopOut.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
     }
