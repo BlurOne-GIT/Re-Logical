@@ -22,28 +22,36 @@ public class LogicalGame : EngineGame
 #endregion
 
 #region Default Methods
-    public LogicalGame()
+    public LogicalGame() : base()
     {
-        Statics.Initialize(Content);
         IsMouseVisible = false;
         Window.AllowAltF4 = true;
         Window.AllowUserResizing = false;
         Window.IsBorderless = false;
-        Configs.Initialize(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
     }
 
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        Configs.Initialize(Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Width, Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Height);
         ReloadScale(null, EventArgs.Empty);
         if (Configs.Fullscreen)
             Graphics.ToggleFullScreen();
         
+        Statics.Initialize(Content);
+        Window.ScreenDeviceNameChanged += OnWindowOnScreenDeviceNameChanged;
         Configs.ResolutionChanged += ReloadScale;
         Configs.FullscreenChanged += Fullscreen;
         Configs.MusicVolumeChanged += UpdateVolume;
+        SwitchGameState(new TitleState(this));
         base.Initialize();
     }
+
+    private void OnWindowOnScreenDeviceNameChanged(object s, EventArgs e)
+        => Configs.ScreenSize = new Vector2(
+            Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Width,
+            Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Height
+            );
 
     protected override void LoadContent()
     {
@@ -62,14 +70,19 @@ public class LogicalGame : EngineGame
         _version = new TextComponent(this, Statics.LightFont, _versionString.ToUpper().Replace('.', '_'), new Vector2(0, 248), 1);
         #endif
         
-        SwitchGameState(new TitleState(this));
+    }
+
+    protected override void SwitchGameState(GameState newGameState)
+    {
+        if (CurrentGameState is not null or TitleState)
+            Configs.SaveFile();
+        base.SwitchGameState(newGameState);
     }
 
     protected override void Update(GameTime gameTime)
     {
         // TODO: Add your update logic here
         Input.UpdateMouseInput(Mouse.GetState());
-        CurrentGameState.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -79,7 +92,7 @@ public class LogicalGame : EngineGame
 
         // TODO: Add your drawing code here
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: ViewportMatrix);
-        CurrentGameState.Draw(gameTime);
+        base.Draw(gameTime);
         if (Statics.ShowCursor)
             SpriteBatch.Draw(
                 _cursorTexture,
@@ -108,8 +121,6 @@ public class LogicalGame : EngineGame
         _version.Draw(gameTime);
         #endif
         SpriteBatch.End();
-
-        base.Draw(gameTime);
     }
 
     protected override void UnloadContent()
@@ -135,8 +146,8 @@ public class LogicalGame : EngineGame
     {
         if (Configs.Fullscreen)
         {
-            Graphics.PreferredBackBufferWidth = Configs.Width;
-            Graphics.PreferredBackBufferHeight = Configs.Height;
+            Graphics.PreferredBackBufferWidth = Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+            Graphics.PreferredBackBufferHeight = Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Height;
         }
         else
         {
@@ -144,7 +155,7 @@ public class LogicalGame : EngineGame
             Graphics.PreferredBackBufferHeight = Configs.NativeHeight * Configs.Scale;
         }
         EngineStatics.Scale = new Vector2(Configs.Scale);
-        EngineStatics.Offset = new Vector2(Configs.XOffset, Configs.YOffset);
+        EngineStatics.Offset = Configs.ScreenOffset;
         Graphics.ApplyChanges();
     }
 

@@ -65,10 +65,10 @@ public class LoadingState : GameState
             _bonuses.Add(10000);
         }
 
-        var points = _bonuses.Sum();
+        var points = Convert.ToUInt32(_bonuses.Sum());
 
         _displayMessages.Add("POINTS:");
-        _bonuses.Add(points);
+        _bonuses.Add((int)points);
         Configs.Score += points;
     }
     #endregion
