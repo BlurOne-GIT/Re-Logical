@@ -22,7 +22,7 @@ public class LogicalGame : EngineGame
 #endregion
 
 #region Default Methods
-    public LogicalGame() : base()
+    public LogicalGame()
     {
         IsMouseVisible = false;
         Window.AllowAltF4 = true;
@@ -135,8 +135,6 @@ public class LogicalGame : EngineGame
         Configs.ResolutionChanged -= ReloadScale;
         Configs.FullscreenChanged -= Fullscreen;
         Configs.MusicVolumeChanged -= UpdateVolume;
-        Activated -= Statics.Focus;
-        Deactivated -= Statics.UnFocus;
         base.OnExiting(sender, args);
     }
 #endregion

@@ -19,7 +19,6 @@ public static class Statics
     public static SpriteFont BoldFont { get; private set; }
     public static SpriteFont LightFont { get; private set; }
     public static bool ShowCursor { get; set; }
-    public static bool WindowFocused { get; set; }
     public static float BackdropOpacity { get; set; }
     public static ContentManager Content { get; private set;}
     public static Vector2 DetectionPoint { get; } = new(13f);
@@ -151,8 +150,6 @@ public static class Statics
         }
         BoldFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
     }
-    public static void Focus(object s, EventArgs e) => WindowFocused = true;
-    public static void UnFocus(object s, EventArgs e) => WindowFocused = false;
     #endregion
 }
 
