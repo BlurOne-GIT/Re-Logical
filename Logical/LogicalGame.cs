@@ -16,7 +16,7 @@ public class LogicalGame : EngineGame
     private Texture2D _backdropTexture;
     private Vector2 _backdropSize;
     #if DEBUG
-    private readonly string _versionString = ((AssemblyInformationalVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)[0]).InformationalVersion;
+    private readonly string _versionString = "v" + ((AssemblyInformationalVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)[0]).InformationalVersion.Split('+')[0];
     private TextComponent _version;
     #endif
 #endregion
