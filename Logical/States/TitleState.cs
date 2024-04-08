@@ -19,7 +19,7 @@ public class TitleState : GameState
 
     #region Default Methods
 
-    public override void LoadContent()
+    protected override void LoadContent()
     {
         _titel = Game.Content.Load<Song>("Titel");
         _background = new SimpleImage(Game, Game.Content.Load<Texture2D>("Credit"), Vector2.Zero, 0);
@@ -30,7 +30,7 @@ public class TitleState : GameState
 
     public override void Update(GameTime gameTime) {}
 
-    public override void UnloadContent()
+    protected override void UnloadContent()
     {
         Game.Content.UnloadAsset("Titel");
         Game.Content.UnloadAsset("Credit");

@@ -23,7 +23,7 @@ public class MenuState : GameState
     #endregion
 
     #region Default Methods
-    public override void LoadContent()
+    protected override void LoadContent()
     {
         _choose = Game.Content.Load<Song>("Choose Music");
         _beginSfx = Game.Content.Load<SoundEffect>("1Success"); // DEBUG //
@@ -54,7 +54,7 @@ public class MenuState : GameState
         if (e.Key == Keys.Escape) Game.Exit();
     }
 
-    public override void UnloadContent()
+    protected override void UnloadContent()
     {
         Game.Content.UnloadAsset("Choose Music");
         Game.Content.UnloadAsset("1Success"); // DEBUG //
