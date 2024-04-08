@@ -43,6 +43,7 @@ public abstract class Block : SimpleImage
         0x10,
         0x11
     };
+    public static Vector2 DetectionPoint { get; } = new(13f);
     #endregion
 
     public Block(Game game, Texture2D texture2D, Point arrayPosition, byte xx, byte yy = 0)

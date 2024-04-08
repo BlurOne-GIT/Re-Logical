@@ -21,7 +21,6 @@ public static class Statics
     public static bool ShowCursor { get; set; }
     public static float BackdropOpacity { get; set; }
     public static ContentManager Content { get; private set;}
-    public static Vector2 DetectionPoint { get; } = new(13f);
     public static Random Brandom = new();
     public static readonly Dictionary<Direction, Direction> ReverseDirection = new(4)
     {

@@ -37,7 +37,7 @@ public class Bumper : Block, IReloadable, IOverlayable
 
     public override void Update(GameTime gameTime)
     {
-        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == Statics.DetectionPoint + Position))
+        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == DetectionPoint + Position))
             ball.MovementDirection = _direction;
     }
 

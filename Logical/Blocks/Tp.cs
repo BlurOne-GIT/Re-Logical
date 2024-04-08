@@ -61,17 +61,17 @@ public class Tp : Pipe, IReloadable, IOverlayable
 
     public override void Update(GameTime gameTime)
     {
-        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == Statics.DetectionPoint + Position))
+        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == DetectionPoint + Position))
             if (ball.MovementDirection is Direction.Left or Direction.Right)
                 if (FirstHorizontalTp.Equals(this))
-                    ball.Position = Statics.DetectionPoint + SecondHorizontalTp.Position;
+                    ball.Position = DetectionPoint + SecondHorizontalTp.Position;
                 else
-                    ball.Position = Statics.DetectionPoint + FirstHorizontalTp.Position;
+                    ball.Position = DetectionPoint + FirstHorizontalTp.Position;
             else
                 if (FirstVerticalTp.Equals(this))
-                    ball.Position = Statics.DetectionPoint + SecondVerticalTp.Position;
+                    ball.Position = DetectionPoint + SecondVerticalTp.Position;
                 else
-                    ball.Position = Statics.DetectionPoint + FirstVerticalTp.Position;
+                    ball.Position = DetectionPoint + FirstVerticalTp.Position;
     }
 
     public void Reload(Block[,] blocks)

@@ -32,7 +32,7 @@ public class Filter : Pipe, IOverlayable
 
     public override void Update(GameTime gameTime)
     {
-        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == Statics.DetectionPoint + Position && ball.BallColor != _ballColor))
+        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == DetectionPoint + Position && ball.BallColor != _ballColor))
             ball.Bounce();
     }
 
