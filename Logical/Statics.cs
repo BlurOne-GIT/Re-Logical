@@ -18,7 +18,6 @@ public static class Statics
     public static SpriteFont TextureFont { get; private set; }
     public static SpriteFont BoldFont { get; private set; }
     public static SpriteFont LightFont { get; private set; }
-    public static int Lives { get; set; }
     public static bool ShowCursor { get; set; }
     public static bool WindowFocused { get; set; }
     public static float BackdropOpacity { get; set; }
