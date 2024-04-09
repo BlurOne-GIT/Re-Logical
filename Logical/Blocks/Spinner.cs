@@ -161,20 +161,16 @@ public class Spinner : Block, IReloadable
                     _slotButtons[i].Enabled = true;
     }
 
-    private void PopOut(object s, EventArgs e)
+    private void PopOut(object sender, EventArgs e)
     {
         if (LevelState.MovesLeft == 0)
             return;
 
-        int index = 4;
-        for (int i = 0; i < 4; i++)
-        {
-            if (!s.Equals(_slotButtons[i])) continue;
-            
-            index = i;
-            break;
-        }
+        var index = Array.IndexOf(_slotButtons, sender as Button);
 
+        if (index is -1)
+            throw new ArgumentException("External button is subscribed to the spinner event.");
+        
         _slotButtons[index].Enabled = false;
         _ = new Ball(Game, _registers[index] + Position, (Direction)index, (BallColors)_slotBalls[index]!, true);
         _slotBalls[index] = null;
