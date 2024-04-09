@@ -10,7 +10,7 @@ public abstract class MenuPanel : DrawableGameComponent
 
     protected MenuPanel(Game game) : base(game)
     {
-        _clickSfx = Game.Content.Load<SoundEffect>("Menu Button");
+        _clickSfx = Game.Content.Load<SoundEffect>("Sfx/Button");
         EnabledChanged += OnEnableChanged;
     }
 

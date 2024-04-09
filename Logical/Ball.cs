@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
 using MmgEngine;
 
 namespace Logical;
@@ -13,10 +11,10 @@ public class Ball : SimpleImage
     #region Fields
     public static event EventHandler BallCreated;
     public static event EventHandler BallDestroyed;
-    private static SoundEffect _bounce;
-    private static SoundEffect _colorChange;
-    private static SoundEffect _tp;
-    private static SoundEffect _explode;
+    private static SoundEffect _bounceSfx;
+    private static SoundEffect _colorChangeSfx;
+    private static SoundEffect _tpSfx;
+    private static SoundEffect _explodeSfx;
     private BallColors _ballColor;
     private Direction _direction;
     private Vector2 _movement;
@@ -32,7 +30,7 @@ public class Ball : SimpleImage
         {
             _ballColor = value;
             if (_shallSound)
-                _colorChange.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+                _colorChangeSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
             ChangeTexture(LevelResources.Ball[(int)_ballColor]);
         }
     }
@@ -43,7 +41,7 @@ public class Ball : SimpleImage
         {
             _direction = value;
             if (_shallSound)
-                _bounce.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+                _bounceSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
             _movement = _direction switch
             {
                 Direction.Left => new Vector2(-1f, 0f),
@@ -63,7 +61,7 @@ public class Ball : SimpleImage
             
             _justTeleported = true;
             if (_shallSound)
-                _tp.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+                _tpSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
             base.Position = value;
         }
     }
@@ -81,14 +79,14 @@ public class Ball : SimpleImage
 
     protected override void LoadContent()
     {
-        if (_bounce.IsDisposed)
-            _bounce = Game.Content.Load<SoundEffect>("Bounce");
-        if (_colorChange.IsDisposed)
-            _colorChange = Game.Content.Load<SoundEffect>("ChangeColor");
-        if (_tp.IsDisposed)
-            _tp = Game.Content.Load<SoundEffect>("Tp");
-        if (_explode.IsDisposed)
-            _explode = Game.Content.Load<SoundEffect>("Explode");
+        if (_bounceSfx is null || _bounceSfx.IsDisposed)
+            _bounceSfx = Game.Content.Load<SoundEffect>("Sfx/Bounce");
+        if (_colorChangeSfx is null || _colorChangeSfx.IsDisposed)
+            _colorChangeSfx = Game.Content.Load<SoundEffect>("Sfx/ColorChange");
+        if (_tpSfx is null || _tpSfx.IsDisposed)
+            _tpSfx = Game.Content.Load<SoundEffect>("Sfx/Tp");
+        if (_explodeSfx is null || _explodeSfx.IsDisposed)
+            _explodeSfx = Game.Content.Load<SoundEffect>("Sfx/Explode");
         base.LoadContent();
     }
 
@@ -106,7 +104,7 @@ public class Ball : SimpleImage
         base.Position += _movement;
         if (Position.X is < -10 or > 320 || Position.Y is < -10 or > 256)
         {
-            _explode.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+            _explodeSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
             Dispose();
         }
         if (_justTeleported)

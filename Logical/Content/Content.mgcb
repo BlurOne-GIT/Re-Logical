@@ -649,18 +649,6 @@
 /processorParam:TextureFormat=Color
 /build:0/TrafficLight.png
 
-#begin 1Fail.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:1Fail.wav
-
-#begin 1Success.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:1Success.wav
-
 #begin BallBlue.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -708,12 +696,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:BallYellow.png
-
-#begin Bounce.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Bounce.wav
 
 #begin ChangerBlue.png
 /importer:TextureImporter
@@ -763,12 +745,6 @@
 /processorParam:TextureFormat=Color
 /build:ChangerYellow.png
 
-#begin ColorChange.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:ColorChange.wav
-
 #begin Credit.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -792,12 +768,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Cursor.png
-
-#begin Explode.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Explode.wav
 
 #begin FilterBlue.png
 /importer:TextureImporter
@@ -943,12 +913,6 @@
 /processorParam:TextureFormat=Color
 /build:MovesBlue.png
 
-#begin output.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:output.wav;Menu Button.wav
-
 #begin Plus.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -960,18 +924,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Plus.png
-
-#begin PopIn.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:PopIn.wav
-
-#begin PopOut.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:PopOut.wav
 
 #begin refer3.png
 /importer:TextureImporter
@@ -985,11 +937,65 @@
 /processorParam:TextureFormat=Color
 /build:refer3.png
 
-#begin Spin.wav
+#begin Sfx/1/Fail.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Spin.wav
+/build:Sfx/1/Fail.wav
+
+#begin Sfx/1/Success.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/1/Success.wav
+
+#begin Sfx/Bounce.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/Bounce.wav
+
+#begin Sfx/Button.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/Button.wav
+
+#begin Sfx/ColorChange.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/ColorChange.wav
+
+#begin Sfx/Explode.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/Explode.wav
+
+#begin Sfx/PopIn.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/PopIn.wav
+
+#begin Sfx/PopOut.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/PopOut.wav
+
+#begin Sfx/Spin.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/Spin.wav
+
+#begin Sfx/Tp.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sfx/Tp.wav
 
 #begin SpinnerBallBlue.png
 /importer:TextureImporter
@@ -1068,12 +1074,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Titlescreen.png;1Titlescreen.png
-
-#begin Tp.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Tp.wav
 
 #begin TpCross.png
 /importer:TextureImporter

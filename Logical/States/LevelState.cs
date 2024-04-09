@@ -72,8 +72,8 @@ public class LevelState : GameState
 
     protected override void LoadContent()
     {
-        _successSfx = Game.Content.Load<SoundEffect>("1Success"); // DEBUG //
-        _failSfx = Game.Content.Load<SoundEffect>("1Fail"); // DEBUG //
+        _successSfx = Game.Content.Load<SoundEffect>("Sfx/1/Success"); // DEBUG //
+        _failSfx = Game.Content.Load<SoundEffect>("Sfx/1/Fail"); // DEBUG //
         _mainPipeBall = new Ball(Game, new Vector2(295, 33), Direction.Left, (BallColors)Statics.Brandom.Next(0, 4), false);
         FadeIn();
         base.LoadContent();
