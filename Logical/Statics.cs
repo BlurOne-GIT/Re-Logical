@@ -170,15 +170,6 @@ public enum Direction
 
 public static class LevelResources
 {
-    #region Sounds
-    public static SoundEffect PopIn;
-    public static SoundEffect PopOut;
-    public static SoundEffect Spin;
-    public static SoundEffect Bounce;
-    public static SoundEffect ColorChange;
-    public static SoundEffect Tp;
-    public static SoundEffect Explode;
-    #endregion
     #region Textures
     public static Texture2D[] Ball = new Texture2D[4]; // DONE
     public static Texture2D MainPipe; // 0✔ 1✔ 2X 3X 4X
@@ -239,14 +230,6 @@ public static class LevelResources
     // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
-        PopIn = Statics.Content.Load<SoundEffect>("PopIn");
-        PopOut = Statics.Content.Load<SoundEffect>("PopOut");
-        Spin = Statics.Content.Load<SoundEffect>("Spin");
-        Bounce = Statics.Content.Load<SoundEffect>("Bounce");
-        ColorChange = Statics.Content.Load<SoundEffect>("ColorChange");
-        Tp = Statics.Content.Load<SoundEffect>("Tp");
-        Explode = Statics.Content.Load<SoundEffect>("Explode");
-
         Ball[0] = Statics.Content.Load<Texture2D>("BallPink");
         Ball[1] = Statics.Content.Load<Texture2D>("BallYellow");
         Ball[2] = Statics.Content.Load<Texture2D>("BallBlue");

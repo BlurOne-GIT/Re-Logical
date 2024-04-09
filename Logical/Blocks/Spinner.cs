@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Logical.States;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using MmgEngine;
 
@@ -15,6 +16,10 @@ public class Spinner : Block, IReloadable
     private static readonly List<Spinner> ExplodedSpinners = new(0);
     public static event EventHandler AllDone;
     public static event EventHandler ConditionClear;
+    private static SoundEffect _popIn;
+    private static SoundEffect _popOut;
+    private static SoundEffect _spin;
+    private static SoundEffect _explode;
     private readonly Button _spinButton;
     private bool _exploded;
     private readonly Button[] _slotButtons = new Button[4];
@@ -83,6 +88,9 @@ public class Spinner : Block, IReloadable
     protected override void LoadContent()
     {
         _spinningTexture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerSpin");
+        _popOut ??= Game.Content.Load<SoundEffect>("PopOut");
+        _spin ??= Game.Content.Load<SoundEffect>("Spin");
+        _explode ??= Game.Content.Load<SoundEffect>("Explode");
         base.LoadContent();
     }
 
@@ -133,7 +141,7 @@ public class Spinner : Block, IReloadable
             _brPos.Start();
         if (_exploded || _slotBalls[3] is not null)
             _bdPos.Start();
-        LevelResources.Spin.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+        _spin.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         Check();
     }
 
@@ -169,7 +177,7 @@ public class Spinner : Block, IReloadable
         _slotButtons[index].Enabled = false;
         _ = new Ball(Game, _registers[index] + Position, (Direction)index, (BallColors)_slotBalls[index]!, true);
         _slotBalls[index] = null;
-        LevelResources.PopOut.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+        _popOut.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
     }
 
     public override void Update(GameTime gameTime)
@@ -181,7 +189,7 @@ public class Spinner : Block, IReloadable
                     _slotBalls[i] = ball.BallColor;
                     if (_slotButtons[i] is not null)
                         _slotButtons[i].Enabled = true;
-                    LevelResources.PopIn.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+                    _popIn.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
                     ball.Dispose();
                     Check();
                 }
@@ -226,7 +234,7 @@ public class Spinner : Block, IReloadable
             _slotBalls[i] = null;
         if (!fb && !ExplodedSpinners.Contains(this))
             ExplodedSpinners.Add(this);
-        LevelResources.Explode.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+        _explode.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         while (!_explodeAnimation.IsAtEnd) {
             await Task.Delay(20);
         }
@@ -316,5 +324,12 @@ public class Spinner : Block, IReloadable
         // Explode Animation
         if (!_explodeAnimation.IsAtEnd)
             DrawAnotherTexture(_explodeAnimation.NextFrame(), _explodePos, 3);
+    }
+
+    protected override void UnloadContent()
+    {
+        _popIn = _popOut = _spin = _explode = null;
+        Game.Content.UnloadAssets(new []{"PopIn", "PopOut", "Spin", "Explode"});
+        base.UnloadContent();
     }
 }
