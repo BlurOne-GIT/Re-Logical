@@ -225,6 +225,9 @@ public class Spinner : Block, IReloadable
 
     private async Task Explode(bool fb = false)
     {
+        foreach (var button in _slotButtons)
+            if (button is not null)
+                button.Enabled = false;
         _explodeAnimation.Start();
         _exploded = true;
         for (int i = 0; i < 4; i++)
