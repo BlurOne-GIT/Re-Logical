@@ -171,7 +171,7 @@ public enum Direction
 public static class LevelResources
 {
     #region Textures
-    public static Texture2D[] Ball = new Texture2D[4]; // DONE
+    //public static Texture2D[] Ball = new Texture2D[4]; // DONE
     public static Texture2D MainPipe; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D MainPipeOpen; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D MainPipeBar; // Done
@@ -230,10 +230,6 @@ public static class LevelResources
     // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
-        Ball[0] = Statics.Content.Load<Texture2D>("BallPink");
-        Ball[1] = Statics.Content.Load<Texture2D>("BallYellow");
-        Ball[2] = Statics.Content.Load<Texture2D>("BallBlue");
-        Ball[3] = Statics.Content.Load<Texture2D>("BallGreen");
         MainPipe = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\MainPipe");
         MainPipeOpen = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\MainPipeOpen");
         MainPipeBar = Statics.Content.Load<Texture2D>("MainPipeBar");
