@@ -180,10 +180,6 @@ public static class LevelResources
     public static Texture2D Spinner; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D[] SpinnerSpin = new Texture2D[3]; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D[] SpinnerExplode = new Texture2D[7];  // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D SpinnerClosedLeft; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D SpinnerClosedUp; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D SpinnerClosedRight; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D SpinnerClosedDown; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D[] SpinnerBall = new Texture2D[4]; // DONE
     public static Texture2D SpinnerBallExploded; // DONE
     public static Texture2D PipeHorizontal; // 0✔ 1X 2X 3X 4X
@@ -248,10 +244,6 @@ public static class LevelResources
         SpinnerExplode[4] = SpinnerExplode[1];
         SpinnerExplode[5] = SpinnerExplode[0];
         SpinnerExplode[6] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode3");
-        SpinnerClosedLeft = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerClosedLeft");
-        SpinnerClosedRight = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerClosedRight");
-        SpinnerClosedDown = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerClosedDown");
-        SpinnerClosedUp = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerClosedUp");
         SpinnerBall[0] = Statics.Content.Load<Texture2D>("SpinnerBallPink");
         SpinnerBall[1] = Statics.Content.Load<Texture2D>("SpinnerBallYellow");
         SpinnerBall[2] = Statics.Content.Load<Texture2D>("SpinnerBallBlue");
