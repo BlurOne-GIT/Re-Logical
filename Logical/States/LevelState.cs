@@ -183,8 +183,8 @@ public class LevelState : GameState
 
     protected override void UnloadContent()
     {
-        Game.Content.UnloadAsset("1Success"); // DEBUG //
-        Game.Content.UnloadAsset("1Fail"); // DEBUG //
+        Game.Content.UnloadAsset("Sfx/1/Success"); // DEBUG //
+        Game.Content.UnloadAsset("Sfx/1/Fail"); // DEBUG //
         base.UnloadContent();
     }
 
