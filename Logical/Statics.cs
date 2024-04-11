@@ -171,10 +171,6 @@ public enum Direction
 public static class LevelResources
 {
     #region Textures
-    //public static Texture2D[] Ball = new Texture2D[4]; // DONE
-    public static Texture2D MainPipe; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D MainPipeOpen; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D MainPipeBar; // Done
     public static Texture2D EmptyBlock; // 0✔ 1X 2X 3X 4X
     public static Texture2D EmptyBlockAlt; // 0✔ 1X 2X 3X 4X
     public static Texture2D Spinner; // 0✔ 1✔ 2X 3X 4X
@@ -226,17 +222,9 @@ public static class LevelResources
     // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
-        MainPipe = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\MainPipe");
-        MainPipeOpen = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\MainPipeOpen");
-        MainPipeBar = Statics.Content.Load<Texture2D>("MainPipeBar");
         EmptyBlock = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\EmptyBlock");
         EmptyBlockAlt = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\EmptyBlockAlt");
         Spinner = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\Spinner");
-        /*
-        SpinnerSpin[0] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin0");
-        SpinnerSpin[1] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin1");
-        SpinnerSpin[2] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerSpin2");
-        */
         SpinnerExplode[0] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode2");
         SpinnerExplode[1] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode0");
         SpinnerExplode[2] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\SpinnerExplode1");

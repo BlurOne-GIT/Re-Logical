@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Logical.Blocks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MmgEngine;
 
@@ -53,12 +54,12 @@ public class LevelState : GameState
             Components.Add(gameObject);
         }
 
-        Components.Add(new SimpleImage(Game, LevelResources.MainPipe, new Vector2(16, 30), 0));
-        _oTimeBar = new SimpleImage(Game, LevelResources.MainPipeBar, new Vector2(304f, 35f), 1);
+        Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/MainPipe"), new Vector2(16, 30), 0));
+        _oTimeBar = new SimpleImage(Game, Game.Content.Load<Texture2D>("MainPipeTime"), new Vector2(304f, 35f), 1);
         Components.Add(_oTimeBar);
         for (int i = 0; i < 8; i++)
             if (_tileset[i, 0].FileValue is 0x01 or 0x16)
-                Components.Add(new SimpleImage(Game, LevelResources.MainPipeOpen, new Vector2(26 + 36 * i, 41), 1));
+                Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/MainPipeOpen"), new Vector2(26 + 36 * i, 41), 1));
 
         Spinner.AllDone += Win;
         Statics.ShowCursor = true;
@@ -185,6 +186,9 @@ public class LevelState : GameState
     {
         Game.Content.UnloadAsset("Sfx/1/Success"); // DEBUG //
         Game.Content.UnloadAsset("Sfx/1/Fail"); // DEBUG //
+        Game.Content.UnloadAsset($"{Configs.GraphicSet}/MainPipe");
+        Game.Content.UnloadAsset($"{Configs.GraphicSet}/MainPipeOpen");
+        Game.Content.UnloadAsset("MainPipeTime");
         base.UnloadContent();
     }
 

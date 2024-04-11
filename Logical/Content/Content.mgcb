@@ -841,7 +841,7 @@
 /processorParam:TextureFormat=Color
 /build:IndicatorYellow.png
 
-#begin MainPipeBar.png
+#begin MainPipeTime.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -851,7 +851,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MainPipeBar.png
+/build:MainPipeTime.png
 
 #begin Minus.png
 /importer:TextureImporter
