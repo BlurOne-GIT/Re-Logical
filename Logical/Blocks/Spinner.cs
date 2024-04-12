@@ -34,7 +34,7 @@ public class Spinner : Block, IReloadable
         new(32f, 10f), // Right
         new(10f, 32f)  // Down
     };
-    private static readonly Animation<Vector2>[] BallOffsetAnimations = {
+    private readonly Animation<Vector2>[] _ballOffsetAnimations = {
         new(new Vector2[]{
             new(11f, 6f),
             new(8f),
@@ -60,13 +60,13 @@ public class Spinner : Block, IReloadable
             new(14f, 23f)
         }, false) // Down
     };
-    private readonly Vector2[] _buttonOffsets =
+    /*private readonly Vector2[] _buttonOffsets =
     {
         new(4f, 13f), // Left
         new(13f, 4f), // Up
         new(23f, 13f), // Right
         new(13f, 23f) // Down
-    };
+    };*/
     private readonly Vector2[] _registers = {
         new(0f, 13f),  // Left
         new(13f, 0f),  // Up
@@ -91,8 +91,8 @@ public class Spinner : Block, IReloadable
     {
         _spinButton = new Button(game, new Rectangle(Position.ToPoint(), new Point(36)));
         _spinButton.RightClicked += Spin;
-        if (Pos.Y == 0)
-            _registers[(int)Direction.Left] = new Vector2(-13f, 13f);
+        if (Pos.Y is 0)
+            _registers[(int)Direction.Up] = new Vector2(13f, -13f);
         ExplodedSpinners.Capacity++;
     }
 
@@ -120,13 +120,26 @@ public class Spinner : Block, IReloadable
         _closedPipes[(int)Direction.Right] = Pos.X == 7 || !HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
         _closedPipes[(int)Direction.Down] = Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
         
-        for (int i = 0; i < 4; i++)
-            if (_closedPipes[i])
-            {
-                _slotButtons[i] = new Button(Game, new Rectangle((Position + _buttonOffsets[i]).ToPoint(),
-                    i % 2 == 0 ? new Point(10, 9) : new Point(9, 10))) {Enabled = false};
-                _slotButtons[i].LeftClicked += PopOut;
-            }
+        if (!_closedPipes[(int)Direction.Left])
+        {
+            _slotButtons[0] = new Button(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
+            _slotButtons[0].LeftClicked += PopOut;
+        }
+        if (!_closedPipes[(int)Direction.Up] && Pos.Y != 0 && blocks[Pos.X, Pos.Y-1].FileValue is not 0x16)
+        {
+            _slotButtons[1] = new Button(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10))) {Enabled = false};
+            _slotButtons[1].LeftClicked += PopOut;
+        }
+        if (!_closedPipes[(int)Direction.Right])
+        {
+            _slotButtons[2] = new Button(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
+            _slotButtons[2].LeftClicked += PopOut;
+        }
+        if (!_closedPipes[(int)Direction.Down] && blocks[Pos.X, Pos.Y+1].FileValue is not 0x16)
+        {
+            _slotButtons[3] = new Button(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10))) {Enabled = false};
+            _slotButtons[3].LeftClicked += PopOut;
+        }
     }
 
     private void Spin(object s, EventArgs e)
@@ -142,7 +155,7 @@ public class Spinner : Block, IReloadable
         
         for (int i = 0; i < 4; i++)
             if (_hasExploded || _slotBalls[i] is not null)
-                BallOffsetAnimations[i].Start();
+                _ballOffsetAnimations[i].Start();
         
         _spinSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         if (LevelState.ColorJobs.Count != 0)
@@ -287,13 +300,14 @@ public class Spinner : Block, IReloadable
         // Slots
         for (int i = 0; i < 4; i++)
             if (_slotBalls[i] is not null)
-                DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[i]], BallOffsetAnimations[i].NextFrame(), 2);
+                DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[i]], _ballOffsetAnimations[i].NextFrame(), 2);
             else if (_hasExploded)
-                DrawAnotherTexture(LevelResources.SpinnerBallExploded, BallOffsetAnimations[i].NextFrame(), 2);
+                DrawAnotherTexture(LevelResources.SpinnerBallExploded, _ballOffsetAnimations[i].NextFrame(), 2);
 
         // Closed Pipes
         for (int i = 0; i < 4; i++)
-            DrawAnotherTexture(_closedPipeTextures[i], ClosedPipeOffsets[i], 1);
+            if (_closedPipes[i])
+                DrawAnotherTexture(_closedPipeTextures[i], ClosedPipeOffsets[i], 1);
         
         // Explode Animation
         if (!_explodeAnimation.IsAtEnd)
