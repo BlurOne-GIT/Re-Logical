@@ -297,7 +297,7 @@ public class Spinner : Block, IReloadable
         
         // Spinning Animation
         if (!_spinAnimation.IsAtEnd)
-            DrawAnotherTexture(_spinningTexture, _spinTextureOffset, 1, _spinAnimation);
+            DrawAnotherTexture(_spinningTexture, _spinTextureOffset, 1, _spinAnimation.NextFrame());
 
         // Slots
         for (int i = 0; i < 4; i++)
@@ -313,7 +313,7 @@ public class Spinner : Block, IReloadable
         
         // Explode Animation
         if (!_explodeAnimation.IsAtEnd)
-            DrawAnotherTexture(_explodingTexture, _explodeTextureOffset, 3, _explodeAnimation);
+            DrawAnotherTexture(_explodingTexture, _explodeTextureOffset, 3, _explodeAnimation.NextFrame());
     }
 
     protected override void UnloadContent()
