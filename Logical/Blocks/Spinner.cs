@@ -78,10 +78,11 @@ public class Spinner : Block, IReloadable
     #endregion
 
     private readonly Animation<Rectangle> _spinAnimation = Animation<Rectangle>.TextureAnimation(new Point(26), new Point(78, 26), false, 1);
-    private readonly Animation<Texture2D> _explodeAnimation = new(LevelResources.SpinnerExplode, false);
+    private readonly Animation<Rectangle> _explodeAnimation = Animation<Rectangle>.TextureAnimation(new Point(28), new Point(196, 28), false, 1);
 
     #region Textures
     private static Texture2D _spinningTexture;
+    private static Texture2D _explodingTexture;
     private static Texture2D[] _closedPipeTextures;
     #endregion
     
@@ -99,6 +100,7 @@ public class Spinner : Block, IReloadable
     protected override void LoadContent()
     {
         _spinningTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerSpin");
+        _explodingTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerExplode");
         _closedPipeTextures ??= new[]
         {
             Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosedLeft"),
@@ -311,18 +313,20 @@ public class Spinner : Block, IReloadable
         
         // Explode Animation
         if (!_explodeAnimation.IsAtEnd)
-            DrawAnotherTexture(_explodeAnimation.NextFrame(), _explodeTextureOffset, 3);
+            DrawAnotherTexture(_explodingTexture, _explodeTextureOffset, 3, _explodeAnimation);
     }
 
     protected override void UnloadContent()
     {
         _popInSfx = _popOutSfx = _spinSfx = _explodeSfx = null;
         _spinningTexture = null;
+        _explodingTexture = null;
         _closedPipeTextures = null;
         Game.Content.UnloadAssets(new []
         {
             "Sfx/PopIn", "Sfx/PopOut", "Sfx/Spin", "Sfx/Explode",
-            "SpinnerSpin",
+            $"{Configs.GraphicSet}/SpinnerSpin",
+            $"{Configs.GraphicSet}/SpinnerExplode",
             $"{Configs.GraphicSet}/SpinnerClosedLeft", 
             $"{Configs.GraphicSet}/SpinnerClosedUp", 
             $"{Configs.GraphicSet}/SpinnerClosedRight", 
