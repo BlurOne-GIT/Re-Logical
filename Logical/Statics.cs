@@ -171,9 +171,6 @@ public enum Direction
 public static class LevelResources
 {
     #region Textures
-    public static Texture2D TpHorizontal; // DONE
-    public static Texture2D TpVertical; // DONE
-    public static Texture2D TpCross; // DONE
     public static Texture2D TpShadowEmpty; // TODO DISABLED
     public static Texture2D TpShadowHorizontal; // TODO DISABLED
     public static Texture2D TpShadowVertical; // TODO DISABLED
@@ -206,9 +203,6 @@ public static class LevelResources
     // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
-        TpHorizontal = Statics.Content.Load<Texture2D>("TpHorizontal");
-        TpVertical = Statics.Content.Load<Texture2D>("TpVertical");
-        TpCross = Statics.Content.Load<Texture2D>("TpCross");
         /* DISABLED
         TpShadowEmpty = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowEmpty");
         TpShadowHorizontal = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowHorizontal");

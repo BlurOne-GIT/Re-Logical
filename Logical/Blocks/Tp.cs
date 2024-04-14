@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MmgEngine;
 
 namespace Logical.Blocks;
@@ -31,21 +32,21 @@ public class Tp : Pipe, IReloadable, IOverlayable
         switch (xx)
         {
             case 0x08:
-                _overlay = new SimpleImage(game, LevelResources.TpHorizontal, Position + new Vector2(7, 7), 9);
+                _overlay = new SimpleImage(game, Game.Content.Load<Texture2D>("TpHorizontal"), Position + new Vector2(7, 7), 9);
                 if (FirstHorizontalTp is null)
                     FirstHorizontalTp = this;
                 else if (SecondHorizontalTp is null)
                     SecondHorizontalTp = this;
                 break;
             case 0x09:
-                _overlay = new SimpleImage(game, LevelResources.TpVertical, Position + new Vector2(7, 7), 9);
+                _overlay = new SimpleImage(game, Game.Content.Load<Texture2D>("TpVertical"), Position + new Vector2(7, 7), 9);
                 if (FirstVerticalTp is null)
                     FirstVerticalTp = this;
                 else if (SecondVerticalTp is null)
                     SecondVerticalTp = this;
                 break;
             case 0x0A:
-                _overlay = new SimpleImage(game, LevelResources.TpCross, Position + new Vector2(7, 7), 9);
+                _overlay = new SimpleImage(game, Game.Content.Load<Texture2D>("TpCross"), Position + new Vector2(7, 7), 9);
                 if (FirstHorizontalTp is null)
                     FirstHorizontalTp = this;
                 else if (SecondHorizontalTp is null)
@@ -120,6 +121,18 @@ public class Tp : Pipe, IReloadable, IOverlayable
             SpriteEffects.None,
             0.2f
         );*/
+    }
+
+    protected override void UnloadContent()
+    {
+        Game.Content.UnloadAsset(FileValue switch
+        {
+            0x08 => "TpHorizontal",
+            0x09 => "TpVertical",
+            0x0A => "TpCross",
+            _ => throw new ArgumentException("Invalid Tp direction")
+        });
+        base.UnloadContent();
     }
 
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {_overlay};
