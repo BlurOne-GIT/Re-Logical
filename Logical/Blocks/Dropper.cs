@@ -2,6 +2,7 @@ using System;
 using Logical.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
@@ -14,7 +15,7 @@ public class Dropper : Block
     private static SoundEffect _popInSfx;
     #endregion
 
-    public Dropper(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.PipeVertical, arrayPosition, xx, yy) { }
+    public Dropper(Game game, Point arrayPosition, byte xx, byte yy):base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeVertical"), arrayPosition, xx, yy) { }
 
     protected override void LoadContent()
     {

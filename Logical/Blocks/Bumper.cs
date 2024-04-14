@@ -23,7 +23,7 @@ public class Bumper : Block, IReloadable, IOverlayable
     private readonly Vector2 _cpuPos = new(10f, 0f);
     #endregion
 
-    public Bumper(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.PipeCross, arrayPosition, xx, yy)
+    public Bumper(Game game, Point arrayPosition, byte xx, byte yy):base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeCross"), arrayPosition, xx, yy)
     {
         _direction = xx switch
         {
