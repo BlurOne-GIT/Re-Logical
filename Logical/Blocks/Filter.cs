@@ -20,16 +20,18 @@ public class Filter : Pipe, IOverlayable
 
     public Filter(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy, false)
     {
-        _shadow = xx switch
-        {
-            0x05 => LevelResources.FilterShadowHorizontal,
-            0x06 => LevelResources.FilterShadowVertical,
-            0x07 => LevelResources.FilterShadowCross,
-            _ => throw new ArgumentException("Invalid Pipe direction")
-        };
+        _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/{ShadowTextureSwitcher(xx)}");
         _ballColor = (BallColors)Argument-1;
         _rectangle = new Rectangle(8 * (int)_ballColor, 0, 8, 8);
     }
+
+    private static string ShadowTextureSwitcher(byte xx) => xx switch
+    {
+        0x05 => "FilterShadowHorizontal",
+        0x06 => "FilterShadowVertical",
+        0x07 => "FilterShadowCross",
+        _ => throw new ArgumentException("Invalid Pipe direction")
+    };
 
     protected override void LoadContent()
     {
