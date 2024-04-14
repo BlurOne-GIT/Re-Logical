@@ -171,7 +171,6 @@ public enum Direction
 public static class LevelResources
 {
     #region Textures
-    public static Texture2D[] Filter = new Texture2D[4]; // DONE
     public static Texture2D FilterShadowHorizontal; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D FilterShadowVertical; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D FilterShadowCross; // 0✔ 1✔ 2X 3X 4X
@@ -210,10 +209,6 @@ public static class LevelResources
     // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
-        Filter[0] = Statics.Content.Load<Texture2D>("FilterPink");
-        Filter[1] = Statics.Content.Load<Texture2D>("FilterYellow");
-        Filter[2] = Statics.Content.Load<Texture2D>("FilterBlue");
-        Filter[3] = Statics.Content.Load<Texture2D>("FilterGreen");
         FilterShadowHorizontal = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\FilterShadowHorizontal");
         FilterShadowVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\FilterShadowVertical");
         FilterShadowCross = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\FilterShadowCross");
