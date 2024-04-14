@@ -56,7 +56,12 @@ public class Filter : Pipe, IOverlayable
     protected override void UnloadContent()
     {
         _balls = null;
-        Game.Content.UnloadAsset("SpinnerBalls");
+        Game.Content.UnloadAssets(new []
+        {
+            "SpinnerBalls",
+            "Filters",
+            _shadow.Name
+        });
         base.UnloadContent();
     }
 
