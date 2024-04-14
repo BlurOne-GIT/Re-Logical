@@ -23,7 +23,7 @@ public class Spinner : Block, IReloadable
     private readonly Button _spinButton;
     private bool _hasExploded;
     private readonly Button[] _slotButtons = new Button[4];
-    private readonly bool[] _closedPipes = new bool[4];
+    private bool[] _closedPipes = new bool[4];
     private readonly List<BallColors?> _slotBalls = new(4) { null, null, null, null };
     
     #region Coordinates
@@ -112,13 +112,12 @@ public class Spinner : Block, IReloadable
         _spinningTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerSpin");
         _explodingTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerExplode");
         _ballsTexture ??= Game.Content.Load<Texture2D>("SpinnerBalls");
-        _closedPipeTextures ??= new[]
+        if (_closedPipeTextures is null)
         {
-            Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosedLeft"),
-            Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosedUp"),
-            Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosedRight"),
-            Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosedDown")
-        };
+            _closedPipeTextures = new Texture2D[4];
+            for (var i = 0; i < 4; i++)
+                _closedPipeTextures[i] = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosed{(Direction)i}");
+        }
         _popInSfx ??= Game.Content.Load<SoundEffect>("Sfx/PopIn");
         _popOutSfx ??= Game.Content.Load<SoundEffect>("Sfx/PopOut");
         _spinSfx ??= Game.Content.Load<SoundEffect>("Sfx/Spin");
@@ -128,10 +127,13 @@ public class Spinner : Block, IReloadable
 
     public void Reload(Block[,] blocks)
     {
-        _closedPipes[(int)Direction.Left] = Pos.X == 0 || !HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
-        _closedPipes[(int)Direction.Up] = Pos.Y != 0 && !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
-        _closedPipes[(int)Direction.Right] = Pos.X == 7 || !HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
-        _closedPipes[(int)Direction.Down] = Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
+        _closedPipes = new[]
+        {
+            Pos.X == 0 || !HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue), // Left
+            Pos.Y != 0 && !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue),   // Up
+            Pos.X == 7 || !HorizontalAttachables.Contains(blocks[Pos.X + 1, Pos.Y].FileValue), // Right
+            Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue)    // Down
+        };
         
         if (!_closedPipes[(int)Direction.Left])
         {

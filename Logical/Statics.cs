@@ -175,10 +175,6 @@ public static class LevelResources
     public static Texture2D TpShadowHorizontal; // TODO DISABLED
     public static Texture2D TpShadowVertical; // TODO DISABLED
     public static Texture2D TpShadowCross; // TODO DISABLED
-    public static Texture2D PipeClosedLeft; // 0✔ 1X 2X 3X 4X
-    public static Texture2D PipeClosedUp; // 0✔ 1X 2X 3X 4X
-    public static Texture2D PipeClosedRight; // 0✔ 1X 2X 3X 4X
-    public static Texture2D PipeClosedDown; // 0✔ 1X 2X 3X 4X
     public static Texture2D[] Changer = new Texture2D[4]; // DONE
     public static Texture2D[] Indicator = new Texture2D[4]; // DONE
     public static Texture2D ChangerShadowHorizontal; // 0✔ 1✔ 2X 3X 4X
@@ -242,10 +238,6 @@ public static class LevelResources
         */
         ColorJob = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\ColorJob");
         TrafficLight = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TrafficLight");
-        PipeClosedLeft = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\PipeClosedLeft");
-        PipeClosedUp = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\PipeClosedUp");
-        PipeClosedRight = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\PipeClosedRight");
-        PipeClosedDown = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\PipeClosedDown");
     }
 
     public static void UnloadTextures()
