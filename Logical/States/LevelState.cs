@@ -21,7 +21,7 @@ public class LevelState : GameState
     private int _oTimeLeft = 145;
     private readonly int _oTime;
     private int _oTimeLoopCounter;
-    public static List<BallColors> ColorJobs = new(4);
+    public static List<BallColors> ColorJobLayout = new(4);
     public static BallColors NextBall { get; private set; }
     public static int TimeLeft;
     public static TimeSpan TimeSpanLeft;
@@ -66,7 +66,7 @@ public class LevelState : GameState
         _oTimeLoopCounter = _oTime;
         ColorJob.SteveJobs?.Recharge();
 
-        if (ColorJobs.Count != 0 || TrafficLights.Count != 0)
+        if (ColorJobLayout.Count != 0 || TrafficLights.Count != 0)
             Spinner.ConditionClear += RecheckConditioned;
 
     }
@@ -216,7 +216,7 @@ public class LevelState : GameState
 
     protected override void Dispose(bool disposing)
     {
-        ColorJobs.Clear();
+        ColorJobLayout.Clear();
         TrafficLights.Clear();
         Spinner.ClearList();
         Spinner.AllDone -= Win;

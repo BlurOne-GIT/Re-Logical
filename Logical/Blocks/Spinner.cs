@@ -73,6 +73,15 @@ public class Spinner : Block, IReloadable
         new(26f, 13f), // Right
         new(13f, 26f)  // Down
     };
+
+    private static readonly Rectangle[] BallRectangles =
+    {
+        new(0, 0, 8, 8),
+        new(8, 0, 8, 8),
+        new(16, 0, 8, 8),
+        new(24, 0, 8, 8),
+        new(32, 0, 8, 8)
+    };
     private readonly Vector2 _spinTextureOffset = new(5f);
     private readonly Vector2 _explodeTextureOffset = new(4f);
     #endregion
@@ -83,6 +92,7 @@ public class Spinner : Block, IReloadable
     #region Textures
     private static Texture2D _spinningTexture;
     private static Texture2D _explodingTexture;
+    private static Texture2D _ballsTexture;
     private static Texture2D[] _closedPipeTextures;
     #endregion
     
@@ -101,6 +111,7 @@ public class Spinner : Block, IReloadable
     {
         _spinningTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerSpin");
         _explodingTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerExplode");
+        _ballsTexture ??= Game.Content.Load<Texture2D>("SpinnerBalls");
         _closedPipeTextures ??= new[]
         {
             Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosedLeft"),
@@ -160,7 +171,7 @@ public class Spinner : Block, IReloadable
                 _ballOffsetAnimations[i].Start();
         
         _spinSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
-        if (LevelState.ColorJobs.Count != 0)
+        if (LevelState.ColorJobLayout.Count != 0)
             Check();
     }
 
@@ -221,15 +232,15 @@ public class Spinner : Block, IReloadable
 
     public async void Check()
     {
-        if (LevelState.ColorJobs.Count != 0 && _slotBalls.SequenceEqual(LevelState.ColorJobs.Cast<BallColors?>()))
+        if (LevelState.ColorJobLayout.Count != 0 && _slotBalls.SequenceEqual(LevelState.ColorJobLayout.Cast<BallColors?>()))
         {
             await Explode();
-            LevelState.ColorJobs.Clear();
+            LevelState.ColorJobLayout.Clear();
             ConditionClear?.Invoke(this, EventArgs.Empty);
             return;
         }
 
-        if (LevelState.ColorJobs.Count != 0 || LevelState.TrafficLights.Count != 0 && _slotBalls[0] != LevelState.TrafficLights[0])
+        if (LevelState.ColorJobLayout.Count != 0 || LevelState.TrafficLights.Count != 0 && _slotBalls[0] != LevelState.TrafficLights[0])
             return;
 
         if (_slotBalls.Any(a => a != _slotBalls[0]) || _slotBalls[0] is null) return;
@@ -302,9 +313,9 @@ public class Spinner : Block, IReloadable
         // Slots
         for (int i = 0; i < 4; i++)
             if (_slotBalls[i] is not null)
-                DrawAnotherTexture(LevelResources.SpinnerBall[(int)_slotBalls[i]], _ballOffsetAnimations[i].NextFrame(), 2);
+                DrawAnotherTexture(_ballsTexture, _ballOffsetAnimations[i].NextFrame(), 2, BallRectangles[(int)_slotBalls[i]]);
             else if (_hasExploded)
-                DrawAnotherTexture(LevelResources.SpinnerBallExploded, _ballOffsetAnimations[i].NextFrame(), 2);
+                DrawAnotherTexture(_ballsTexture, _ballOffsetAnimations[i].NextFrame(), 2, BallRectangles[4]);
 
         // Closed Pipes
         for (int i = 0; i < 4; i++)
@@ -321,10 +332,12 @@ public class Spinner : Block, IReloadable
         _popInSfx = _popOutSfx = _spinSfx = _explodeSfx = null;
         _spinningTexture = null;
         _explodingTexture = null;
+        _ballsTexture = null;
         _closedPipeTextures = null;
         Game.Content.UnloadAssets(new []
         {
             "Sfx/PopIn", "Sfx/PopOut", "Sfx/Spin", "Sfx/Explode",
+            "SpinnerBalls",
             $"{Configs.GraphicSet}/SpinnerSpin",
             $"{Configs.GraphicSet}/SpinnerExplode",
             $"{Configs.GraphicSet}/SpinnerClosedLeft", 

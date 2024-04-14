@@ -72,7 +72,7 @@ public class DefaultPanel : MenuPanel
             read = read.Remove(0, 10);
             try
             {
-                Configs.Stage = Convert.ToByte(read[..(read.Length < 12 ? 1 : 2)]);
+                Configs.Stage = Convert.ToByte(read);
             } catch (FormatException)
             {
                 throw new NotImplementedException();

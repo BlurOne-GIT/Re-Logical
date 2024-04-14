@@ -171,7 +171,6 @@ public enum Direction
 public static class LevelResources
 {
     #region Textures
-    public static Texture2D[] SpinnerBall = new Texture2D[4]; // DONE
     public static Texture2D SpinnerBallExploded; // DONE
     public static Texture2D PipeHorizontal; // 0✔ 1X 2X 3X 4X
     public static Texture2D PipeHorizontalAlt; // 0X 1✔ 2X 3X 4X
@@ -217,10 +216,6 @@ public static class LevelResources
     // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
-        SpinnerBall[0] = Statics.Content.Load<Texture2D>("SpinnerBallPink");
-        SpinnerBall[1] = Statics.Content.Load<Texture2D>("SpinnerBallYellow");
-        SpinnerBall[2] = Statics.Content.Load<Texture2D>("SpinnerBallBlue");
-        SpinnerBall[3] = Statics.Content.Load<Texture2D>("SpinnerBallGreen");
         SpinnerBallExploded = Statics.Content.Load<Texture2D>("SpinnerBallExploded");
         PipeHorizontal = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\PipeHorizontal");
         PipeVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\PipeVertical");
