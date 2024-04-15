@@ -43,6 +43,7 @@ public static class Statics
         var kernings = new List<Vector3>();
         var glyphRectangles = new List<Rectangle>();
         var fontRectangles = new List<Rectangle>();
+        // Todo: have this array in a loadable xml file
         var characters = new List<char>{
             ' ',
             '!',
@@ -91,11 +92,12 @@ public static class Statics
         };
         for (int i = 0; i < characters.Count; i++)
         {
-            glyphRectangles.Add(new Rectangle(new Point(i*8, 0), new Point(8, 7)));
-            fontRectangles.Add(new Rectangle(new Point(0, 0), new Point(8, 7)));
+            glyphRectangles.Add(new Rectangle(i*8, 0, 8, 7));
+            fontRectangles.Add(new Rectangle(0, 0, 8, 7));
             kernings.Add(new Vector3(0, 8, 0));
         }
         LightFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
+        // Todo: have this array in a loadable xml file
         characters = new List<char>{
             ' ',
             '/',
@@ -142,9 +144,8 @@ public static class Statics
         kernings = new List<Vector3>();
         for (int i = 0; i < characters.Count; i++)
         {
-            var p = new Point(i * 8, 7);
-            glyphRectangles.Add(new Rectangle(p, new Point(8, 8)));
-            fontRectangles.Add(new Rectangle(new Point(0, 0), new Point(8, 7)));
+            glyphRectangles.Add(new Rectangle(i*8, 7, 8, 8));
+            fontRectangles.Add(new Rectangle(0, 0, 8, 7));
             kernings.Add(new Vector3(0, 8, 0));
         }
         BoldFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
