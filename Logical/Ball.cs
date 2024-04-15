@@ -32,7 +32,7 @@ public class Ball : SimpleImage
             _ballColor = value;
             if (_shallSound)
                 _colorChangeSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
-            ChangeAnimation(new Animation<Rectangle>(new[] { new Rectangle(10 * (int)_ballColor, 0, 10, 10) }, false));
+            DefaultRectangle = new Rectangle(10 * (int)_ballColor, 0, 10, 10);
         }
     }
     public Direction MovementDirection
@@ -68,9 +68,8 @@ public class Ball : SimpleImage
     }
     #endregion
 
-    public Ball(Game game, Vector2 position, Direction direction, BallColors ballColor, bool willSound) : base(game,
-        game.Content.Load<Texture2D>("Balls"), position, 7,
-        animation: new Animation<Rectangle>(new[] { new Rectangle(10 * (int)ballColor, 0, 10, 10) }, false))
+    public Ball(Game game, Vector2 position, Direction direction, BallColors ballColor, bool willSound)
+        : base(game, game.Content.Load<Texture2D>("Balls"), position, 7)
     {
         _shallSound = false;
         MovementDirection = direction;
