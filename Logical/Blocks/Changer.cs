@@ -11,7 +11,7 @@ public class Changer : Pipe, IOverlayable
 {
     #region Fields
 
-    private readonly BallColors _ballColors;
+    private readonly BallColors _ballColor;
     private readonly Texture2D _shadow;
     private readonly Texture2D _indicator;
     private readonly Vector2 _ciPos = new(12f);
@@ -27,14 +27,14 @@ public class Changer : Pipe, IOverlayable
             0x0D => LevelResources.ChangerShadowCross,
             _ => throw new ArgumentException("Invalid Pipe direction")
         };
-        _ballColors = (BallColors)Argument-1;
+        _ballColor = (BallColors)Argument-1;
         _indicator = LevelResources.Indicator[Argument-1];
     }
     
     public override void Update(GameTime gameTime)
     {
         foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == DetectionPoint + Position))
-            ball.BallColor = _ballColors;
+            ball.BallColor = _ballColor;
     }
 
 
@@ -45,6 +45,15 @@ public class Changer : Pipe, IOverlayable
         DrawAnotherTexture(_indicator, _ciPos, 1);
         DrawAnotherTexture(_shadow, _shadowPos, 1);
     }
-    
-    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(Game, LevelResources.Changer[Argument-1], Position + _ciPos, 9)};
+
+    protected override void UnloadContent()
+    {
+        Game.Content.UnloadAsset("Changers");
+        base.UnloadContent();
+    }
+
+    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(
+        Game, Game.Content.Load<Texture2D>("Changers"), Position + _ciPos, 9)
+        {DefaultRectangle = new Rectangle(12 * (int)_ballColor, 0, 12, 12)}
+    };
 }
