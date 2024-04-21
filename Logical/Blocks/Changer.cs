@@ -14,8 +14,9 @@ public class Changer : Pipe, IOverlayable
     private readonly BallColors _ballColor;
     private readonly Texture2D _shadow;
     private readonly Texture2D _indicator;
-    private readonly Vector2 _ciPos = new(12f);
-    private readonly Vector2 _shadowPos = new(18f);
+    private readonly Vector2 _indicatorOffset = new(12f);
+    private readonly Rectangle _indicatorRectangle;
+    private readonly Vector2 _shadowOffset = new(18f);
     #endregion
 
     public Changer(Game game, Point arrayPosition, byte xx, byte yy):base(game, arrayPosition, xx, yy, false)
@@ -28,7 +29,8 @@ public class Changer : Pipe, IOverlayable
             _ => throw new ArgumentException("Invalid Pipe direction")
         };
         _ballColor = (BallColors)Argument-1;
-        _indicator = LevelResources.Indicator[Argument-1];
+        _indicator = Game.Content.Load<Texture2D>("Indicators");
+        _indicatorRectangle = new Rectangle(12 * (int)_ballColor, 0, 12, 12);
     }
     
     public override void Update(GameTime gameTime)
@@ -42,18 +44,18 @@ public class Changer : Pipe, IOverlayable
     {
         base.Draw(gameTime);
         
-        DrawAnotherTexture(_indicator, _ciPos, 1);
-        DrawAnotherTexture(_shadow, _shadowPos, 1);
+        DrawAnotherTexture(_indicator, _indicatorOffset, 1, _indicatorRectangle);
+        DrawAnotherTexture(_shadow, _shadowOffset, 1);
     }
 
     protected override void UnloadContent()
     {
-        Game.Content.UnloadAsset("Changers");
+        Game.Content.UnloadAssets(new []{"Changers", "Indicators"});
         base.UnloadContent();
     }
 
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(
-        Game, Game.Content.Load<Texture2D>("Changers"), Position + _ciPos, 9)
-        {DefaultRectangle = new Rectangle(12 * (int)_ballColor, 0, 12, 12)}
+        Game, Game.Content.Load<Texture2D>("Changers"), Position + _indicatorOffset, 9)
+        {DefaultRectangle = _indicatorRectangle}
     };
 }

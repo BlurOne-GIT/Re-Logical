@@ -7,20 +7,34 @@ namespace Logical.Blocks;
 public class NextBall : Block
 {
     #region Field
-    private readonly Vector2 _holderPos = new(9f);
-    private readonly Vector2 _indicatorPos = new(12f);
-    private readonly Vector2 _shadowPos = new(12f, 13f);
+    private readonly Vector2 _holderOffset = new(9f);
+    private readonly Vector2 _indicatorOffset = new(12f);
+    private readonly Vector2 _shadowOffset = new(12f, 13f);
+    private static Texture2D _indicators;
     #endregion
 
     public NextBall(Game game, Point arrayPosition, byte xx, byte yy)
         : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/EmptyBlock"), arrayPosition, xx, yy) { }
 
+    protected override void LoadContent()
+    {
+        _indicators ??= Game.Content.Load<Texture2D>("Indicators");
+        base.LoadContent();
+    }
+    
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
         
-        DrawAnotherTexture(LevelResources.HolderShadowEmpty, _shadowPos, 1);
-        DrawAnotherTexture(LevelResources.Holder, _holderPos, 2);
-        DrawAnotherTexture(LevelResources.Indicator[(int)LevelState.NextBall], _indicatorPos, 3);
+        DrawAnotherTexture(LevelResources.HolderShadowEmpty, _shadowOffset, 1);
+        DrawAnotherTexture(LevelResources.Holder, _holderOffset, 2);
+        DrawAnotherTexture(_indicators, _indicatorOffset, 3, new Rectangle(12 * (int)LevelState.NextBall, 0, 12, 12));
+    }
+
+    protected override void UnloadContent()
+    {
+        _indicators = null;
+        Game.Content.UnloadAsset("Indicators");
+        base.UnloadContent();
     }
 }
