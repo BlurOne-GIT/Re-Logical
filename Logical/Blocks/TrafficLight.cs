@@ -22,7 +22,8 @@ public class TrafficLight : Block
     private readonly Rectangle[] _rectangles = new Rectangle[3];
     #endregion
 
-    public TrafficLight(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.TrafficLight, arrayPosition, xx, yy)
+    public TrafficLight(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/TrafficLight"), arrayPosition, xx, yy)
     {
         if (_theChosenOne is not null)
             _theChosenOne.DisableTraffic = true;

@@ -179,7 +179,6 @@ public static class LevelResources
     public static Texture2D[] UsedSand = new Texture2D[10]; // TODO DISABLED
     public static Texture2D[] SandLeft = new Texture2D[10]; // TODO DISABLED
     public static Texture2D FallingSand; // PLACEHOLDER TODO DISABLED
-    public static Texture2D TrafficLight; // DONE
     #endregion
 
     // Don't worry, I'll get rid of this after I'm done with the conversion
@@ -199,7 +198,6 @@ public static class LevelResources
         }
         FallingSand = Statics.Content.Load<Texture2D>("FallingSand");
         */
-        TrafficLight = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TrafficLight");
     }
 
     public static void UnloadTextures()
