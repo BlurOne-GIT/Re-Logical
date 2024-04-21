@@ -31,59 +31,14 @@ public static class Statics
     #endregion
 
     #region Methods
+    // TODO: after exporting the complete font sprite, turn into an actual font to use along a local spritefont description
     public static void LoadFonts(ContentManager content)
     {
         var fontTexture = content.Load<Texture2D>("Fonts");
         var kernings = new List<Vector3>();
         var glyphRectangles = new List<Rectangle>();
         var fontRectangles = new List<Rectangle>();
-        // Todo: have this array in a loadable xml file
-        var characters = new List<char>{
-            ' ',
-            '!',
-            '%',
-            '*',
-            '-',
-            '0',
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            ':',
-            '=',
-            'A',
-            'B',
-            'C',
-            'D',
-            'E',
-            'F',
-            'G',
-            'H',
-            'I',
-            'J',
-            'K',
-            'L',
-            'M',
-            'N',
-            'O',
-            'P',
-            'Q',
-            'R',
-            'S',
-            'T',
-            'U',
-            'V',
-            'W',
-            'X',
-            'Y',
-            'Z',
-            '_'
-        };
+        var characters = content.Load<List<char>>("LightFontCharacters");
         for (int i = 0; i < characters.Count; i++)
         {
             glyphRectangles.Add(new Rectangle(i*8, 0, 8, 7));
@@ -91,48 +46,8 @@ public static class Statics
             kernings.Add(new Vector3(0, 8, 0));
         }
         LightFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
-        // Todo: have this array in a loadable xml file
-        characters = new List<char>{
-            ' ',
-            '/',
-            '0',
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            'A',
-            'B',
-            'C',
-            'D',
-            'E',
-            'F',
-            'G',
-            'H',
-            'I',
-            'J',
-            'K',
-            'L',
-            'M',
-            'N',
-            'O',
-            'P',
-            'Q',
-            'R',
-            'S',
-            'T',
-            'U',
-            'V',
-            'W',
-            'X',
-            'Y',
-            'Z',
-            '_'
-        };
+        
+        characters = content.Load<List<char>>("BoldFontCharacters");
         glyphRectangles = new List<Rectangle>();
         fontRectangles = new List<Rectangle>();
         kernings = new List<Vector3>();

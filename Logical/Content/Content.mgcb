@@ -589,6 +589,11 @@
 /processorParam:TextureFormat=Color
 /build:Balls.png
 
+#begin BoldFontCharacters.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:BoldFontCharacters.xml
+
 #begin Changers.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -660,6 +665,11 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Indicators.png
+
+#begin LightFontCharacters.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:LightFontCharacters.xml
 
 #begin MainPipeTime.png
 /importer:TextureImporter
