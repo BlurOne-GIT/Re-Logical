@@ -20,7 +20,6 @@ public static class Statics
     public static SpriteFont LightFont { get; private set; }
     public static bool ShowCursor { get; set; }
     public static float BackdropOpacity { get; set; }
-    public static ContentManager Content { get; private set;}
     public static Random Brandom = new();
     public static readonly Dictionary<Direction, Direction> ReverseDirection = new(4)
     {
@@ -32,14 +31,9 @@ public static class Statics
     #endregion
 
     #region Methods
-    public static void Initialize(ContentManager content)
+    public static void LoadFonts(ContentManager content)
     {
-        Content = content;
-    }
-    
-    public static void LoadFonts()
-    {
-        var fontTexture = Content.Load<Texture2D>("Fonts");
+        var fontTexture = content.Load<Texture2D>("Fonts");
         var kernings = new List<Vector3>();
         var glyphRectangles = new List<Rectangle>();
         var fontRectangles = new List<Rectangle>();
