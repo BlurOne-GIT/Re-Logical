@@ -10,8 +10,8 @@ public class Sandclock : Block
     #region Field
     private static Sandclock _bruceCook;
     public bool Stuck;
-    private Texture2D _usedSand;
-    private Texture2D _sandLeft;
+    //private Texture2D _usedSand;
+    //private Texture2D _sandLeft;
     private readonly Vector2 _usPos = new(10f, 18f);
     private readonly Vector2 _slPos = new(10f, 5f);
     //private Vector2 fsPos;
@@ -27,8 +27,8 @@ public class Sandclock : Block
 
         _bruceCook = this;
 
-        _usedSand = LevelResources.UsedSand[0];
-        _sandLeft = LevelResources.SandLeft[0];
+        //_usedSand = LevelResources.UsedSand[0];
+        //_sandLeft = LevelResources.SandLeft[0];
     }
 
     public override void Update(GameTime gameTime)

@@ -23,7 +23,6 @@ public class LoadingState : GameState
         }
         _message = "MAKE IT!";
         _mode = Mode.Start;
-        LevelResources.LoadTextures();
     }
     
     public LoadingState(Game game, string deathReason) : base(game) // You failed! 1
@@ -124,7 +123,6 @@ public class LoadingState : GameState
     {
         if (e.Key is Keys.Escape)
             FadeOut(() => {
-                LevelResources.UnloadTextures();
                 SwitchState(new MenuState(Game));
                 });
         else
@@ -173,7 +171,6 @@ public class LoadingState : GameState
                 if (Configs.Lives == 0)
                 {
                     Configs.Score = 0;
-                    LevelResources.UnloadTextures();
                     SwitchState(new MenuState(Game));
                 }
                 else

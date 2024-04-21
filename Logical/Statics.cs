@@ -169,6 +169,7 @@ public enum Direction
     Down
 }
 
+/*
 public static class LevelResources
 {
     #region Textures
@@ -184,20 +185,20 @@ public static class LevelResources
     // Don't worry, I'll get rid of this after I'm done with the conversion
     public static void LoadTextures()
     {
-        /* DISABLED
+         DISABLED
         TpShadowEmpty = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowEmpty");
         TpShadowHorizontal = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowHorizontal");
         TpShadowVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowVertical");
         TpShadowCross = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowCross");
-        */
-        /* DISABLED
+        
+        DISABLED
         for (int i = 0; i < 10; i++)
         {
             UsedSand[i] = Statics.Content.Load<Texture2D>($"UsedSand{i}");
             SandLeft[i] = Statics.Content.Load<Texture2D>($"SandLeft{i}");
         }
         FallingSand = Statics.Content.Load<Texture2D>("FallingSand");
-        */
+        
     }
 
     public static void UnloadTextures()
@@ -252,12 +253,12 @@ public static class LevelResources
         Statics.Content.UnloadAsset("TpHorizontal");
         Statics.Content.UnloadAsset("TpVertical");
         Statics.Content.UnloadAsset("TpCross");
-        /* DISABLED
+         DISABLED
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TpShadowEmpty");
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TpShadowHorizontal");
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TpShadowVertical");
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TpShadowCross");
-        */
+        
         Statics.Content.UnloadAsset("ChangerPink");
         Statics.Content.UnloadAsset("ChangerYellow");
         Statics.Content.UnloadAsset("ChangerBlue");
@@ -281,15 +282,16 @@ public static class LevelResources
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\Moves");
         Statics.Content.UnloadAsset("MovesBlue");
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\Sandclock");
-        /* DISABLED
+         DISABLED
         for (int i = 0; i < 10; i++)
         {
             Statics.Content.UnloadAsset($"UsedSand{i}");
             Statics.Content.UnloadAsset($"SandLeft{i}");
         }
         Statics.Content.UnloadAsset("FallingSand");
-        */
+        
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\ColorJob");
         Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TrafficLight");
     }
 }
+*/
