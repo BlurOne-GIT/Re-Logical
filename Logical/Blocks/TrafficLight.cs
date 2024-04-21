@@ -34,38 +34,8 @@ public class TrafficLight : Block
         if (yy is < 1 or > 4)
             throw new ArgumentException("Invalid TrafficLight position");
         
-        LevelState.TrafficLights.AddRange(new [] { BallColors.Pink, BallColors.Yellow, BallColors.Blue, BallColors.Green, BallColors.Pink, BallColors.Yellow }.Take(
-            (yy - 1)..(yy + 2)));
-        /*
-        LevelState.TrafficLights.AddRange(yy switch
-        {
-            1 => new[]
-            {
-                BallColors.Pink,
-                BallColors.Yellow,
-                BallColors.Blue
-            },
-            2 => new[]
-            {
-                BallColors.Yellow,
-                BallColors.Blue,
-                BallColors.Green
-            },
-            3 => new[]
-            {
-                BallColors.Blue,
-                BallColors.Green,
-                BallColors.Pink
-            },
-            4 => new[]
-            {
-                BallColors.Green,
-                BallColors.Pink,
-                BallColors.Yellow
-            },
-            _ => throw new ArgumentException("Invalid TrafficLight colors")
-        });
-        */
+        LevelState.TrafficLights.AddRange(new [] { BallColors.Pink, BallColors.Yellow, BallColors.Blue, BallColors.Green, BallColors.Pink, BallColors.Yellow }
+            .Take((yy - 1)..(yy + 2)));
         
         for (int i = 0; i < 3; i++)
             _rectangles[i] = new Rectangle(8 * (int)LevelState.TrafficLights[i], 0, 8, 8);
@@ -81,7 +51,7 @@ public class TrafficLight : Block
     {
         base.Draw(gameTime);
         
-        for (int i = 3 - LevelState.TrafficLights.Count; i < 3; i++)
+        for (int i = 3 - (DisableTraffic ? 3 : LevelState.TrafficLights.Count); i < 3; i++)
             DrawAnotherTexture(_balls, BallOffsets[i], 1, _rectangles[i]);
     }
 
