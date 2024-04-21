@@ -19,7 +19,7 @@ public class NextBall : Block
 
     protected override void LoadContent()
     {
-        _holder ??= Game.Content.Load<Texture2D>("Holder");
+        _holder ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Holder");
         _indicators ??= Game.Content.Load<Texture2D>("Indicators");
         base.LoadContent();
     }
