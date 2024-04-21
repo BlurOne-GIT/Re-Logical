@@ -19,14 +19,14 @@ public class Sandclock : Block
     private readonly TimeSpan _clockCycle = new(0, 1, 30);
     #endregion
 
-    public Sandclock(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.Sandclock, arrayPosition, xx, yy)
+    public Sandclock(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Sandclock"), arrayPosition, xx, yy)
     {
         if (_bruceCook is not null)
             _bruceCook.Stuck = true;
 
         _bruceCook = this;
 
-        Texture = LevelResources.Sandclock;
         _usedSand = LevelResources.UsedSand[0];
         _sandLeft = LevelResources.SandLeft[0];
     }

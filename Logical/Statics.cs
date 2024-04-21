@@ -176,7 +176,6 @@ public static class LevelResources
     public static Texture2D TpShadowHorizontal; // TODO DISABLED
     public static Texture2D TpShadowVertical; // TODO DISABLED
     public static Texture2D TpShadowCross; // TODO DISABLED
-    public static Texture2D Sandclock; // DONE
     public static Texture2D[] UsedSand = new Texture2D[10]; // TODO DISABLED
     public static Texture2D[] SandLeft = new Texture2D[10]; // TODO DISABLED
     public static Texture2D FallingSand; // PLACEHOLDER TODO DISABLED
@@ -193,7 +192,6 @@ public static class LevelResources
         TpShadowVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowVertical");
         TpShadowCross = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowCross");
         */
-        Sandclock = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\Sandclock");
         /* DISABLED
         for (int i = 0; i < 10; i++)
         {
