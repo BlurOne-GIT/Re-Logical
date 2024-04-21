@@ -176,9 +176,6 @@ public static class LevelResources
     public static Texture2D TpShadowHorizontal; // TODO DISABLED
     public static Texture2D TpShadowVertical; // TODO DISABLED
     public static Texture2D TpShadowCross; // TODO DISABLED
-    public static Texture2D ChangerShadowHorizontal; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D ChangerShadowVertical; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D ChangerShadowCross; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D Holder; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D HolderShadowEmpty; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D HolderShadowHorizontal; // 0✔ 1✔ 2X 3X 4X
@@ -204,9 +201,6 @@ public static class LevelResources
         TpShadowVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowVertical");
         TpShadowCross = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowCross");
         */
-        ChangerShadowHorizontal = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\ChangerShadowHorizontal");
-        ChangerShadowVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\ChangerShadowVertical");
-        ChangerShadowCross = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\ChangerShadowCross");
         Holder = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\Holder");
         HolderShadowEmpty = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\HolderShadowEmpty");
         HolderShadowHorizontal = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\HolderShadowHorizontal");

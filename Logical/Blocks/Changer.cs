@@ -21,17 +21,19 @@ public class Changer : Pipe, IOverlayable
 
     public Changer(Game game, Point arrayPosition, byte xx, byte yy):base(game, arrayPosition, xx, yy, false)
     {
-        _shadow = xx switch
-        {
-            0x0B => LevelResources.ChangerShadowHorizontal,
-            0x0C => LevelResources.ChangerShadowVertical,
-            0x0D => LevelResources.ChangerShadowCross,
-            _ => throw new ArgumentException("Invalid Pipe direction")
-        };
+        _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/{ShadowTextureSwitcher(xx)}");
         _ballColor = (BallColors)Argument-1;
         _indicator = Game.Content.Load<Texture2D>("Indicators");
         _indicatorRectangle = new Rectangle(12 * (int)_ballColor, 0, 12, 12);
     }
+    
+    private static string ShadowTextureSwitcher(byte xx) => xx switch
+    {
+        0x0B => "ChangerShadowHorizontal",
+        0x0C => "ChangerShadowVertical",
+        0x0D => "ChangerShadowCross",
+        _ => throw new ArgumentException("Invalid Pipe direction")
+    };
     
     public override void Update(GameTime gameTime)
     {
