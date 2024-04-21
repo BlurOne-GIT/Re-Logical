@@ -22,7 +22,8 @@ public class ColorJob : Block
     private readonly Rectangle[] _rectangles = new Rectangle[4];
     #endregion
 
-    public ColorJob(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.ColorJob, arrayPosition, xx, yy)
+    public ColorJob(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, game.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\ColorJob"), arrayPosition, xx, yy)
     {
         if (SteveJobs is not null)
             SteveJobs.DisableJobs = true;

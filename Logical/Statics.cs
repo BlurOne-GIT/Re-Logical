@@ -179,7 +179,6 @@ public static class LevelResources
     public static Texture2D[] UsedSand = new Texture2D[10]; // TODO DISABLED
     public static Texture2D[] SandLeft = new Texture2D[10]; // TODO DISABLED
     public static Texture2D FallingSand; // PLACEHOLDER TODO DISABLED
-    public static Texture2D ColorJob; // DONE
     public static Texture2D TrafficLight; // DONE
     #endregion
 
@@ -200,7 +199,6 @@ public static class LevelResources
         }
         FallingSand = Statics.Content.Load<Texture2D>("FallingSand");
         */
-        ColorJob = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\ColorJob");
         TrafficLight = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TrafficLight");
     }
 
