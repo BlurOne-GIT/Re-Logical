@@ -196,10 +196,6 @@ public static class LevelResources
         TpShadowVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowVertical");
         TpShadowCross = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowCross");
         */
-        HolderShadowEmpty = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\HolderShadowEmpty");
-        HolderShadowHorizontal = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\HolderShadowHorizontal");
-        HolderShadowVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\HolderShadowVertical");
-        HolderShadowCross = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\HolderShadowCross");
         Bumper[0] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\BumperLeft");
         Bumper[1] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\BumperUp");
         Bumper[2] = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\BumperRight");
