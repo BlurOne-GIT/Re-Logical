@@ -9,7 +9,7 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
-    <VersionPrefix>0.3.0</VersionPrefix>
+    <VersionPrefix>0.4.0</VersionPrefix>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />
@@ -22,7 +22,6 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-    <PackageReference Include="Octokit" Version="4.0.3" />
   </ItemGroup>
   <ItemGroup>
     <None Include="alf.dat" CopyToOutputDirectory="PreserveNewest" />

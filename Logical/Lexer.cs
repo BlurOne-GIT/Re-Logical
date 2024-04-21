@@ -55,13 +55,9 @@ public class Lexer
 
     public byte GetLevelNumber(string name)
     {
-        for (byte i = 0; i < 99; i++)
+        for (byte i = 1; i < 100; i++)
         {
-            var r = "";
-            int btr = i * 100 + 83;
-            for (int j = 0; j < 15; j++)
-                r += $"{(CharEncode)_hexFile[btr + j]}";
-            if (name == r.Replace("Space", " ").TrimEnd())
+            if (name == GetLevelName(i))
                 return i;
         }
         return 0;

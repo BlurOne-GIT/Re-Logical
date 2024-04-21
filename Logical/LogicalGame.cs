@@ -22,7 +22,7 @@ public class LogicalGame : EngineGame
 #endregion
 
 #region Default Methods
-    public LogicalGame() : base()
+    public LogicalGame()
     {
         IsMouseVisible = false;
         Window.AllowAltF4 = true;
@@ -38,7 +38,6 @@ public class LogicalGame : EngineGame
         if (Configs.Fullscreen)
             Graphics.ToggleFullScreen();
         
-        Statics.Initialize(Content);
         Window.ScreenDeviceNameChanged += OnWindowOnScreenDeviceNameChanged;
         Configs.ResolutionChanged += ReloadScale;
         Configs.FullscreenChanged += Fullscreen;
@@ -65,7 +64,7 @@ public class LogicalGame : EngineGame
         _backdropTexture = new Texture2D(Graphics.GraphicsDevice, 1, 1);
         _backdropTexture.SetData(new[] { Color.Black });
         _backdropSize = new Vector2(Configs.NativeWidth, Configs.NativeHeight);
-        Statics.LoadFonts();
+        Statics.LoadFonts(Content);
         #if DEBUG
         _version = new TextComponent(this, Statics.LightFont, _versionString.ToUpper().Replace('.', '_'), new Vector2(0, 248), 1);
         #endif
@@ -135,8 +134,6 @@ public class LogicalGame : EngineGame
         Configs.ResolutionChanged -= ReloadScale;
         Configs.FullscreenChanged -= Fullscreen;
         Configs.MusicVolumeChanged -= UpdateVolume;
-        Activated -= Statics.Focus;
-        Deactivated -= Statics.UnFocus;
         base.OnExiting(sender, args);
     }
 #endregion

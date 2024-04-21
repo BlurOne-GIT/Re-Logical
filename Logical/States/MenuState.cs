@@ -26,7 +26,7 @@ public class MenuState : GameState
     protected override void LoadContent()
     {
         _choose = Game.Content.Load<Song>("Choose Music");
-        _beginSfx = Game.Content.Load<SoundEffect>("1Success"); // DEBUG //
+        _beginSfx = Game.Content.Load<SoundEffect>("Sfx/1/Success"); // DEBUG //
         MediaPlayer.Play(_choose);
         MediaPlayer.IsRepeating = true;
         
@@ -57,8 +57,8 @@ public class MenuState : GameState
     protected override void UnloadContent()
     {
         Game.Content.UnloadAsset("Choose Music");
-        Game.Content.UnloadAsset("1Success"); // DEBUG //
-        Game.Content.UnloadAsset("Menu Button");
+        Game.Content.UnloadAsset("Sfx/1/Success"); // DEBUG //
+        Game.Content.UnloadAsset("Sfx/Button");
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/Titlescreen");
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/OwnSet");
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/Password");

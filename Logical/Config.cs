@@ -57,7 +57,7 @@ public static class Configs
             if (Fullscreen) return;
             _jsonNode[nameof(Scale)] = value;
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
-        } 
+        }
     }
     
     public static bool Fullscreen

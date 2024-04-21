@@ -12,18 +12,20 @@ public class Bumper : Block, IReloadable, IOverlayable
     #region Field
     private readonly Direction _direction;
     private Texture2D _shadow;
-    private bool _closedPipeLeft;
-    private bool _closedPipeUp;
-    private bool _closedPipeRight;
-    private bool _closedPipeDown;
-    private readonly Vector2 _shadowPos = new(12f, 13f);
-    private readonly Vector2 _cplPos = new(0f, 10f);
-    private readonly Vector2 _cprPos = new(26f, 10f);
-    private readonly Vector2 _cpdPos = new(10f, 26f);
-    private readonly Vector2 _cpuPos = new(10f, 0f);
+    private bool[] _closedPipes = new bool[4];
+    private readonly Vector2 _shadowOffset = new(12f, 13f);
+    private static readonly Vector2[] ClosedPipeOffsets =
+    {
+        new(0f, 10f),  // Left
+        new(10f, 0f),  // Up
+        new(26f, 10f), // Right
+        new(10f, 26f)  // Down
+    };
+
+    private static Texture2D[] _closedPipeTextures;
     #endregion
 
-    public Bumper(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.PipeCross, arrayPosition, xx, yy)
+    public Bumper(Game game, Point arrayPosition, byte xx, byte yy):base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeCross"), arrayPosition, xx, yy)
     {
         _direction = xx switch
         {
@@ -35,39 +37,72 @@ public class Bumper : Block, IReloadable, IOverlayable
         };
     }
 
+    protected override void LoadContent()
+    {
+        if (_closedPipeTextures is null)
+        {
+            _closedPipeTextures = new Texture2D[4];
+            for (var i = 0; i < 4; i++)
+                _closedPipeTextures[i] = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosed{(Direction)i}");
+        }
+        base.LoadContent();
+    }
+
     public override void Update(GameTime gameTime)
     {
-        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == Statics.DetectionPoint + Position))
+        foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == DetectionPoint + Position))
             ball.MovementDirection = _direction;
     }
 
     public void Reload(Block[,] blocks)
     {
-        _closedPipeLeft = Pos.X == 0 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X-1, Pos.Y].FileValue);
-        _closedPipeUp = Pos.Y == 0 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y-1].FileValue);
-        _closedPipeRight = Pos.X == 7 || !Statics.HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue);
-        _closedPipeDown = Pos.Y == 4 || !Statics.VerticalAttachables.Contains(blocks[Pos.X, Pos.Y+1].FileValue);
+        _closedPipes = new[]
+        {
+            Pos.X == 0 || !HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue), // Left
+            Pos.Y == 0 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue), // Up
+            Pos.X == 7 || !HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue), // Right
+            Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) // Down
+        };
 
-        _shadow = !_closedPipeRight && !_closedPipeDown ? LevelResources.HolderShadowCross : !_closedPipeRight ? LevelResources.HolderShadowHorizontal : !_closedPipeDown ? LevelResources.HolderShadowVertical : LevelResources.HolderShadowEmpty;
+        _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadow" + 
+            (!_closedPipes[(int)Direction.Right] && !_closedPipes[(int)Direction.Down] ? "Cross" :
+            !_closedPipes[(int)Direction.Right] ? "Horizontal" :
+            !_closedPipes[(int)Direction.Down] ? "Vertical" : 
+            "Empty")
+        );
     }
 
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        if (_closedPipeLeft)
-            DrawAnotherTexture(LevelResources.PipeClosedLeft, _cplPos, 1);
         
-        if (_closedPipeUp)
-            DrawAnotherTexture(LevelResources.PipeClosedUp, _cpuPos, 1);
+        for (var i = 0; i < 4; i++)
+            if (_closedPipes[i])
+                DrawAnotherTexture(_closedPipeTextures[i], ClosedPipeOffsets[i], 1);
         
-        if (_closedPipeRight)
-            DrawAnotherTexture(LevelResources.PipeClosedRight, _cprPos, 1);
-        
-        if (_closedPipeDown)
-            DrawAnotherTexture(LevelResources.PipeClosedDown, _cpdPos, 1);
-        
-        DrawAnotherTexture(_shadow, _shadowPos, 2);
+        DrawAnotherTexture(_shadow, _shadowOffset, 2);
     }
 
-    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(Game, LevelResources.Holder, Position + new Vector2(9f), 8), new SimpleImage(Game, LevelResources.Bumper[(int)_direction], Position + new Vector2(14f), 9)};
+    protected override void UnloadContent()
+    {
+        _closedPipeTextures = null;
+        Game.Content.UnloadAssets(new []
+        {
+            $"{Configs.GraphicSet}/PipeClosedLeft", 
+            $"{Configs.GraphicSet}/PipeClosedUp", 
+            $"{Configs.GraphicSet}/PipeClosedRight", 
+            $"{Configs.GraphicSet}/PipeClosedDown",
+            $"{Configs.GraphicSet}/Holder",
+            $"{Configs.GraphicSet}/Bumpers",
+            _shadow.Name
+        });
+        base.UnloadContent();
+    }
+
+    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[]
+    {
+        new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Holder"), Position + new Vector2(9f), 8),
+        new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Bumpers"), Position + new Vector2(14f), 9)
+            { DefaultRectangle = new Rectangle(8 * (int)_direction, 0, 8, 8) }
+    };
 }

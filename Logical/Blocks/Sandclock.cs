@@ -10,8 +10,8 @@ public class Sandclock : Block
     #region Field
     private static Sandclock _bruceCook;
     public bool Stuck;
-    private Texture2D _usedSand;
-    private Texture2D _sandLeft;
+    //private Texture2D _usedSand;
+    //private Texture2D _sandLeft;
     private readonly Vector2 _usPos = new(10f, 18f);
     private readonly Vector2 _slPos = new(10f, 5f);
     //private Vector2 fsPos;
@@ -19,16 +19,16 @@ public class Sandclock : Block
     private readonly TimeSpan _clockCycle = new(0, 1, 30);
     #endregion
 
-    public Sandclock(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.Sandclock, arrayPosition, xx, yy)
+    public Sandclock(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Sandclock"), arrayPosition, xx, yy)
     {
         if (_bruceCook is not null)
             _bruceCook.Stuck = true;
 
         _bruceCook = this;
 
-        Texture = LevelResources.Sandclock;
-        _usedSand = LevelResources.UsedSand[0];
-        _sandLeft = LevelResources.SandLeft[0];
+        //_usedSand = LevelResources.UsedSand[0];
+        //_sandLeft = LevelResources.SandLeft[0];
     }
 
     public override void Update(GameTime gameTime)

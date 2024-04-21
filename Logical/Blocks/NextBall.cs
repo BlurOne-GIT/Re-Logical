@@ -7,20 +7,38 @@ namespace Logical.Blocks;
 public class NextBall : Block
 {
     #region Field
-    private readonly Vector2 _holderPos = new(9f);
-    private readonly Vector2 _indicatorPos = new(12f);
-    private readonly Vector2 _shadowPos = new(12f, 13f);
+    private readonly Vector2 _holderOffset = new(9f);
+    private readonly Vector2 _indicatorOffset = new(12f);
+    private readonly Vector2 _shadowOffset = new(12f, 13f);
+    private static Texture2D _holder;
+    private static Texture2D _indicators;
+    private static Texture2D _shadow;
     #endregion
 
-    public NextBall(Game game, Point arrayPosition, byte xx, byte yy):base(game, LevelResources.EmptyBlock, arrayPosition, xx, yy) { }
+    public NextBall(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/EmptyBlock"), arrayPosition, xx, yy) { }
 
-    public override void Draw(GameTime gameTime)
+    protected override void LoadContent()
+    {
+        _holder ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Holder");
+        _indicators ??= Game.Content.Load<Texture2D>("Indicators");
+        _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadowEmpty");
+        base.LoadContent();
+    }
     
+    public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
         
-        DrawAnotherTexture(LevelResources.HolderShadowEmpty, _shadowPos, 1);
-        DrawAnotherTexture(LevelResources.Holder, _holderPos, 2);
-        DrawAnotherTexture(LevelResources.Indicator[(int)LevelState.NextBall], _indicatorPos, 3);
+        DrawAnotherTexture(_shadow, _shadowOffset, 1);
+        DrawAnotherTexture(_holder, _holderOffset, 2);
+        DrawAnotherTexture(_indicators, _indicatorOffset, 3, new Rectangle(12 * (int)LevelState.NextBall, 0, 12, 12));
+    }
+
+    protected override void UnloadContent()
+    {
+        _holder = _indicators = _shadow = null;
+        Game.Content.UnloadAssets(new []{$"{Configs.GraphicSet}/Holder", "Indicators", $"{Configs.GraphicSet}/HolderShadowEmpty"});
+        base.UnloadContent();
     }
 }

@@ -15,10 +15,14 @@ public class LoadingState : GameState
     #region Constructors
     public LoadingState(Game game) : base(game) // Make it! 0
     {
-        Statics.Lives = 3;
+        if (Configs.Lives is 0 || Configs.Stage is 0)
+        {
+            Configs.Lives = 3;
+            Configs.Score = 0;
+            Configs.Stage = 1;
+        }
         _message = "MAKE IT!";
         _mode = Mode.Start;
-        LevelResources.LoadTextures();
     }
     
     public LoadingState(Game game, string deathReason) : base(game) // You failed! 1
@@ -119,7 +123,6 @@ public class LoadingState : GameState
     {
         if (e.Key is Keys.Escape)
             FadeOut(() => {
-                LevelResources.UnloadTextures();
                 SwitchState(new MenuState(Game));
                 });
         else
@@ -165,10 +168,9 @@ public class LoadingState : GameState
         {
             case Mode.Start: SwitchState(new LevelState(Game)); break;
             case Mode.Failed:
-                if (Statics.Lives == 0)
+                if (Configs.Lives == 0)
                 {
                     Configs.Score = 0;
-                    LevelResources.UnloadTextures();
                     SwitchState(new MenuState(Game));
                 }
                 else

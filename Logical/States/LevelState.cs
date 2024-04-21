@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Logical.Blocks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MmgEngine;
 
@@ -20,7 +21,7 @@ public class LevelState : GameState
     private int _oTimeLeft = 145;
     private readonly int _oTime;
     private int _oTimeLoopCounter;
-    public static List<BallColors> ColorJobs = new(4);
+    public static List<BallColors> ColorJobLayout = new(4);
     public static BallColors NextBall { get; private set; }
     public static int TimeLeft;
     public static TimeSpan TimeSpanLeft;
@@ -53,27 +54,27 @@ public class LevelState : GameState
             Components.Add(gameObject);
         }
 
-        Components.Add(new SimpleImage(Game, LevelResources.MainPipe, new Vector2(16, 30), 0));
-        _oTimeBar = new SimpleImage(Game, LevelResources.MainPipeBar, new Vector2(304f, 35f), 1);
+        Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/MainPipe"), new Vector2(16, 30), 0));
+        _oTimeBar = new SimpleImage(Game, Game.Content.Load<Texture2D>("MainPipeTime"), new Vector2(304f, 35f), 1);
         Components.Add(_oTimeBar);
         for (int i = 0; i < 8; i++)
             if (_tileset[i, 0].FileValue is 0x01 or 0x16)
-                Components.Add(new SimpleImage(Game, LevelResources.MainPipeOpen, new Vector2(26 + 36 * i, 41), 1));
+                Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/MainPipeOpen"), new Vector2(26 + 36 * i, 41), 1));
 
         Spinner.AllDone += Win;
         Statics.ShowCursor = true;
         _oTimeLoopCounter = _oTime;
         ColorJob.SteveJobs?.Recharge();
 
-        if (ColorJobs.Count != 0 || TrafficLights.Count != 0)
+        if (ColorJobLayout.Count != 0 || TrafficLights.Count != 0)
             Spinner.ConditionClear += RecheckConditioned;
 
     }
 
     protected override void LoadContent()
     {
-        _successSfx = Game.Content.Load<SoundEffect>("1Success"); // DEBUG //
-        _failSfx = Game.Content.Load<SoundEffect>("1Fail"); // DEBUG //
+        _successSfx = Game.Content.Load<SoundEffect>("Sfx/1/Success"); // DEBUG //
+        _failSfx = Game.Content.Load<SoundEffect>("Sfx/1/Fail"); // DEBUG //
         _mainPipeBall = new Ball(Game, new Vector2(295, 33), Direction.Left, (BallColors)Statics.Brandom.Next(0, 4), false);
         FadeIn();
         base.LoadContent();
@@ -183,8 +184,11 @@ public class LevelState : GameState
 
     protected override void UnloadContent()
     {
-        Game.Content.UnloadAsset("1Success"); // DEBUG //
-        Game.Content.UnloadAsset("1Fail"); // DEBUG //
+        Game.Content.UnloadAsset("Sfx/1/Success"); // DEBUG //
+        Game.Content.UnloadAsset("Sfx/1/Fail"); // DEBUG //
+        Game.Content.UnloadAsset($"{Configs.GraphicSet}/MainPipe");
+        Game.Content.UnloadAsset($"{Configs.GraphicSet}/MainPipeOpen");
+        Game.Content.UnloadAsset("MainPipeTime");
         base.UnloadContent();
     }
 
@@ -212,7 +216,7 @@ public class LevelState : GameState
 
     protected override void Dispose(bool disposing)
     {
-        ColorJobs.Clear();
+        ColorJobLayout.Clear();
         TrafficLights.Clear();
         Spinner.ClearList();
         Spinner.AllDone -= Win;
