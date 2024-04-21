@@ -10,6 +10,7 @@ public class NextBall : Block
     private readonly Vector2 _holderOffset = new(9f);
     private readonly Vector2 _indicatorOffset = new(12f);
     private readonly Vector2 _shadowOffset = new(12f, 13f);
+    private static Texture2D _holder;
     private static Texture2D _indicators;
     #endregion
 
@@ -18,6 +19,7 @@ public class NextBall : Block
 
     protected override void LoadContent()
     {
+        _holder ??= Game.Content.Load<Texture2D>("Holder");
         _indicators ??= Game.Content.Load<Texture2D>("Indicators");
         base.LoadContent();
     }
@@ -27,14 +29,15 @@ public class NextBall : Block
         base.Draw(gameTime);
         
         DrawAnotherTexture(LevelResources.HolderShadowEmpty, _shadowOffset, 1);
-        DrawAnotherTexture(LevelResources.Holder, _holderOffset, 2);
+        DrawAnotherTexture(_holder, _holderOffset, 2);
         DrawAnotherTexture(_indicators, _indicatorOffset, 3, new Rectangle(12 * (int)LevelState.NextBall, 0, 12, 12));
     }
 
     protected override void UnloadContent()
     {
         _indicators = null;
-        Game.Content.UnloadAsset("Indicators");
+        _holder = null;
+        Game.Content.UnloadAssets(new []{"Indicators", "Holder"});
         base.UnloadContent();
     }
 }
