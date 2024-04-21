@@ -64,10 +64,12 @@ public class Bumper : Block, IReloadable, IOverlayable
             Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) // Down
         };
 
-        _shadow = !_closedPipes[(int)Direction.Right] && !_closedPipes[(int)Direction.Down] ? LevelResources.HolderShadowCross :
-            !_closedPipes[(int)Direction.Right] ? LevelResources.HolderShadowHorizontal :
-            !_closedPipes[(int)Direction.Down] ? LevelResources.HolderShadowVertical : 
-            LevelResources.HolderShadowEmpty;
+        _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadow" + 
+            (!_closedPipes[(int)Direction.Right] && !_closedPipes[(int)Direction.Down] ? "Cross" :
+            !_closedPipes[(int)Direction.Right] ? "Horizontal" :
+            !_closedPipes[(int)Direction.Down] ? "Vertical" : 
+            "Empty")
+        );
     }
 
     public override void Draw(GameTime gameTime)
@@ -89,7 +91,9 @@ public class Bumper : Block, IReloadable, IOverlayable
             $"{Configs.GraphicSet}/PipeClosedLeft", 
             $"{Configs.GraphicSet}/PipeClosedUp", 
             $"{Configs.GraphicSet}/PipeClosedRight", 
-            $"{Configs.GraphicSet}/PipeClosedDown"  
+            $"{Configs.GraphicSet}/PipeClosedDown",
+            $"{Configs.GraphicSet}/Holder",
+            _shadow.Name
         });
         base.UnloadContent();
     }

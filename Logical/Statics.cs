@@ -176,10 +176,6 @@ public static class LevelResources
     public static Texture2D TpShadowHorizontal; // TODO DISABLED
     public static Texture2D TpShadowVertical; // TODO DISABLED
     public static Texture2D TpShadowCross; // TODO DISABLED
-    public static Texture2D HolderShadowEmpty; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D HolderShadowHorizontal; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D HolderShadowVertical; // 0✔ 1✔ 2X 3X 4X
-    public static Texture2D HolderShadowCross; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D[] Bumper = new Texture2D[4]; // 0✔ 1✔ 2X 3X 4X
     public static Texture2D Moves; // DONE
     public static Texture2D MovesBlue; // DONE
