@@ -77,7 +77,7 @@ public class Lexer
     private Block GetBlockType(Point index, byte fileValue, byte arguments) => fileValue switch
     {
         0x00 => new EmptyBlock(_game, index, fileValue, arguments),
-        0x01 => new Spinner(_game, index, fileValue, arguments),
+        0x01 => new Spinner(_game, index, fileValue, arguments) { Enabled = false },
         <= 0x04 => new Pipe(_game, index, fileValue, arguments),
         <= 0x07 => new Filter(_game, index, fileValue, arguments),
         <= 0x0A => new Tp(_game, index, fileValue, arguments),
