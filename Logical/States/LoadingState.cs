@@ -12,6 +12,21 @@ namespace Logical.States;
 
 public class LoadingState : GameState
 {
+
+    private Action _action;
+    private States _state = States.BlackIn;
+    private int _timer;
+    private const int BlackTime = 660;
+    private const int FadeTime = 280;
+    private enum States
+    {
+        BlackIn,
+        FadeIn,
+        Standby,
+        FadeOut,
+        BlackOut
+    }
+    
     #region Constructors
     public LoadingState(Game game) : base(game) // Make it! 0
     {
@@ -110,29 +125,27 @@ public class LoadingState : GameState
             Components.Add(_changingDisplay);
             if (_mode is Mode.Complete)
             {
-                // TODO: Implement bonusMessag with bonuses
+                // TODO: Implement bonusMessage with bonuses
                 _bonusMessage = new TextComponent(Game, Statics.LightFont, $"= {_bonuses[0]:000000}", new Vector2(232, 163), 1);
                 Components.Add(_bonusMessage);
             }
         }
         Components.Add(new TextComponent(Game, Statics.BoldFont/*DEBUG TextureFont*/, $"{Configs.Score:000000}", new Vector2(209, 188), 1));
-        FadeIn();
     }
 
     public override void HandleInput(object s, InputKeyEventArgs e)
     {
-        if (e.Key is Keys.Escape)
-            FadeOut(() => {
-                SwitchState(new MenuState(Game));
-                });
-        else
-            FadeOut(Exit);
+        if (_state != States.Standby) return;
+        
+        _action = e.Key is not Keys.Escape ? Exit : () => SwitchState(new MenuState(Game));
+        _state = States.FadeOut;
     }
 
     public override void HandleInput(object s, ButtonEventArgs e)
     {
-        if (e.Button is "LeftButton" or "RightButton")
-            FadeOut(Exit);
+        if (e.Button is not ("LeftButton" or "RightButton") || _state != States.Standby) return;
+        _action = Exit;
+        _state = States.FadeOut;
     }
 
     protected override void UnloadContent()
@@ -141,27 +154,6 @@ public class LoadingState : GameState
     #endregion
 
     #region Custom Methods
-    private async void FadeIn()
-    {
-        await Task.Delay(660);
-        for (float i = 1; i > 0; i -= 0.05f)
-        {
-            Statics.BackdropOpacity = i;
-            await Task.Delay(14);
-        }
-        Statics.BackdropOpacity = 0;
-    }
-    private async void FadeOut(Action action)
-    {
-        for (float i = 0; i < 1; i += 0.05f)
-        {
-            Statics.BackdropOpacity = i;
-            await Task.Delay(14);
-        }
-        Statics.BackdropOpacity = 1;
-        await Task.Delay(660);
-        action();
-    }
     private void Exit()
     {
         switch (_mode)
@@ -179,6 +171,43 @@ public class LoadingState : GameState
             case Mode.Complete: SwitchState(new LevelState(Game)); break;
             default: throw new NotImplementedException();
         }
+    }
+    
+    public override void Update(GameTime gameTime)
+    {
+        switch (_state)
+        {
+            case States.BlackIn:
+                if (_timer >= BlackTime)
+                {
+                    _state = States.FadeIn;
+                    _timer = 0;
+                }
+                break;
+            case States.FadeIn:
+                Statics.BackdropOpacity = Math.Clamp(1f - _timer / (float) FadeTime, 0f, 1f);
+                if (_timer >= FadeTime)
+                {
+                    _state = States.Standby;
+                    _timer = 0;
+                }
+                break;
+            case States.FadeOut:
+                Statics.BackdropOpacity = Math.Clamp(_timer / (float) FadeTime, 0f, 1f);
+                if (_timer >= FadeTime)
+                {
+                    _state = States.BlackOut;
+                    _timer = 0;
+                }
+                break;
+            case States.BlackOut:
+                if (_timer >= BlackTime)
+                    _action();
+                break;
+        }
+        if (_state is not States.Standby)
+            _timer += gameTime.ElapsedGameTime.Milliseconds;
+        base.Update(gameTime);
     }
     #endregion
 }

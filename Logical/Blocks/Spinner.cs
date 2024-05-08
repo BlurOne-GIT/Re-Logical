@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Logical.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -13,7 +12,7 @@ namespace Logical.Blocks;
 public class Spinner : Block, IReloadable
 {
     #region Fields
-    private static readonly List<Spinner> ExplodedSpinners = new(0);
+    public static readonly List<Spinner> ExplodedSpinners = new(0);
     public static event EventHandler AllDone;
     public static event EventHandler ConditionClear;
     private static SoundEffect _popInSfx;
@@ -177,10 +176,10 @@ public class Spinner : Block, IReloadable
             Check();
     }
 
-    public void Pause(bool paused)
+    protected override void OnEnabledChanged(object sender, EventArgs args)
     {
-        _spinButton.Enabled = !paused;
-        if (paused)
+        _spinButton.Enabled = Enabled;
+        if (!Enabled)
         {
             foreach (var button in _slotButtons)
                 if (button is not null)
@@ -190,6 +189,7 @@ public class Spinner : Block, IReloadable
             for (int i = 0; i < 4; i++)
                 if (_slotBalls[i] is not null && _slotButtons[i] is not null)
                     _slotButtons[i].Enabled = true;
+        base.OnEnabledChanged(sender, args);
     }
 
     private void PopOut(object sender, EventArgs e)
@@ -230,13 +230,14 @@ public class Spinner : Block, IReloadable
         for (int i = 0; i < 4; i++)
             if (_slotButtons[i] is not null && _slotBalls[i] is not null)
                 _slotButtons[i].Enabled = true;
+
     }
 
-    public async void Check()
+    public void Check()
     {
         if (LevelState.ColorJobLayout.Count != 0 && _slotBalls.SequenceEqual(LevelState.ColorJobLayout.Cast<BallColors?>()))
         {
-            await Explode();
+            Explode();
             LevelState.ColorJobLayout.Clear();
             ConditionClear?.Invoke(this, EventArgs.Empty);
             return;
@@ -247,14 +248,14 @@ public class Spinner : Block, IReloadable
 
         if (_slotBalls.Any(a => a != _slotBalls[0]) || _slotBalls[0] is null) return;
         
-        await Explode();
+        Explode();
         if (LevelState.TrafficLights.Count == 0) return;
         
         LevelState.TrafficLights.RemoveAt(0);
         ConditionClear?.Invoke(this, EventArgs.Empty);
     }
 
-    private async Task Explode(bool fb = false)
+    private void Explode(bool fb = false)
     {
         foreach (var button in _slotButtons)
             if (button is not null)
@@ -266,23 +267,14 @@ public class Spinner : Block, IReloadable
         if (!fb && !ExplodedSpinners.Contains(this))
             ExplodedSpinners.Add(this);
         _explodeSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
-        while (!_explodeAnimation.IsAtEnd) {
-            await Task.Delay(20);
-        }
-        await Task.Delay(fb ? 20 : 40);
         if (!fb && ExplodedSpinners.Count == ExplodedSpinners.Capacity)
             AllDone?.Invoke(ExplodedSpinners, EventArgs.Empty);
     }
 
-    public async Task<int> FinalBoom()
+    public int FinalBoom()
     {
-        _spinButton.Enabled = false;
-        foreach (var button in _slotButtons)
-            if (button is not null)
-                button.Enabled = false;
-        var r = _slotBalls.Count(a => a is not null);
-        await Explode(true);
-        return r;
+        Explode(true);
+        return _slotBalls.Count(a => a is not null);
     }
 
     public static void ClearList()

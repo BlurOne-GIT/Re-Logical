@@ -20,6 +20,18 @@ public class MenuState : GameState
     private SimpleImage _background;
     private DefaultPanel _defaultPanel;
     private SettingsPanel _settingsPanel;
+    private States _state = States.BlackIn;
+    private int _timer;
+    private const int BlackTime = 660;
+    private const int FadeTime = 280;
+    private enum States
+    {
+        BlackIn,
+        FadeIn,
+        Standby,
+        FadeOut,
+        BlackOut
+    }
     #endregion
 
     #region Default Methods
@@ -40,14 +52,46 @@ public class MenuState : GameState
         _settingsPanel.Enabled = false;
         _settingsPanel.Visible = false;
         Components.Add(_settingsPanel);
-        
-        FadeIn();
     }
 
-    /*public override void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
-        
-    }*/
+        switch (_state)
+        {
+            case States.BlackIn:
+                if (_timer >= BlackTime)
+                {
+                    _state = States.FadeIn;
+                    _timer = 0;
+                }
+                break;
+            case States.FadeIn:
+                Statics.BackdropOpacity = Math.Clamp(1f - _timer / (float) FadeTime, 0f, 1f);
+                if (_timer >= FadeTime)
+                {
+                    _state = States.Standby;
+                    _timer = 0;
+                    ButtonSubscriber();
+                }
+                break;
+            case States.FadeOut:
+                Statics.BackdropOpacity = Math.Clamp(_timer / (float) FadeTime, 0f, 1f);
+                if (_timer >= FadeTime)
+                {
+                    _state = States.BlackOut;
+                    _timer = 0;
+                    _beginSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+                }
+                break;
+            case States.BlackOut:
+                if (_timer >= BlackTime)
+                    SwitchState(new LoadingState(Game));
+                break;
+        }
+        if (_state is not States.Standby)
+            _timer += gameTime.ElapsedGameTime.Milliseconds;
+        base.Update(gameTime);
+    }
 
     public override void HandleInput(object s, InputKeyEventArgs e)
     {
@@ -57,7 +101,7 @@ public class MenuState : GameState
     protected override void UnloadContent()
     {
         Game.Content.UnloadAsset("Choose Music");
-        Game.Content.UnloadAsset("Sfx/1/Success"); // DEBUG //
+        //Game.Content.UnloadAsset("Sfx/1/Success"); // DEBUG //
         Game.Content.UnloadAsset("Sfx/Button");
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/Titlescreen");
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/OwnSet");
@@ -92,32 +136,6 @@ public class MenuState : GameState
         _settingsPanel.BackButton.LeftClicked += Back;
     }
     
-    private async void FadeIn()
-    {
-        await Task.Delay(660);
-        for (float i = 1; i > 0; i -= 0.05f)
-        {
-            Statics.BackdropOpacity = i;
-            await Task.Delay(14);
-        }
-        Statics.BackdropOpacity = 0;
-        ButtonSubscriber();
-    }
-    
-    private async void FadeOut()
-    {
-        MediaPlayer.Stop();
-        for (float i = 0; i < 1; i += 0.05f)
-        {
-            Statics.BackdropOpacity = i;
-            await Task.Delay(14);
-        }
-        Statics.BackdropOpacity = 1;
-        _beginSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
-        await Task.Delay(660);
-        SwitchState(new LoadingState(Game));
-    }
-    
     private void Settings(object s, EventArgs e)
     {
         _defaultPanel.Enabled = false;
@@ -125,11 +143,14 @@ public class MenuState : GameState
         _settingsPanel.Enabled = true;
         _settingsPanel.Visible = true;
     }
+    
     private void StartGame(object s, EventArgs e)
     {
         if (Configs.Stage is 0)
             Configs.Stage = 1;
-        FadeOut();
+        MediaPlayer.Stop();
+        _state = States.FadeOut;
+        _defaultPanel.Enabled = false;
     }
     
     private void Back(object s, EventArgs e)
@@ -139,6 +160,5 @@ public class MenuState : GameState
         _defaultPanel.Enabled = true;
         _defaultPanel.Visible = true;
     }
-
     #endregion
 }

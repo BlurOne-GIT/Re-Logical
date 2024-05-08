@@ -5,6 +5,13 @@
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+    <Version>0.5.0</Version>
+    <Title>Logical</Title>
+    <Authors>BlurOne!</Authors>
+    <Description>A truthful remake of the 1991 game "Logical" by Rainbow Arts for the Commodore Amiga #BuiltWithMonoGame. </Description>
+    <PackageLicenseUrl>https://github.com/BlurOne-GIT/Re-Logical/blob/main/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/BlurOne-GIT/Re-Logical</RepositoryUrl>
+    <PackageTags>remake amiga puzzle-game monogame videogame logical built-with-monogame commodore-amiga</PackageTags>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
