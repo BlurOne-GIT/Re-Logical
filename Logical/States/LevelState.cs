@@ -48,6 +48,7 @@ public class LevelState : GameState
     private int _stateTimer;
     private double _leavingDuration;
     private Action _blackOutAction;
+    private SimpleImage _fakeCursor;
     
     private enum States
     {
@@ -132,9 +133,16 @@ public class LevelState : GameState
         State = States.Won;
         _stateTimer = 1;
         InteractionEnabler(false);
+        Components.Add(_fakeCursor = new SimpleImage(Game,
+            Game.Content.Load<Texture2D>("Cursor"),
+            Input.MousePoint.ToVector2(),
+            10));
         _ballsLeft = Ball.AllBalls.Count - 1;
         foreach (var ball in Ball.AllBalls.ToArray())
-            ball.Dispose();
+            if (ball != _mainPipeBall)
+                ball.Dispose();
+            else
+                ball.Enabled = false;
 
         Configs.Stage++;
 
@@ -260,8 +268,10 @@ public class LevelState : GameState
 
     private void Leave(SoundEffect sfx, Action action)
     {
+        Components.Remove(_fakeCursor);
+        _mainPipeBall.Dispose();
         sfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
-        _leavingDuration = sfx.Duration.TotalMilliseconds - (double)FadeTime;
+        _leavingDuration = sfx.Duration.TotalMilliseconds - FadeTime;
         _blackOutAction = action;
         State = States.Leaving;
     }
