@@ -99,7 +99,7 @@ public class LogicalGame : EngineGame
                 null,
                 Color.White,
                 0,
-                new Vector2(7, 7),
+                Statics.CursorTextureOffset,
                 1f,
                 SpriteEffects.None,
                 1f

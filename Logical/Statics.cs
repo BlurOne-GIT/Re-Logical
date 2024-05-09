@@ -27,6 +27,8 @@ public static class Statics
         {Direction.Right, Direction.Left},
         {Direction.Down, Direction.Up}
     };
+
+    public static readonly Vector2 CursorTextureOffset = new(7f, 7f);
     #endregion
 
     #region Methods

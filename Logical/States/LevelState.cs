@@ -135,7 +135,7 @@ public class LevelState : GameState
         InteractionEnabler(false);
         Components.Add(_fakeCursor = new SimpleImage(Game,
             Game.Content.Load<Texture2D>("Cursor"),
-            Input.MousePoint.ToVector2(),
+            Input.MousePoint.ToVector2() - Statics.CursorTextureOffset,
             10));
         _ballsLeft = Ball.AllBalls.Count - 1;
         foreach (var ball in Ball.AllBalls.ToArray())
@@ -166,6 +166,8 @@ public class LevelState : GameState
                     if (State is States.FadeIn)
                         _mainPipeBall = new Ball(Game, new Vector2(295, 33), Direction.Left, (BallColors)Statics.Brandom.Next(0, 4), false) { Enabled = false };
                     InteractionEnabler(true);
+                    foreach (var ball in Ball.AllBalls)
+                        ball.Visible = true;
                     State = States.Playing;
                 }
                 break;
@@ -233,9 +235,16 @@ public class LevelState : GameState
                 {
                     case States.Playing:
                         State = States.Paused;
+                        Components.Add(_fakeCursor = new SimpleImage(Game,
+                            Game.Content.Load<Texture2D>("Cursor"),
+                            Input.MousePoint.ToVector2() - Statics.CursorTextureOffset,
+                            10));
                         InteractionEnabler(false);
                         break;
                     case States.Paused:
+                        Components.Remove(_fakeCursor);
+                        foreach (var ball in Ball.AllBalls)
+                            ball.Visible = false;
                         State = States.Unpausing;
                         break;
                 }   
