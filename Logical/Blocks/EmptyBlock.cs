@@ -6,8 +6,9 @@ namespace Logical.Blocks;
 public class EmptyBlock : Block
 {
     public EmptyBlock(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/" +
-                                                  (Statics.Brandom.Next(0, 2) == 0 ? "EmptyBlock" : "EmptyBlockAlt")), arrayPosition, xx, yy) { }
+        : base(game, game.Content.Load<Texture2D>(
+            $"{Configs.GraphicSet}/" + (Statics.Brandom.Next(0, 2) == 0 ? "EmptyBlock" : "EmptyBlockAlt")
+            ), arrayPosition, xx, yy) { }
 
     protected override void UnloadContent()
     {

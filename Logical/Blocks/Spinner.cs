@@ -230,7 +230,6 @@ public class Spinner : Block, IReloadable
         for (int i = 0; i < 4; i++)
             if (_slotButtons[i] is not null && _slotBalls[i] is not null)
                 _slotButtons[i].Enabled = true;
-
     }
 
     public void Check()

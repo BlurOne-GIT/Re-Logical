@@ -1,11 +1,8 @@
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Logical.Blocks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical;
 
@@ -23,7 +20,7 @@ public class Lexer
 
     #region Fields
     private readonly byte[] _hexFile;
-    private List<byte> _stack = new();
+    //private List<byte> _stack = new();
     #endregion
 
     public Block[,] GetLevelBlocks(int level, out int oTime, out int time, out bool isTimed, out string name)
@@ -38,7 +35,7 @@ public class Lexer
         tempBlocks[7,4] = GetBlockType(new Point(7, 4), _hexFile[btr], (byte)(_hexFile[btr+1] % 4));
         btr++;
         oTime = _hexFile[btr++];
-        time = _hexFile[btr++];
+        time = _hexFile[btr]; // Final read byte
         isTimed = tempBlocks.OfType<Block>().Any(b => b is Sandclock);
         name = GetLevelName(level);
         return tempBlocks;

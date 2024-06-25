@@ -9,10 +9,10 @@ public abstract class Block : SimpleImage
 {
     #region Fields
     public readonly byte FileValue;
-    public readonly bool HasArgument = false;
-    public readonly byte Argument;
+    public readonly bool HasArgument;
+    protected readonly byte Argument;
     protected Point Pos;
-    public static readonly byte[] VerticalAttachables = {
+    protected static readonly byte[] VerticalAttachables = {
         0x01,
         0x03,
         0x04,
@@ -28,7 +28,7 @@ public abstract class Block : SimpleImage
         0x11,
         0x16
     };
-    public static readonly byte[] HorizontalAttachables = {
+    protected static readonly byte[] HorizontalAttachables = {
         0x01,
         0x02,
         0x04,
@@ -43,10 +43,11 @@ public abstract class Block : SimpleImage
         0x10,
         0x11
     };
-    public static Vector2 DetectionPoint { get; } = new(13f);
+
+    protected static Vector2 DetectionPoint { get; } = new(13f);
     #endregion
 
-    public Block(Game game, Texture2D texture2D, Point arrayPosition, byte xx, byte yy = 0)
+    protected Block(Game game, Texture2D texture2D, Point arrayPosition, byte xx, byte yy = 0)
         : base(
             game,
             texture2D,
@@ -60,7 +61,7 @@ public abstract class Block : SimpleImage
         if (yy == 0) 
             return;
         
-        HasArgument = false;
+        HasArgument = true;
         Argument = yy;
     }
 }
