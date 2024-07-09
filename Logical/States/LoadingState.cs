@@ -111,9 +111,9 @@ public class LoadingState : GameState
         Statics.ShowCursor = false;
         Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Loading"), new Vector2(0, 28), 0));
         Components.Add(new TextComponent(Game, Statics.LightFont, _message, new Vector2(84, 43), 1, anchor: Alignment.TopCenter));
-        var pinkBall = Game.Content.Load<Texture2D>("SpinnerBallPink");
+        var pinkBall = Game.Content.Load<Texture2D>("SpinnerBalls");
         for (int i = 0; i < Configs.Lives; i++)
-            Components.Add(new SimpleImage(Game, pinkBall, new Vector2(72 + 12 * i, 82), 1));
+            Components.Add(new SimpleImage(Game, pinkBall, new Vector2(72 + 12 * i, 82), 1) { DefaultRectangle = new Rectangle(0, 0, 8, 8) });
         Components.Add(new TextComponent(Game, Statics.LightFont, $"{Configs.Stage:00} {/*Statics.LevelPassword*/ new Lexer(Game).GetLevelName(Configs.Stage)}", new Vector2(16, 123), 1));
         if (_mode is not Mode.Start)
         {
