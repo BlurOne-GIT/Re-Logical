@@ -98,7 +98,7 @@ public class Spinner : Block, IReloadable, IFixable
     #endregion
 
     public Spinner(Game game, Point arrayPosition, byte xx, byte yy) 
-        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Spinner"), arrayPosition, xx, yy)
+        : base(game, "Spinner", arrayPosition, xx, yy)
     {
         DefaultRectangle = new Rectangle(0, 0, 36, 36);
         _spinButton = new Button(game, new Rectangle(Position.ToPoint(), new Point(36)));

@@ -15,7 +15,11 @@ public class Dropper : Block
     private static SoundEffect _popInSfx;
     #endregion
 
-    public Dropper(Game game, Point arrayPosition, byte xx, byte yy):base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeVertical"), arrayPosition, xx, yy) { }
+    public Dropper(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, "PipeVertical", arrayPosition, xx, yy)
+    {
+        DefaultRectangle = new Rectangle(0, 0, 36, 36);
+    }
 
     protected override void LoadContent()
     {

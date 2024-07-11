@@ -34,7 +34,7 @@ public class ColorJob : Block, IFixable
     #endregion
 
     public ColorJob(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, game.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\ColorJob"), arrayPosition, xx, yy)
+        : base(game, "ColorJob", arrayPosition, xx, yy)
     {
         if (SteveJobs is not null)
             SteveJobs.DisableJobs = true;

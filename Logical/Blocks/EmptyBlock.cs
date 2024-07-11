@@ -6,7 +6,7 @@ namespace Logical.Blocks;
 public class EmptyBlock : Block
 {
     public EmptyBlock(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/EmptyBlock"), arrayPosition, xx, yy)
+        : base(game, "EmptyBlock", arrayPosition, xx, yy)
     {
         DefaultRectangle = new Rectangle(Statics.Brandom.Next(0, 2) * 36, 0, 36, 36);
     }

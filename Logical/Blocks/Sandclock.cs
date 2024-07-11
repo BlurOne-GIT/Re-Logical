@@ -20,7 +20,7 @@ public class Sandclock : Block
     #endregion
 
     public Sandclock(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Sandclock"), arrayPosition, xx, yy)
+        : base(game, "Sandclock", arrayPosition, xx, yy)
     {
         if (_bruceCook is not null)
             _bruceCook.Stuck = true;

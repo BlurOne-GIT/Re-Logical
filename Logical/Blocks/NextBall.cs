@@ -16,7 +16,10 @@ public class NextBall : Block
     #endregion
 
     public NextBall(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/EmptyBlock"), arrayPosition, xx, yy) { }
+        : base(game, "EmptyBlock", arrayPosition, xx, yy)
+    {
+        DefaultRectangle = new Rectangle(0, 0, 36, 36);
+    }
 
     protected override void LoadContent()
     {

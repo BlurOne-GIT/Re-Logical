@@ -25,7 +25,8 @@ public class Bumper : Block, IReloadable, IOverlayable
     private static Texture2D[] _closedPipeTextures;
     #endregion
 
-    public Bumper(Game game, Point arrayPosition, byte xx, byte yy):base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeCross"), arrayPosition, xx, yy)
+    public Bumper(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, "PipeCross", arrayPosition, xx, yy)
     {
         _direction = xx switch
         {

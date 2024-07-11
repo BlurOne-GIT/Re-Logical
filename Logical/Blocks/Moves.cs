@@ -18,7 +18,7 @@ public class Moves : Block
     #endregion
 
     public Moves(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Moves"), arrayPosition, xx, yy) { }
+        : base(game, "Moves", arrayPosition, xx, yy) { }
 
     protected override void LoadContent()
     {

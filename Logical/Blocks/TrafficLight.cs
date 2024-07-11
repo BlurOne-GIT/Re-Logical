@@ -23,7 +23,7 @@ public class TrafficLight : Block
     #endregion
 
     public TrafficLight(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/TrafficLight"), arrayPosition, xx, yy)
+        : base(game, "TrafficLight", arrayPosition, xx, yy)
     {
         if (_theChosenOne is not null)
             _theChosenOne.DisableTraffic = true;

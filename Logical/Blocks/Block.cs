@@ -47,6 +47,9 @@ public abstract class Block : SimpleImage
     protected static Vector2 DetectionPoint { get; } = new(13f);
     #endregion
 
+    protected Block(Game game, string textureName, Point arrayPosition, byte xx, byte yy = 0)
+        : this(game,game.Content.Load<Texture2D>($"{Configs.GraphicSet}/{textureName}"), arrayPosition, xx, yy) { }
+    
     protected Block(Game game, Texture2D texture2D, Point arrayPosition, byte xx, byte yy = 0)
         : base(
             game,
