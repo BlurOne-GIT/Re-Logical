@@ -20,7 +20,7 @@ public class NextBall : Block
 
     protected override void LoadContent()
     {
-        _holder ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Holder");
+        _holder ??= Game.Content.Load<Texture2D>("Holder");
         _indicators ??= Game.Content.Load<Texture2D>("Indicators");
         _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadowEmpty");
         base.LoadContent();
@@ -38,7 +38,7 @@ public class NextBall : Block
     protected override void UnloadContent()
     {
         _holder = _indicators = _shadow = null;
-        Game.Content.UnloadAssets(new []{$"{Configs.GraphicSet}/Holder", "Indicators", $"{Configs.GraphicSet}/HolderShadowEmpty"});
+        Game.Content.UnloadAssets(new []{"Holder", "Indicators", $"{Configs.GraphicSet}/HolderShadowEmpty"});
         base.UnloadContent();
     }
 }

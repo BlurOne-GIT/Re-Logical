@@ -92,7 +92,7 @@ public class Bumper : Block, IReloadable, IOverlayable
             $"{Configs.GraphicSet}/PipeClosedUp", 
             $"{Configs.GraphicSet}/PipeClosedRight", 
             $"{Configs.GraphicSet}/PipeClosedDown",
-            $"{Configs.GraphicSet}/Holder",
+            "Holder",
             $"{Configs.GraphicSet}/Bumpers",
             _shadow.Name
         });
@@ -101,8 +101,8 @@ public class Bumper : Block, IReloadable, IOverlayable
 
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[]
     {
-        new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Holder"), Position + new Vector2(9f), 8),
-        new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Bumpers"), Position + new Vector2(14f), 9)
-            { DefaultRectangle = new Rectangle(8 * (int)_direction, 0, 8, 8) }
+        new SimpleImage(Game, Game.Content.Load<Texture2D>("Holder"), Position + new Vector2(9f), 8),
+        new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Bumpers"), Position + new Vector2(13f), 9)
+            { DefaultRectangle = new Rectangle(9 * (int)_direction, 0, 10, 10) }
     };
 }
