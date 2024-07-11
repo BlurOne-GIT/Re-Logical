@@ -28,7 +28,7 @@ public class Tp : Pipe, IReloadable, IOverlayable
     private static Texture2D[] _closedPipeTextures;
     #endregion
 
-    public Tp(Game game, Point arrayPosition, byte xx, byte yy):base(game, arrayPosition, xx, yy, false)
+    public Tp(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
     {
         switch (xx)
         {
