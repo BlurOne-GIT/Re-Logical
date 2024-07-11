@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
-public class ColorJob : Block
+public class ColorJob : Block, IFixable
 {
     #region Field
     public static ColorJob SteveJobs;
@@ -12,12 +12,24 @@ public class ColorJob : Block
     private static Texture2D _balls;
     private static readonly Vector2[] BallOffsets =
     {
-        new(5f, 14f),
-        new(14f, 5f),
-        new(23f, 14f),
-        new(14f, 23f)
+        new( 5f, 15f), // Left
+        new(14f,  5f), // Up
+        new(23f, 15f), // Right
+        new(14f, 23f)  // Down
+    };
+    private static readonly Vector2[] FixedBallOffsets =
+    {
+        new( 5f, 14f), // Left
+        new(14f,  5f), // Up
+        new(23f, 14f), // Right
+        new(14f, 23f)  // Down
     };
 
+    // Uncomment when MonoGame moves to .Net 7+
+    //private ref Vector2[] ballOffsets = ref BallOffsets;
+    // In the meanwhile, we're stuck with copying the array values
+    private Vector2[] _ballOffsets = BallOffsets;
+    
     private readonly Rectangle[] _rectangles = new Rectangle[4];
     #endregion
 
@@ -28,6 +40,8 @@ public class ColorJob : Block
             SteveJobs.DisableJobs = true;
         
         SteveJobs = this;
+        
+        DefaultRectangle = new Rectangle(0, 0, 36, 36);
     }
 
     protected override void LoadContent()
@@ -53,7 +67,7 @@ public class ColorJob : Block
             return;
 
         for (int i = 0; i < 4; i++)
-            DrawAnotherTexture(_balls, BallOffsets[i], 1, _rectangles[i]);
+            DrawAnotherTexture(_balls, _ballOffsets[i], 1, _rectangles[i]);
     }
 
     protected override void Dispose(bool disposing)
@@ -68,5 +82,13 @@ public class ColorJob : Block
         _balls = null;
         Game.Content.UnloadAsset("SpinnerBalls");
         base.UnloadContent();
+    }
+
+    public bool ShallFix() => true;
+
+    public void Fix()
+    {
+        DefaultRectangle = new Rectangle(36, 0, 36, 36);
+        _ballOffsets = FixedBallOffsets;
     }
 }
