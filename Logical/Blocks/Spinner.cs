@@ -9,7 +9,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Spinner : Block, IReloadable
+public class Spinner : Block, IReloadable, IFixable
 {
     #region Fields
     public static readonly List<Spinner> ExplodedSpinners = new(0);
@@ -28,23 +28,23 @@ public class Spinner : Block, IReloadable
     #region Coordinates
     
     private static readonly Vector2[] ClosedPipeOffsets = {
-        new(0f, 10f),  // Left
-        new(10f, 0f),  // Up
+        new( 0f, 10f), // Left
+        new(10f,  0f), // Up
         new(32f, 10f), // Right
         new(10f, 32f)  // Down
     };
     private readonly Animation<Vector2>[] _ballOffsetAnimations = {
         new(new Vector2[]{
-            new(11f, 6f),
+            new(11f,  6f),
             new(8f),
-            new(6f, 11f),
-            new(5f, 14f)
+            new( 6f, 11f),
+            new( 5f, 14f)
         }, false), // Left
         new(new Vector2[]{
             new(22f, 11f),
-            new(20f, 8f),
-            new(17f, 6f),
-            new(14f, 5f)
+            new(20f,  8f),
+            new(17f,  6f),
+            new(14f,  5f)
         }, false), // Up
         new(new Vector2[]{
             new(17f, 22f),
@@ -53,8 +53,8 @@ public class Spinner : Block, IReloadable
             new(23f, 14f)
         }, false), // Right
         new(new Vector2[]{
-            new(6f, 17f),
-            new(8f, 20f),
+            new( 6f, 17f),
+            new( 8f, 20f),
             new(11f, 22f),
             new(14f, 23f)
         }, false) // Down
@@ -67,8 +67,8 @@ public class Spinner : Block, IReloadable
         new(13f, 23f) // Down
     };*/
     private readonly Vector2[] _registers = {
-        new(0f, 13f),  // Left
-        new(13f, 0f),  // Up
+        new( 0f, 13f), // Left
+        new(13f,  0f), // Up
         new(26f, 13f), // Right
         new(13f, 26f)  // Down
     };
@@ -97,8 +97,10 @@ public class Spinner : Block, IReloadable
     
     #endregion
 
-    public Spinner(Game game, Point arrayPosition, byte xx, byte yy):base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Spinner"), arrayPosition, xx, yy)
+    public Spinner(Game game, Point arrayPosition, byte xx, byte yy) 
+        : base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Spinner"), arrayPosition, xx, yy)
     {
+        DefaultRectangle = new Rectangle(0, 0, 36, 36);
         _spinButton = new Button(game, new Rectangle(Position.ToPoint(), new Point(36)));
         _spinButton.RightClicked += Spin;
         if (Pos.Y is 0)
@@ -339,5 +341,12 @@ public class Spinner : Block, IReloadable
             $"{Configs.GraphicSet}/SpinnerClosedDown"
         });
         base.UnloadContent();
+    }
+
+    public bool ShallFix() => true;
+
+    public void Fix()
+    {
+        DefaultRectangle = new Rectangle(36, 0, 36, 36);
     }
 }
