@@ -343,10 +343,11 @@ public class Spinner : Block, IReloadable, IFixable
         base.UnloadContent();
     }
 
-    public bool ShallFix() => true;
-
-    public void Fix()
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Fixed;
+    
+    public void Fix(IFixable.FidelityLevel _)
     {
         DefaultRectangle = new Rectangle(36, 0, 36, 36);
+        // TODO: Implement fixes for the other problems
     }
 }

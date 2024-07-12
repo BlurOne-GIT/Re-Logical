@@ -100,6 +100,12 @@ public static class Configs
         set => _jsonNode[nameof(StereoSeparation)] = value;
     }
     
+    public static IFixable.FidelityLevel FidelityLevel
+    {
+        get => (IFixable.FidelityLevel)_jsonNode[nameof(FidelityLevel)]!.GetValue<int>();
+        set => _jsonNode[nameof(FidelityLevel)] = (int)value;
+    }
+    
     public static byte Stage
     {
         get => _stage;

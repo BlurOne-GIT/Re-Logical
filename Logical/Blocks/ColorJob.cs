@@ -84,11 +84,20 @@ public class ColorJob : Block, IFixable
         base.UnloadContent();
     }
 
-    public bool ShallFix() => true;
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Fixed;
 
-    public void Fix()
+    public void Fix(IFixable.FidelityLevel fidelity)
     {
-        DefaultRectangle = new Rectangle(36, 0, 36, 36);
-        _ballOffsets = FixedBallOffsets;
+        var rectangle = DefaultRectangle!.Value;
+        if (Configs.GraphicSet >= 4)
+            rectangle.Y = 36;
+
+        if (fidelity is IFixable.FidelityLevel.Remastered)
+        {
+            rectangle.X = 36;
+            _ballOffsets = FixedBallOffsets;
+        }
+
+        DefaultRectangle = rectangle;
     }
 }

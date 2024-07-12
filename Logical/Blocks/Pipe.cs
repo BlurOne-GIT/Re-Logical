@@ -21,16 +21,21 @@ public class Pipe : Block, IFixable
         DefaultRectangle = new Rectangle(Statics.Brandom.Next(0, 2) * 36, 0, 36, 36);
     }
 
-    public void Fix()
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Remastered;
+
+    public bool ShallFix(IFixable.FidelityLevel fidelity)
+    {
+        if (fidelity < Fidelity)
+            return false;
+        
+        var xx = FileValue % 3;
+        return xx is 2 && Configs.GraphicSet is 1 || xx is 0 && Configs.GraphicSet is 1 or >= 3;
+    }
+    
+    public void Fix(IFixable.FidelityLevel _)
     {
         var rectangle = DefaultRectangle!.Value;
         rectangle.X += 36;
         DefaultRectangle = rectangle;
-    }
-
-    public bool ShallFix()
-    {
-        var xx = FileValue % 3;
-        return xx is 2 && Configs.GraphicSet is 1 || xx is 0 && Configs.GraphicSet is 1 or >= 3;
     }
 }
