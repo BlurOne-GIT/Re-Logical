@@ -29,7 +29,7 @@ public class Pipe : Block, IFixable
             return false;
         
         var xx = FileValue % 3;
-        return xx is 2 && Configs.GraphicSet is 1 || xx is 0 && Configs.GraphicSet is 1 or >= 3;
+        return xx is 2 && Configs.GraphicSet is 1 || xx is 0 && Configs.GraphicSet is 1 or 3;
     }
     
     public void Fix(IFixable.FidelityLevel _)
