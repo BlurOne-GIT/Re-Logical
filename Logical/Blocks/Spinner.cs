@@ -85,8 +85,19 @@ public class Spinner : Block, IReloadable, IFixable
     private readonly Vector2 _explodeTextureOffset = new(4f);
     #endregion
 
-    private readonly Animation<Rectangle> _spinAnimation = Animation<Rectangle>.TextureAnimation(new Point(26), new Point(78, 26), false, 1);
-    private readonly Animation<Rectangle> _explodeAnimation = Animation<Rectangle>.TextureAnimation(new Point(28), new Point(196, 28), false, 1);
+    private readonly Animation<Rectangle> _spinAnimation =
+        Animation<Rectangle>.TextureAnimation(new Point(26), new Point(78, 26), false);
+
+    private readonly Animation<Rectangle> _explodeAnimation = new(new Rectangle[]
+    {
+        new(56, 0, 28, 28),
+        new( 0, 0, 28, 28),
+        new(28, 0, 28, 28),
+        new(28, 0, 28, 28),
+        new( 0, 0, 28, 28),
+        new(56, 0, 28, 28),
+        new(84, 0, 28, 28)
+    }, false);
 
     #region Textures
     private static Texture2D _spinningTexture;
@@ -348,6 +359,8 @@ public class Spinner : Block, IReloadable, IFixable
     public void Fix(IFixable.FidelityLevel _)
     {
         DefaultRectangle = new Rectangle(36, 0, 36, 36);
+        for (int i = 0; i < _explodeAnimation.Length; ++i)
+            _explodeAnimation.Frames[i].Y = 28;
         // TODO: Implement fixes for the other problems
     }
 }
