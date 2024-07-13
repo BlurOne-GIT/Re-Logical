@@ -48,12 +48,9 @@ public abstract class Block : SimpleImage
     #endregion
 
     protected Block(Game game, string textureName, Point arrayPosition, byte xx, byte yy = 0)
-        : this(game,game.Content.Load<Texture2D>($"{Configs.GraphicSet}/{textureName}"), arrayPosition, xx, yy) { }
-    
-    protected Block(Game game, Texture2D texture2D, Point arrayPosition, byte xx, byte yy = 0)
         : base(
             game,
-            texture2D,
+            $"{Configs.GraphicSet}/{textureName}",
             new Vector2(16 + arrayPosition.X * 36, 46 + arrayPosition.Y * 36),
             0
             )
