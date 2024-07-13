@@ -7,7 +7,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Bumper : Block, IReloadable, IOverlayable
+public class Bumper : Block, IReloadable, IOverlayable, IFixable
 {
     #region Field
     private readonly Direction _direction;
@@ -16,13 +16,16 @@ public class Bumper : Block, IReloadable, IOverlayable
     private readonly Vector2 _shadowOffset = new(12f, 13f);
     private static readonly Vector2[] ClosedPipeOffsets =
     {
-        new(0f, 10f),  // Left
-        new(10f, 0f),  // Up
+        new( 0f, 10f), // Left
+        new(10f,  0f), // Up
         new(26f, 10f), // Right
         new(10f, 26f)  // Down
     };
 
     private static Texture2D[] _closedPipeTextures;
+
+    private SimpleImage _holder;
+    private SimpleImage _arrow;
     #endregion
 
     public Bumper(Game game, Point arrayPosition, byte xx, byte yy)
@@ -47,6 +50,10 @@ public class Bumper : Block, IReloadable, IOverlayable
                 _closedPipeTextures[i] = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosed{(Direction)i}");
         }
         base.LoadContent();
+        _holder = new SimpleImage(Game, "Holder", Position + new Vector2(9f), 8)
+            { DefaultRectangle = new Rectangle(0, 1, 18, 17)};
+        _arrow = new SimpleImage(Game, $"{Configs.GraphicSet}/Bumpers", Position + new Vector2(13f, 12f), 9)
+            { DefaultRectangle = new Rectangle(9 * (int)_direction, 0, 10, 10) };
     }
 
     public override void Update(GameTime gameTime)
@@ -60,7 +67,7 @@ public class Bumper : Block, IReloadable, IOverlayable
         _closedPipes = new[]
         {
             Pos.X == 0 || !HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue), // Left
-            Pos.Y == 0 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue), // Up
+            Pos.Y == 0 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue),  // Up
             Pos.X == 7 || !HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue), // Right
             Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) // Down
         };
@@ -100,10 +107,14 @@ public class Bumper : Block, IReloadable, IOverlayable
         base.UnloadContent();
     }
 
-    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[]
+    public IEnumerable<DrawableGameComponent> GetOverlayables()
+        => new DrawableGameComponent[] { _holder, _arrow };
+
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
+    
+    public void Fix(IFixable.FidelityLevel fidelity)
     {
-        new SimpleImage(Game, Game.Content.Load<Texture2D>("Holder"), Position + new Vector2(9f), 8),
-        new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Bumpers"), Position + new Vector2(13f), 9)
-            { DefaultRectangle = new Rectangle(9 * (int)_direction, 0, 10, 10) }
-    };
+        _holder.DefaultRectangle = null;
+        _arrow.Position += new Vector2(0f, 1f);
+    }
 }
