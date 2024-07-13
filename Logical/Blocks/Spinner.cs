@@ -343,7 +343,7 @@ public class Spinner : Block, IReloadable, IFixable
         base.UnloadContent();
     }
 
-    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Fixed;
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Refined;
     
     public void Fix(IFixable.FidelityLevel _)
     {

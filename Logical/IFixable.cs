@@ -6,7 +6,7 @@ public interface IFixable
     {
         Faithful,
         Intended,
-        Fixed,
+        Refined,
         Remastered
     }
     
