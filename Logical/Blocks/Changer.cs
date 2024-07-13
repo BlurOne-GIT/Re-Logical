@@ -56,8 +56,9 @@ public class Changer : Pipe, IOverlayable
         base.UnloadContent();
     }
 
-    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(
-        Game, Game.Content.Load<Texture2D>("Changers"), Position + _indicatorOffset, 9)
+    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] 
+    {
+        new SimpleImage(Game, "Changers", Position + _indicatorOffset, 9)
         {DefaultRectangle = _indicatorRectangle}
     };
 }

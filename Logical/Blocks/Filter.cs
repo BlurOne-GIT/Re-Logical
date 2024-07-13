@@ -65,8 +65,8 @@ public class Filter : Pipe, IOverlayable
         base.UnloadContent();
     }
 
-    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {new SimpleImage(
-        Game, Game.Content.Load<Texture2D>( "Filters"), Position + new Vector2(7f), 9)
+    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {
+        new SimpleImage(Game,  "Filters", Position + new Vector2(7f), 9)
         {DefaultRectangle = new Rectangle(22 * (int)_ballColor, 0, 22, 22)}
     };
 }
