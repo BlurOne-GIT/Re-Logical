@@ -7,7 +7,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Tp : Pipe, IReloadable, IOverlayable
+public class Tp : Pipe, IReloadable, IOverlayable, IFixable
 {
     #region Field
     public static Tp FirstHorizontalTp;
@@ -30,35 +30,20 @@ public class Tp : Pipe, IReloadable, IOverlayable
 
     public Tp(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
     {
-        switch (xx)
-        {
-            case 0x08:
-                _overlay = new SimpleImage(game, Game.Content.Load<Texture2D>("TpHorizontal"), Position + new Vector2(7, 7), 9);
-                if (FirstHorizontalTp is null)
-                    FirstHorizontalTp = this;
-                else if (SecondHorizontalTp is null)
-                    SecondHorizontalTp = this;
-                break;
-            case 0x09:
-                _overlay = new SimpleImage(game, Game.Content.Load<Texture2D>("TpVertical"), Position + new Vector2(7, 7), 9);
-                if (FirstVerticalTp is null)
-                    FirstVerticalTp = this;
-                else if (SecondVerticalTp is null)
-                    SecondVerticalTp = this;
-                break;
-            case 0x0A:
-                _overlay = new SimpleImage(game, Game.Content.Load<Texture2D>("TpCross"), Position + new Vector2(7, 7), 9);
-                if (FirstHorizontalTp is null)
-                    FirstHorizontalTp = this;
-                else if (SecondHorizontalTp is null)
-                    SecondHorizontalTp = this;
-                if (FirstVerticalTp is null)
-                    FirstVerticalTp = this;
-                else if (SecondVerticalTp is null)
-                    SecondVerticalTp = this;
-                break;
-            default: throw new ArgumentException("Invalid Tp direction");
-        }
+        _overlay = new SimpleImage(game, "Teleporters", Position + new Vector2(7, 7), 9)
+            { DefaultRectangle = new Rectangle((xx - 0x08) * 22, 0, 22, 22)};
+        
+        if (xx is 0x08 or 0x0A)
+            if (FirstHorizontalTp is null)
+                FirstHorizontalTp = this;
+            else if (SecondHorizontalTp is null)
+                SecondHorizontalTp = this;
+            
+        if (xx is 0x09 or 0x0A)
+            if (FirstVerticalTp is null)
+                FirstVerticalTp = this;
+            else if (SecondVerticalTp is null)
+                SecondVerticalTp = this;
     }
 
     protected override void LoadContent()
@@ -91,13 +76,13 @@ public class Tp : Pipe, IReloadable, IOverlayable
     {
         _closedPipes = new[]
         {
-            Pos.X == 0 || (!HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue) &&
+            Pos.X is 0 || (!HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue) &&
                            FileValue is 0x08 or 0x0A), // Left
-            Pos.Y == 0 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue) &&
+            Pos.Y is 0 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue) &&
                            FileValue is 0x09 or 0x0A), // Up
-            Pos.X == 7 || (!HorizontalAttachables.Contains(blocks[Pos.X + 1, Pos.Y].FileValue) &&
+            Pos.X is 7 || (!HorizontalAttachables.Contains(blocks[Pos.X + 1, Pos.Y].FileValue) &&
                            FileValue is 0x08 or 0x0A), // Right
-            Pos.Y == 4 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) &&
+            Pos.Y is 4 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) &&
                            FileValue is 0x09 or 0x0A)  // Down
         };
     }
@@ -158,5 +143,19 @@ public class Tp : Pipe, IReloadable, IOverlayable
         base.UnloadContent();
     }
 
-    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {_overlay};
+    public IEnumerable<DrawableGameComponent> GetOverlayables()
+        => new DrawableGameComponent[] { _overlay };
+
+    public new IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
+
+    public new bool ShallFix(IFixable.FidelityLevel fidelity) => fidelity >= Fidelity;
+    
+    public new void Fix(IFixable.FidelityLevel fidelity)
+    {
+        if (FileValue is 0x0A)
+            _overlay.DefaultRectangle = new Rectangle(66, 0, 22, 22);
+        
+        if (base.ShallFix(fidelity))
+            base.Fix(fidelity);
+    }
 }
