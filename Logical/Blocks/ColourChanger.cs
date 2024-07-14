@@ -7,7 +7,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Changer : Pipe, IOverlayable
+public class ColourChanger : Pipe, IOverlayable
 {
     #region Fields
 
@@ -19,7 +19,7 @@ public class Changer : Pipe, IOverlayable
     private readonly Vector2 _shadowOffset = new(18f);
     #endregion
 
-    public Changer(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
+    public ColourChanger(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
     {
         _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/{ShadowTextureSwitcher(xx)}");
         _ballColor = (BallColors)Argument-1;
