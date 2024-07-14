@@ -59,14 +59,14 @@ public class ColourStopper : Pipe, IOverlayable
         Game.Content.UnloadAssets(new []
         {
             "SpinnerBalls",
-            "Filters",
+            "ColourStoppers",
             _shadow.Name
         });
         base.UnloadContent();
     }
 
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {
-        new SimpleImage(Game,  "Filters", Position + new Vector2(7f), 9)
+        new SimpleImage(Game,  "ColourStoppers", Position + new Vector2(7f), 9)
         {DefaultRectangle = new Rectangle(22 * (int)_ballColor, 0, 22, 22)}
     };
 }
