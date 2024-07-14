@@ -7,7 +7,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Bumper : Block, IReloadable, IOverlayable, IFixable
+public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
 {
     #region Field
     private readonly Direction _direction;
@@ -28,7 +28,7 @@ public class Bumper : Block, IReloadable, IOverlayable, IFixable
     private SimpleImage _arrow;
     #endregion
 
-    public Bumper(Game game, Point arrayPosition, byte xx, byte yy)
+    public DirectionArrow(Game game, Point arrayPosition, byte xx, byte yy)
         : base(game, "PipeCross", arrayPosition, xx, yy)
     {
         _direction = xx switch

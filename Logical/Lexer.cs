@@ -79,7 +79,7 @@ public class Lexer
         <= 0x07 => new ColourStopper(_game, index, fileValue, arguments),
         <= 0x0A => new Tp(_game, index, fileValue, arguments),
         <= 0x0D => new ColourChanger(_game, index, fileValue, arguments),
-        <= 0x11 => new Bumper(_game, index, fileValue, arguments),
+        <= 0x11 => new DirectionArrow(_game, index, fileValue, arguments),
         0x12 => new MarbleDisplay(_game, index, fileValue, arguments),
         0x13 => new Sandclock(_game, index, fileValue, arguments),
         0x14 => new ColorJob(_game, index, fileValue, arguments),
