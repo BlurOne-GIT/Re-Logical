@@ -26,13 +26,6 @@ public class Spinner : Block, IReloadable, IFixable
     private readonly List<BallColors?> _slotBalls = new(4) { null, null, null, null };
     
     #region Coordinates
-    
-    private static readonly Vector2[] ClosedPipeOffsets = {
-        new( 0f, 10f), // Left
-        new(10f,  0f), // Up
-        new(32f, 10f), // Right
-        new(10f, 32f)  // Down
-    };
     private readonly Animation<Vector2>[] _ballOffsetAnimations = {
         new(new Vector2[]{
             new(11f,  6f),
@@ -364,9 +357,8 @@ public class Spinner : Block, IReloadable, IFixable
                 DrawAnotherTexture(_ballsTexture, _ballOffsetAnimations[i].NextFrame(), 2, BallRectangles[4]);
 
         // Closed Pipes
-        for (int i = 0; i < 4; i++)
-            if (_closedPipes[i])
-                DrawAnotherTexture(_closedPipeTextures[i], ClosedPipeOffsets[i], 1);
+        if (_closingsSource != default)
+            DrawAnotherTexture(_spinnerClosings, _closingsOffset, 1, _closingsSource);
         
         // Explode Animation
         if (!_explodeAnimation.IsAtEnd)
