@@ -35,8 +35,16 @@ public class TrafficLight : Block
         if (yy is < 1 or > 4)
             throw new ArgumentException("Invalid TrafficLight position");
         
-        LevelState.TrafficLights.AddRange(new [] { BallColors.Pink, BallColors.Yellow, BallColors.Blue, BallColors.Green, BallColors.Pink, BallColors.Yellow }
-            .Take((yy - 1)..(yy + 2)));
+        LevelState.TrafficLights.AddRange(new []
+            {
+                BallColors.Pink,   // 1
+                BallColors.Yellow, // 1 2
+                BallColors.Blue,   // 1 2 3
+                BallColors.Green,  //   2 3 4
+                BallColors.Pink,   //     3 4
+                BallColors.Yellow  //       4
+            }.Take((yy - 1)..(yy + 2))
+        );
         
         for (int i = 0; i < 3; i++)
             _rectangles[i] = new Rectangle(8 * (int)LevelState.TrafficLights[i], 0, 8, 8);
