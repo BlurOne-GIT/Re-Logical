@@ -6,10 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
-public class TrafficLight : Block
+public class TrafficLights : Block
 {
     #region Field
-    private static TrafficLight _theChosenOne;
+    private static TrafficLights _theChosenOne;
     private static Texture2D _balls;
     public bool DisableTraffic;
 
@@ -22,8 +22,8 @@ public class TrafficLight : Block
     private readonly Rectangle[] _rectangles = new Rectangle[3];
     #endregion
 
-    public TrafficLight(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, "TrafficLight", arrayPosition, xx, yy)
+    public TrafficLights(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, "TrafficLights", arrayPosition, xx, yy)
     {
         if (_theChosenOne is not null)
             _theChosenOne.DisableTraffic = true;
