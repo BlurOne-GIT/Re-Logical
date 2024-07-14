@@ -125,16 +125,10 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
 
     protected override void UnloadContent()
     {
-        Game.Content.UnloadAsset(FileValue switch
-        {
-            0x08 => "TpHorizontal",
-            0x09 => "TpVertical",
-            0x0A => "TpCross",
-            _ => throw new ArgumentException("Invalid Tp direction")
-        });
         _closedPipeTextures = null;
         Game.Content.UnloadAssets(new []
         {
+            "Teleporters",
             $"{Configs.GraphicSet}/PipeClosedLeft", 
             $"{Configs.GraphicSet}/PipeClosedUp", 
             $"{Configs.GraphicSet}/PipeClosedRight", 
