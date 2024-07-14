@@ -115,6 +115,6 @@ public class Bumper : Block, IReloadable, IOverlayable, IFixable
     public void Fix(IFixable.FidelityLevel fidelity)
     {
         _holder.DefaultRectangle = null;
-        _arrow.Position += new Vector2(0f, 1f);
+        _arrow.Position += Vector2.UnitY;
     }
 }

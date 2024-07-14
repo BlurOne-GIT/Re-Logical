@@ -103,7 +103,10 @@ public class Spinner : Block, IReloadable, IFixable
     private static Texture2D _spinningTexture;
     private static Texture2D _explodingTexture;
     private static Texture2D _ballsTexture;
-    private static Texture2D[] _closedPipeTextures;
+    private static Texture2D _spinnerClosings;
+
+    private Vector2 _closingsOffset = Vector2.Zero;
+    private Rectangle _closingsSource = new(0, 0, 36, 36);
     #endregion
     
     #endregion
@@ -124,12 +127,7 @@ public class Spinner : Block, IReloadable, IFixable
         _spinningTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerSpin");
         _explodingTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerExplode");
         _ballsTexture ??= Game.Content.Load<Texture2D>("SpinnerBalls");
-        if (_closedPipeTextures is null)
-        {
-            _closedPipeTextures = new Texture2D[4];
-            for (var i = 0; i < 4; i++)
-                _closedPipeTextures[i] = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosed{(Direction)i}");
-        }
+        _spinningTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosings");
         _popInSfx ??= Game.Content.Load<SoundEffect>("Sfx/PopIn");
         _popOutSfx ??= Game.Content.Load<SoundEffect>("Sfx/PopOut");
         _spinSfx ??= Game.Content.Load<SoundEffect>("Sfx/Spin");
@@ -152,21 +150,60 @@ public class Spinner : Block, IReloadable, IFixable
             _slotButtons[0] = new Button(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
             _slotButtons[0].LeftClicked += PopOut;
         }
-        if (!_closedPipes[(int)Direction.Up] && Pos.Y != 0 && blocks[Pos.X, Pos.Y-1].FileValue is not 0x16)
+        else
         {
-            _slotButtons[1] = new Button(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10))) {Enabled = false};
-            _slotButtons[1].LeftClicked += PopOut;
+            _closingsOffset.X = _closingsSource.X = 10;
+            _closingsSource.Width = 26;
         }
+        
+        if (!_closedPipes[(int)Direction.Up])
+        {
+            if (Pos.Y != 0 && blocks[Pos.X, Pos.Y - 1].FileValue is not 0x16)
+            {
+                _slotButtons[1] = new Button(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10))) {Enabled = false};
+                _slotButtons[1].LeftClicked += PopOut;
+            }
+        }
+        else
+        {
+            _closingsOffset.Y = _closingsSource.Y = 10;
+            _closingsSource.Height = 26;
+        }
+        
         if (!_closedPipes[(int)Direction.Right])
         {
             _slotButtons[2] = new Button(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
             _slotButtons[2].LeftClicked += PopOut;
         }
-        if (!_closedPipes[(int)Direction.Down] && blocks[Pos.X, Pos.Y+1].FileValue is not 0x16)
+        else
         {
+            _closingsSource.Width -= 10;
+            if (_closingsSource.Width is 16 && _closingsSource.Y is 10)
+            {
+                _closingsOffset.Y = _closingsSource.Y = 32;
+                _closingsSource.Height = 4;
+            }
+        }
+        
+        if (!_closedPipes[(int)Direction.Down])
+        {
+            if (blocks[Pos.X, Pos.Y + 1].FileValue is 0x16) return;
             _slotButtons[3] = new Button(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10))) {Enabled = false};
             _slotButtons[3].LeftClicked += PopOut;
+            return;
         }
+
+        if (_closingsSource.Height is 4)
+        {
+            _closingsSource = default;
+            return;
+        }
+        
+        _closingsSource.Height -= 10;
+        if (_closingsSource.Height is not 16 || _closingsSource.X is not 10) return;
+        
+        _closingsOffset.X = _closingsSource.X = 32;
+        _closingsSource.Width = 4;
     }
 
     private void Spin(object s, EventArgs e)
@@ -342,17 +379,14 @@ public class Spinner : Block, IReloadable, IFixable
         _spinningTexture = null;
         _explodingTexture = null;
         _ballsTexture = null;
-        _closedPipeTextures = null;
+        _spinnerClosings = null;
         Game.Content.UnloadAssets(new []
         {
             "Sfx/PopIn", "Sfx/PopOut", "Sfx/Spin", "Sfx/Explode",
             "SpinnerBalls",
             $"{Configs.GraphicSet}/SpinnerSpin",
             $"{Configs.GraphicSet}/SpinnerExplode",
-            $"{Configs.GraphicSet}/SpinnerClosedLeft", 
-            $"{Configs.GraphicSet}/SpinnerClosedUp", 
-            $"{Configs.GraphicSet}/SpinnerClosedRight", 
-            $"{Configs.GraphicSet}/SpinnerClosedDown"
+            $"{Configs.GraphicSet}/SpinnerClosings"
         });
         base.UnloadContent();
     }
