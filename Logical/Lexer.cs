@@ -85,7 +85,7 @@ public class Lexer
         0x14 => new ColourHandicap(_game, index, fileValue, arguments),
         0x15 => new TrafficLights(_game, index, fileValue, arguments),
         0x16 => new Dropper(_game, index, fileValue, arguments),
-        0x17 => new NextBall(_game, index, fileValue, arguments),
+        0x17 => new ColourForecast(_game, index, fileValue, arguments),
         _ => new EmptyBlock(_game, index, fileValue, arguments)
     };
 }

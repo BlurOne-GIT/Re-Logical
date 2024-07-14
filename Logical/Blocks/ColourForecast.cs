@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
-public class NextBall : Block, IFixable
+public class ColourForecast : Block, IFixable
 {
     #region Field
     private readonly Vector2 _holderOffset = new(9f);
@@ -16,7 +16,7 @@ public class NextBall : Block, IFixable
     private Vector2 _indicatorOffset = new(12f, 11f);
     #endregion
 
-    public NextBall(Game game, Point arrayPosition, byte xx, byte yy)
+    public ColourForecast(Game game, Point arrayPosition, byte xx, byte yy)
         : base(game, "EmptyBlock", arrayPosition, xx, yy)
     {
         DefaultRectangle = new Rectangle(0, 0, 36, 36);
