@@ -77,7 +77,7 @@ public class Lexer
         0x01 => new Spinner(_game, index, fileValue, arguments) { Enabled = false },
         <= 0x04 => new Pipe(_game, index, fileValue, arguments),
         <= 0x07 => new ColourStopper(_game, index, fileValue, arguments),
-        <= 0x0A => new Tp(_game, index, fileValue, arguments),
+        <= 0x0A => new Teleporter(_game, index, fileValue, arguments),
         <= 0x0D => new ColourChanger(_game, index, fileValue, arguments),
         <= 0x11 => new DirectionArrow(_game, index, fileValue, arguments),
         0x12 => new MarbleDisplay(_game, index, fileValue, arguments),

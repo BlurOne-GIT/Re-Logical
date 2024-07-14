@@ -7,13 +7,13 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Tp : Pipe, IReloadable, IOverlayable, IFixable
+public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
 {
     #region Field
-    public static Tp FirstHorizontalTp;
-    public static Tp SecondHorizontalTp;
-    public static Tp FirstVerticalTp;
-    public static Tp SecondVerticalTp;
+    public static Teleporter FirstHorizontalTp;
+    public static Teleporter SecondHorizontalTp;
+    public static Teleporter FirstVerticalTp;
+    public static Teleporter SecondVerticalTp;
     private readonly SimpleImage _overlay;
     //private Texture2D _shadow;
     private bool[] _closedPipes = new bool[4];
@@ -28,7 +28,7 @@ public class Tp : Pipe, IReloadable, IOverlayable, IFixable
     private static Texture2D[] _closedPipeTextures;
     #endregion
 
-    public Tp(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
+    public Teleporter(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
     {
         _overlay = new SimpleImage(game, "Teleporters", Position + new Vector2(7, 7), 9)
             { DefaultRectangle = new Rectangle((xx - 0x08) * 22, 0, 22, 22)};
