@@ -272,6 +272,9 @@ public class Spinner : Block, IReloadable, IFixable
         foreach (var button in _slotButtons)
             if (button is not null)
                 button.Enabled = false;
+        // Intentional break for Faithful parity
+        if (Configs.GraphicSet is 1)
+            DefaultRectangle = new Rectangle(DefaultRectangle!.Value.X, 36, 36, 36);
         _explodeAnimation.Start();
         _hasExploded = true;
         for (int i = 0; i < 4; i++)
@@ -358,7 +361,8 @@ public class Spinner : Block, IReloadable, IFixable
     
     public void Fix(IFixable.FidelityLevel _)
     {
-        DefaultRectangle = new Rectangle(36, 0, 36, 36);
+        if (Configs.GraphicSet is 1)
+            DefaultRectangle = new Rectangle(36, 0, 36, 36);
         for (int i = 0; i < _explodeAnimation.Length; ++i)
             _explodeAnimation.Frames[i].Y = 28;
         // TODO: Implement fixes for the other problems
