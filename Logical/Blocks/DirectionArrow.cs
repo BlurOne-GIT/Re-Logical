@@ -52,7 +52,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         base.LoadContent();
         _holder = new SimpleImage(Game, "Holder", Position + new Vector2(9f), 8)
             { DefaultRectangle = new Rectangle(0, 1, 18, 17)};
-        _arrow = new SimpleImage(Game, $"{Configs.GraphicSet}/Bumpers", Position + new Vector2(13f, 12f), 9)
+        _arrow = new SimpleImage(Game, $"{Configs.GraphicSet}/DirectionArrows", Position + new Vector2(13f, 12f), 9)
             { DefaultRectangle = new Rectangle(9 * (int)_direction, 0, 10, 10) };
     }
 
@@ -101,7 +101,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             $"{Configs.GraphicSet}/PipeClosedRight", 
             $"{Configs.GraphicSet}/PipeClosedDown",
             "Holder",
-            $"{Configs.GraphicSet}/Bumpers",
+            $"{Configs.GraphicSet}/DirectionArrows",
             _shadow.Name
         });
         base.UnloadContent();
