@@ -52,13 +52,13 @@ public class ColourChanger : Pipe, IOverlayable
 
     protected override void UnloadContent()
     {
-        Game.Content.UnloadAssets(new []{"Changers", "Indicators"});
+        Game.Content.UnloadAssets(new []{"ColourChangers", "Indicators"});
         base.UnloadContent();
     }
 
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] 
     {
-        new SimpleImage(Game, "Changers", Position + _indicatorOffset, 9)
+        new SimpleImage(Game, "ColourChangers", Position + _indicatorOffset, 9)
         {DefaultRectangle = _indicatorRectangle}
     };
 }
