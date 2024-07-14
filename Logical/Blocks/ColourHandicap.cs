@@ -4,10 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
-public class ColorJob : Block, IFixable
+public class ColourHandicap : Block, IFixable
 {
     #region Field
-    public static ColorJob SteveJobs;
+    public static ColourHandicap SteveJobs;
     public bool DisableJobs;
     private static Texture2D _balls;
     private static readonly Vector2[] BallOffsets =
@@ -33,8 +33,8 @@ public class ColorJob : Block, IFixable
     private readonly Rectangle[] _rectangles = new Rectangle[4];
     #endregion
 
-    public ColorJob(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, "ColorJob", arrayPosition, xx, yy)
+    public ColourHandicap(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, "ColourHandicap", arrayPosition, xx, yy)
     {
         if (SteveJobs is not null)
             SteveJobs.DisableJobs = true;

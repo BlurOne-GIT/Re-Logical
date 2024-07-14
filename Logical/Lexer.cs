@@ -82,7 +82,7 @@ public class Lexer
         <= 0x11 => new DirectionArrow(_game, index, fileValue, arguments),
         0x12 => new MarbleDisplay(_game, index, fileValue, arguments),
         0x13 => new Sandclock(_game, index, fileValue, arguments),
-        0x14 => new ColorJob(_game, index, fileValue, arguments),
+        0x14 => new ColourHandicap(_game, index, fileValue, arguments),
         0x15 => new TrafficLights(_game, index, fileValue, arguments),
         0x16 => new Dropper(_game, index, fileValue, arguments),
         0x17 => new NextBall(_game, index, fileValue, arguments),
