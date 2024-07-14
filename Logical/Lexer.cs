@@ -76,7 +76,7 @@ public class Lexer
         0x00 => new EmptyBlock(_game, index, fileValue, arguments),
         0x01 => new Spinner(_game, index, fileValue, arguments) { Enabled = false },
         <= 0x04 => new Pipe(_game, index, fileValue, arguments),
-        <= 0x07 => new Filter(_game, index, fileValue, arguments),
+        <= 0x07 => new ColourStopper(_game, index, fileValue, arguments),
         <= 0x0A => new Tp(_game, index, fileValue, arguments),
         <= 0x0D => new Changer(_game, index, fileValue, arguments),
         <= 0x11 => new Bumper(_game, index, fileValue, arguments),

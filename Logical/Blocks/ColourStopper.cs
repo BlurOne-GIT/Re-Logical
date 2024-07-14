@@ -7,7 +7,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Filter : Pipe, IOverlayable
+public class ColourStopper : Pipe, IOverlayable
 {
     #region Fields
     private readonly BallColors _ballColor;
@@ -18,7 +18,7 @@ public class Filter : Pipe, IOverlayable
     private readonly Rectangle _rectangle;
     #endregion
 
-    public Filter(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
+    public ColourStopper(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
     {
         _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/{ShadowTextureSwitcher(xx)}");
         _ballColor = (BallColors)Argument-1;
