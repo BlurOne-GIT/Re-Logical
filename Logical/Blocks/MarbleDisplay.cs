@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
-public class Moves : Block
+public class MarbleDisplay : Block
 {
     #region Field
     private static Texture2D _blue;
@@ -17,19 +17,19 @@ public class Moves : Block
     };
     #endregion
 
-    public Moves(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, "Moves", arrayPosition, xx, yy) { }
+    public MarbleDisplay(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, "MarbleDisplay", arrayPosition, xx, yy) { }
 
     protected override void LoadContent()
     {
-        _blue ??= Game.Content.Load<Texture2D>("MovesBlue");
+        _blue ??= Game.Content.Load<Texture2D>("MarbleDisplayBlue");
         base.LoadContent();
     }
 
     protected override void UnloadContent()
     {
         _blue = null;
-        Game.Content.UnloadAsset("MovesBlue");
+        Game.Content.UnloadAsset("MarbleDisplayBlue");
         base.UnloadContent();
     }
 
