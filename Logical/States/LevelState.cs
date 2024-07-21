@@ -22,10 +22,7 @@ public class LevelState : GameState
     private int _oTimeLoopCounter;
     public static List<BallColors> ColorJobLayout = new(4);
     public static BallColors NextBall { get; private set; }
-    public static int TimeLeft;
-    public static TimeSpan TimeSpanLeft;
-    private readonly TimeSpan _initialTimeSpan;
-    private static bool _isTimed;
+    private static bool IsTimed => Hourglass.BruceCook is not null;
     private readonly Block[,] _tileset;
     private Ball _mainPipeBall;
     private SoundEffect _successSfx;
@@ -70,10 +67,13 @@ public class LevelState : GameState
         Ball.BallCreated += AddBall;
         Ball.BallDestroyed += RemoveBall;
         var lexer = new Lexer(game);
-        _tileset = lexer.GetLevelBlocks(Configs.Stage, out _oTime, out TimeLeft, out _isTimed, out _);
+        _tileset = lexer.GetLevelBlocks(Configs.Stage, out _oTime, out var timeLeft, out _, out _);
         _oTime++;
-        _initialTimeSpan = new TimeSpan(0, 1, 30) * (TimeLeft + 1);
-        TimeSpanLeft = _initialTimeSpan;
+        if (IsTimed)
+        {
+            Hourglass.BruceCook.InitialCycles = timeLeft;
+            Hourglass.TimeOut += OnTimeOut;
+        }
         foreach (var gameObject in _tileset)
         {
             if (gameObject is IReloadable reloadable)
@@ -93,7 +93,7 @@ public class LevelState : GameState
 
         Spinner.AllDone += Win;
         _oTimeLoopCounter = _oTime;
-        ColorJob.SteveJobs?.Recharge();
+        ColourHandicap.SteveJobs?.Recharge();
 
         if (ColorJobLayout.Count != 0 || TrafficLights.Count != 0)
             Spinner.ConditionClear += RecheckConditioned;
@@ -146,7 +146,7 @@ public class LevelState : GameState
 
         Configs.Stage++;
 
-        _timeLeft = _isTimed ? (int)(TimeSpanLeft.Ticks * 100 / _initialTimeSpan.Ticks) : 100;
+        _timeLeft = IsTimed ? Hourglass.BruceCook.TimeLeftPoints : 100;
     }
 
 
@@ -183,9 +183,6 @@ public class LevelState : GameState
         
                 if (_oTimeLeft is 0)
                     Lose("BALLTIMEOUT");
-
-                if (TimeLeft is -1)
-                    Lose("TIMEOUT");
 
                 _oTimeLoopCounter = _oTimeLoopCounter == 0 ? _oTime : _oTimeLoopCounter-1;
                 break;
@@ -292,6 +289,8 @@ public class LevelState : GameState
         foreach (var ball in Ball.AllBalls.ToArray())
             ball.Dispose();
     }
+    
+    private void OnTimeOut(object _, EventArgs __) => Lose("TIMEOUT");
 
     protected override void Dispose(bool disposing)
     {
@@ -302,6 +301,7 @@ public class LevelState : GameState
         Spinner.ConditionClear -= RecheckConditioned;
         Ball.BallCreated -= AddBall;
         Ball.BallDestroyed -= RemoveBall;
+        Hourglass.TimeOut -= OnTimeOut;
         base.Dispose(disposing);
     }
 }

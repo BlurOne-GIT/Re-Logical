@@ -59,6 +59,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
 
     public override void Update(GameTime gameTime)
     {
+        // TODO: add case where there is no second teleporter and the ball explodes
         foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == DetectionPoint + Position))
             if (ball.MovementDirection is Direction.Left or Direction.Right)
                 if (FirstHorizontalTp.Equals(this))

@@ -36,7 +36,7 @@ public class Lexer
         btr++;
         oTime = _hexFile[btr++];
         time = _hexFile[btr]; // Final read byte
-        isTimed = tempBlocks.OfType<Block>().Any(b => b is Sandclock);
+        isTimed = tempBlocks.OfType<Block>().Any(b => b is Hourglass);
         name = GetLevelName(level);
         return tempBlocks;
     }
@@ -81,7 +81,7 @@ public class Lexer
         <= 0x0D => new ColourChanger(_game, index, fileValue, arguments),
         <= 0x11 => new DirectionArrow(_game, index, fileValue, arguments),
         0x12 => new MarbleDisplay(_game, index, fileValue, arguments),
-        0x13 => new Sandclock(_game, index, fileValue, arguments),
+        0x13 => new Hourglass(_game, index, fileValue, arguments),
         0x14 => new ColourHandicap(_game, index, fileValue, arguments),
         0x15 => new TrafficLights(_game, index, fileValue, arguments),
         0x16 => new Dropper(_game, index, fileValue, arguments),
