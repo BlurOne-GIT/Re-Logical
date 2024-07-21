@@ -74,8 +74,8 @@ public class Spinner : Block, IReloadable, IFixable
         new(24, 0, 8, 8),
         new(32, 0, 8, 8)
     };
-    private readonly Vector2 _spinTextureOffset = new(5f);
-    private readonly Vector2 _explodeTextureOffset = new(4f);
+    private static readonly Vector2 SpinTextureOffset = new(5f);
+    private static readonly Vector2 ExplodeTextureOffset = new(3f);
     #endregion
 
     private readonly Animation<Rectangle> _spinAnimation =
@@ -83,13 +83,13 @@ public class Spinner : Block, IReloadable, IFixable
 
     private readonly Animation<Rectangle> _explodeAnimation = new(new Rectangle[]
     {
-        new(56, 0, 28, 28),
-        new( 0, 0, 28, 28),
-        new(28, 0, 28, 28),
-        new(28, 0, 28, 28),
-        new( 0, 0, 28, 28),
-        new(56, 0, 28, 28),
-        new(84, 0, 28, 28)
+        new(58, 0, 29, 29), // 2
+        new( 0, 0, 29, 29), // 0
+        new(29, 0, 29, 29), // 1
+        new(29, 0, 29, 29), // 1
+        new( 0, 0, 29, 29), // 0
+        new(58, 0, 29, 29), // 2
+        new(87, 0, 29, 29)  // 3
     }, false);
 
     #region Textures
@@ -113,6 +113,8 @@ public class Spinner : Block, IReloadable, IFixable
         if (Pos.Y is 0)
             _registers[(int)Direction.Up] = new Vector2(13f, -13f);
         ExplodedSpinners.Capacity++;
+        if (Configs.GraphicSet is 1)
+            DefaultRectangle = new Rectangle(0, 0, 36, 36);
     }
 
     protected override void LoadContent()
@@ -347,7 +349,7 @@ public class Spinner : Block, IReloadable, IFixable
         
         // Spinning Animation
         if (!_spinAnimation.IsAtEnd)
-            DrawAnotherTexture(_spinningTexture, _spinTextureOffset, 1, _spinAnimation.NextFrame());
+            DrawAnotherTexture(_spinningTexture, SpinTextureOffset, 1, _spinAnimation.NextFrame());
 
         // Slots
         for (int i = 0; i < 4; i++)
@@ -362,7 +364,7 @@ public class Spinner : Block, IReloadable, IFixable
         
         // Explode Animation
         if (!_explodeAnimation.IsAtEnd)
-            DrawAnotherTexture(_explodingTexture, _explodeTextureOffset, 3, _explodeAnimation.NextFrame());
+            DrawAnotherTexture(_explodingTexture, ExplodeTextureOffset, 3, _explodeAnimation.NextFrame());
     }
 
     protected override void UnloadContent()
@@ -385,12 +387,14 @@ public class Spinner : Block, IReloadable, IFixable
 
     public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Refined;
     
-    public void Fix(IFixable.FidelityLevel _)
+    public void Fix(IFixable.FidelityLevel fidelity)
     {
         if (Configs.GraphicSet is 1)
             DefaultRectangle = new Rectangle(36, 0, 36, 36);
         for (int i = 0; i < _explodeAnimation.Length; ++i)
-            _explodeAnimation.Frames[i].Y = 28;
+            _explodeAnimation.Frames[i].Y = 29;
+        if (fidelity is IFixable.FidelityLevel.Remastered)
+            _explodeAnimation.Frames[1] = _explodeAnimation.Frames[4] = new Rectangle(116, 0, 30, 30);
         // TODO: Implement fixes for the other problems
     }
 }
