@@ -7,7 +7,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
+public class Teleporter : Pipe, IReloadable, IOverlayable
 {
     #region Field
     public static Teleporter FirstHorizontalTp;
@@ -141,11 +141,11 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
     public IEnumerable<DrawableGameComponent> GetOverlayables()
         => new DrawableGameComponent[] { _overlay };
 
-    public new IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
+    public override IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
 
-    public new bool ShallFix(IFixable.FidelityLevel fidelity) => fidelity >= Fidelity;
+    public override bool ShallFix(IFixable.FidelityLevel fidelity) => fidelity >= Fidelity;
     
-    public new void Fix(IFixable.FidelityLevel fidelity)
+    public override void Fix(IFixable.FidelityLevel fidelity)
     {
         if (FileValue is 0x0A)
             _overlay.DefaultRectangle = new Rectangle(66, 0, 22, 22);
