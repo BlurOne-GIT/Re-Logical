@@ -18,7 +18,7 @@ public class Pipe : Block, IFixable
         arrayPosition, xx, yy
     )
     {
-        DefaultRectangle = new Rectangle(Statics.Brandom.Next(0, 2) * 36, 0, 36, 36);
+        DefaultRectangle = new Rectangle(Statics.Brandom.Next(2) * 36, 0, 36, 36);
     }
 
     public virtual IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Remastered;
