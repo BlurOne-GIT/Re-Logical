@@ -11,9 +11,10 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
 {
     #region Field
     private readonly Direction _direction;
-    private Texture2D _shadow;
+    private static Texture2D _shadow;
     private bool[] _closedPipes = new bool[4];
     private readonly Vector2 _shadowOffset = new(12f, 13f);
+    private Rectangle _shadowSource;
     private static readonly Vector2[] ClosedPipeOffsets =
     {
         new( 0f, 10f), // Left
@@ -26,6 +27,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
 
     private SimpleImage _holder;
     private SimpleImage _arrow;
+
     #endregion
 
     public DirectionArrow(Game game, Point arrayPosition, byte xx, byte yy)
@@ -54,6 +56,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             { DefaultRectangle = new Rectangle(0, 1, 18, 17)};
         _arrow = new SimpleImage(Game, $"{Configs.GraphicSet}/DirectionArrows", Position + new Vector2(13f, 12f), 9)
             { DefaultRectangle = new Rectangle(9 * (int)_direction, 0, 10, 10) };
+        _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadows");
     }
 
     public override void Update(GameTime gameTime)
@@ -72,12 +75,8 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) // Down
         };
 
-        _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadow" + 
-            (!_closedPipes[(int)Direction.Right] && !_closedPipes[(int)Direction.Down] ? "Cross" :
-            !_closedPipes[(int)Direction.Right] ? "Horizontal" :
-            !_closedPipes[(int)Direction.Down] ? "Vertical" : 
-            "Empty")
-        );
+        var s = Convert.ToInt32(_closedPipes[(int)Direction.Right]) | Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
+        _shadowSource = new Rectangle(s * 18, 0, 18, 18);
     }
 
     public override void Draw(GameTime gameTime)
@@ -88,7 +87,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             if (_closedPipes[i])
                 DrawAnotherTexture(_closedPipeTextures[i], ClosedPipeOffsets[i], 1);
         
-        DrawAnotherTexture(_shadow, _shadowOffset, 2);
+        DrawAnotherTexture(_shadow, _shadowOffset, 2, _shadowSource);
     }
 
     protected override void UnloadContent()

@@ -7,8 +7,9 @@ namespace Logical.Blocks;
 public class ColourForecast : Block, IFixable
 {
     #region Field
-    private readonly Vector2 _holderOffset = new(9f);
-    private readonly Vector2 _shadowOffset = new(12f, 13f);
+    private static readonly Vector2 HolderOffset = new(9f);
+    private static readonly Vector2 ShadowOffset = new(12f, 13f);
+    private static readonly Rectangle ShadowSource = new(54, 0, 18, 18);
     private static Texture2D _holder;
     private static Texture2D _indicators;
     private static Texture2D _shadow;
@@ -26,7 +27,7 @@ public class ColourForecast : Block, IFixable
     {
         _holder ??= Game.Content.Load<Texture2D>("Holder");
         _indicators ??= Game.Content.Load<Texture2D>("Indicators");
-        _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadowEmpty");
+        _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadows");
         base.LoadContent();
     }
     
@@ -34,15 +35,15 @@ public class ColourForecast : Block, IFixable
     {
         base.Draw(gameTime);
         
-        DrawAnotherTexture(_shadow, _shadowOffset, 1);
-        DrawAnotherTexture(_holder, _holderOffset, 2, _holderSource);
+        DrawAnotherTexture(_shadow, ShadowOffset, 1, ShadowSource);
+        DrawAnotherTexture(_holder, HolderOffset, 2, _holderSource);
         DrawAnotherTexture(_indicators, _indicatorOffset, 3, new Rectangle(12 * (int)LevelState.NextBall, 0, 12, 12));
     }
 
     protected override void UnloadContent()
     {
         _holder = _indicators = _shadow = null;
-        Game.Content.UnloadAssets(new []{"Holder", "Indicators", $"{Configs.GraphicSet}/HolderShadowEmpty"});
+        Game.Content.UnloadAssets(new []{"Holder", "Indicators", $"{Configs.GraphicSet}/HolderShadows"});
         base.UnloadContent();
     }
 
