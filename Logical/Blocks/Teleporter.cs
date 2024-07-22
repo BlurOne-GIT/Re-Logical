@@ -142,15 +142,13 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
         => new DrawableGameComponent[] { _overlay };
 
     public override IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
-
-    public override bool ShallFix(IFixable.FidelityLevel fidelity) => fidelity >= Fidelity;
     
     public override void Fix(IFixable.FidelityLevel fidelity)
     {
         if (FileValue is 0x0A)
             _overlay.DefaultRectangle = new Rectangle(66, 0, 22, 22);
         
-        if (base.ShallFix(fidelity))
+        if (fidelity >= base.Fidelity)
             base.Fix(fidelity);
     }
 }
