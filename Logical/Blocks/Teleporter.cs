@@ -15,9 +15,10 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     public static Teleporter FirstVerticalTp;
     public static Teleporter SecondVerticalTp;
     private readonly SimpleImage _overlay;
-    //private Texture2D _shadow;
+    private static Texture2D _shadow;
     private bool[] _closedPipes = new bool[4];
-    //private readonly Vector2 _shadowOffset = new(10, 11);
+    private static readonly Vector2 ShadowOffset = new(10, 19);
+    private Rectangle _shadowSource;
     private static readonly Vector2[] ClosedPipeOffsets =
     {
         new(0, 10),  // Left
@@ -26,6 +27,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
         new(10, 26)  // Down
     };
     private static Texture2D[] _closedPipeTextures;
+    
     #endregion
 
     public Teleporter(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
@@ -48,6 +50,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
 
     protected override void LoadContent()
     {
+        _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/TeleporterShadows");
         if (_closedPipeTextures is null)
         {
             _closedPipeTextures = new Texture2D[4];
@@ -77,15 +80,24 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     {
         _closedPipes = new[]
         {
-            Pos.X is 0 || (!HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue) &&
-                           FileValue is 0x08 or 0x0A), // Left
+            FileValue is not 0x09 &&
+            (Pos.X is 0 || (!HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue) &&
+                            FileValue is 0x08 or 0x0A)), // Left
+            FileValue is not 0x08 &&
             Pos.Y is 0 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue) &&
                            FileValue is 0x09 or 0x0A), // Up
+            FileValue is not 0x09 &&
             Pos.X is 7 || (!HorizontalAttachables.Contains(blocks[Pos.X + 1, Pos.Y].FileValue) &&
                            FileValue is 0x08 or 0x0A), // Right
+            FileValue is not 0x08 &&
             Pos.Y is 4 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) &&
                            FileValue is 0x09 or 0x0A)  // Down
         };
+        
+        var shadowNum =
+            Convert.ToInt32(_closedPipes[(int)Direction.Right]) |
+            Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
+        _shadowSource = new Rectangle(shadowNum * 22 + Variation * 42, FileValue * 14, 22, 14);
     }
 
     protected override void Dispose(bool disposing)
@@ -110,20 +122,9 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
             if (_closedPipes[i])
                 DrawAnotherTexture(_closedPipeTextures[i], ClosedPipeOffsets[i], 1);
         
-        /* DISABLED
-        _spriteBatch.Draw(
-            _shadow,
-            (Position + shadowPos) * Configs.Scale,
-            null,
-            Color.White * Statics.Opacity,
-            0,
-            Vector2.Zero,
-            Configs.Scale,
-            SpriteEffects.None,
-            0.2f
-        );*/
+        DrawAnotherTexture(_shadow, ShadowOffset, 2, _shadowSource);
     }
-
+    
     protected override void UnloadContent()
     {
         _closedPipeTextures = null;
@@ -150,5 +151,10 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
         
         if (fidelity >= base.Fidelity)
             base.Fix(fidelity);
+        
+        var shadowNum =
+            Convert.ToInt32(_closedPipes[(int)Direction.Right]) |
+            Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
+        _shadowSource.X = shadowNum * 22 + Variation * 42;
     }
 }

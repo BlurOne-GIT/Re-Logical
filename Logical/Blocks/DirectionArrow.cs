@@ -76,8 +76,10 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) // Down
         };
 
-        var s = Convert.ToInt32(_closedPipes[(int)Direction.Right]) | Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
-        _shadowSource = new Rectangle(0, s * 18, 18, 18);
+        var shadowNum = 
+            Convert.ToInt32(_closedPipes[(int)Direction.Right]) |
+            Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
+        _shadowSource = new Rectangle(0, shadowNum * 18, 18, 18);
     }
 
     public override void Draw(GameTime gameTime)
