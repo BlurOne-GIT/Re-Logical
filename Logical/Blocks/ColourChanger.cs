@@ -15,7 +15,7 @@ public class ColourChanger : Pipe, IOverlayable
     private static Texture2D _indicator;
     private readonly Vector2 _indicatorOffset = new(12f);
     private readonly Rectangle _indicatorSource;
-    private readonly Vector2 _shadowOffset = new(18f);
+    private Vector2 _shadowOffset = new(18f);
     private Rectangle _shadowSource;
     #endregion
 
@@ -51,6 +51,7 @@ public class ColourChanger : Pipe, IOverlayable
     {
         base.Fix(_);
         _shadowSource = new Rectangle(13 * Variation, FileValue * 12, 12, 12);
+        _shadowOffset = new Vector2(15f, 16f);
     }
 
     protected override void UnloadContent()
