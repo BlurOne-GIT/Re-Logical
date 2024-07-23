@@ -9,7 +9,7 @@ public class ColourForecast : Block, IFixable
     #region Field
     private static readonly Vector2 HolderOffset = new(9f);
     private static readonly Vector2 ShadowOffset = new(12f, 13f);
-    private static readonly Rectangle ShadowSource = new(54, 0, 18, 18);
+    private static readonly Rectangle ShadowSource = new(0, 54, 18, 18);
     private static Texture2D _holder;
     private static Texture2D _indicators;
     private static Texture2D _shadow;

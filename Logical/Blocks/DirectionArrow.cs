@@ -77,7 +77,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         };
 
         var s = Convert.ToInt32(_closedPipes[(int)Direction.Right]) | Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
-        _shadowSource = new Rectangle(s * 18, 0, 18, 18);
+        _shadowSource = new Rectangle(0, s * 18, 18, 18);
     }
 
     public override void Draw(GameTime gameTime)
@@ -102,7 +102,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             $"{Configs.GraphicSet}/PipeClosedDown",
             "Holder",
             $"{Configs.GraphicSet}/DirectionArrows",
-            _shadow.Name
+            $"{Configs.GraphicSet}/HolderShadows"
         });
         base.UnloadContent();
     }
@@ -121,5 +121,6 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
 
         var variation = Statics.Brandom.Next(3);
         DefaultRectangle = new Rectangle(72, variation * 36, 36, 36);
+        _shadowSource.X = 18 * variation;
     }
 }
