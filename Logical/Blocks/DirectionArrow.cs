@@ -94,6 +94,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     protected override void UnloadContent()
     {
         _closedPipeTextures = null;
+        _shadow = null;
         Game.Content.UnloadAssets(new []
         {
             $"{Configs.GraphicSet}/PipeClosedLeft", 
