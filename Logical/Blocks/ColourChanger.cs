@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -12,29 +11,27 @@ public class ColourChanger : Pipe, IOverlayable
     #region Fields
 
     private readonly BallColors _ballColor;
-    private readonly Texture2D _shadow;
-    private readonly Texture2D _indicator;
+    private static Texture2D _shadow;
+    private static Texture2D _indicator;
     private readonly Vector2 _indicatorOffset = new(12f);
-    private readonly Rectangle _indicatorRectangle;
+    private readonly Rectangle _indicatorSource;
     private readonly Vector2 _shadowOffset = new(18f);
+    private Rectangle _shadowSource;
     #endregion
 
     public ColourChanger(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
     {
-        _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/{ShadowTextureSwitcher(xx)}");
         _ballColor = (BallColors)Argument-1;
-        _indicator = Game.Content.Load<Texture2D>("Indicators");
-        _indicatorRectangle = new Rectangle(12 * (int)_ballColor, 0, 12, 12);
+        _indicatorSource = new Rectangle(12 * (int)_ballColor, 0, 12, 12);
+        _shadowSource = new Rectangle(3 + 13 * Variation, 2 + xx * 12, 10, 10);
     }
-    
-    private static string ShadowTextureSwitcher(byte xx) => xx switch
+
+    protected override void LoadContent()
     {
-        0x0B => "ChangerShadowHorizontal",
-        0x0C => "ChangerShadowVertical",
-        0x0D => "ChangerShadowCross",
-        _ => throw new ArgumentException("Invalid Pipe direction")
-    };
-    
+        _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/ChangerShadows");
+        _indicator ??= Game.Content.Load<Texture2D>("Indicators");
+    }
+
     public override void Update(GameTime gameTime)
     {
         foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == DetectionPoint + Position))
@@ -46,12 +43,19 @@ public class ColourChanger : Pipe, IOverlayable
     {
         base.Draw(gameTime);
         
-        DrawAnotherTexture(_indicator, _indicatorOffset, 1, _indicatorRectangle);
-        DrawAnotherTexture(_shadow, _shadowOffset, 1);
+        DrawAnotherTexture(_indicator, _indicatorOffset, 1, _indicatorSource);
+        DrawAnotherTexture(_shadow, _shadowOffset, 1, _shadowSource);
+    }
+
+    public override void Fix(IFixable.FidelityLevel _)
+    {
+        base.Fix(_);
+        _shadowSource = new Rectangle(13 * Variation, FileValue * 12, 12, 12);
     }
 
     protected override void UnloadContent()
     {
+        _shadow = _indicator = null;
         Game.Content.UnloadAssets(new []{"ColourChangers", "Indicators"});
         base.UnloadContent();
     }
@@ -59,6 +63,6 @@ public class ColourChanger : Pipe, IOverlayable
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] 
     {
         new SimpleImage(Game, "ColourChangers", Position + _indicatorOffset, 9)
-        {DefaultRectangle = _indicatorRectangle}
+        { DefaultRectangle = _indicatorSource }
     };
 }
