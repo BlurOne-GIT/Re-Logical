@@ -60,6 +60,12 @@ public class ColourStopper : Pipe, IOverlayable
         base.UnloadContent();
     }
 
+    public override void Fix(IFixable.FidelityLevel _)
+    {
+        base.Fix(_);
+        _shadowSource = new Rectangle(22 * Variation, FileValue * 14, 22, 14);
+    }
+
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {
         new SimpleImage(Game,  "ColourStoppers", Position + new Vector2(7f), 9)
         {DefaultRectangle = new Rectangle(22 * (int)_ballColor, 0, 22, 22)}
