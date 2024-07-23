@@ -44,7 +44,7 @@ public class ColourStopper : Pipe, IOverlayable
         base.Draw(gameTime);
         
         DrawAnotherTexture(_balls, BallOffset, 1, _ballSource);
-        DrawAnotherTexture(_shadow, ShadowOffset, 1);
+        DrawAnotherTexture(_shadow, ShadowOffset, 1, _shadowSource);
     }
 
     protected override void UnloadContent()
