@@ -31,7 +31,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     #endregion
 
     public DirectionArrow(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, "PipeCross", arrayPosition, xx, yy)
+        : base(game, "Pipe", arrayPosition, xx, yy)
     {
         _direction = xx switch
         {
@@ -41,6 +41,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             0x11 => Direction.Down,
             _ => throw new ArgumentException("Invalid Bumper direction")
         };
+        DefaultRectangle = new Rectangle(0, 72, 36, 36);
     }
 
     protected override void LoadContent()
@@ -115,5 +116,10 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     {
         _holder.DefaultRectangle = null;
         _arrow.Position += Vector2.UnitY;
+
+        if (fidelity is not IFixable.FidelityLevel.Remastered) return;
+
+        var variation = Statics.Brandom.Next(3);
+        DefaultRectangle = new Rectangle(72, variation * 36, 36, 36);
     }
 }

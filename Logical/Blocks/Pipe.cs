@@ -5,30 +5,27 @@ namespace Logical.Blocks;
 
 public class Pipe : Block, IFixable
 {
-    protected int RandomAspect { get; private set; }
-    
-    public Pipe(Game game, Point arrayPosition, byte xx, byte yy) : base
-    (
-        game,
-        (xx % 3) switch
-        {
-            2 => "PipeHorizontal",
-            0 => "PipeVertical",
-            1 => "PipeCross",
-            _ => throw new ArgumentException("Invalid Pipe direction")
-        },
-        arrayPosition, xx, yy
-    )
+    protected int Variation { get; private set; }
+    public enum Orientation
     {
-        RandomAspect = Statics.Brandom.Next(2);
-        DefaultRectangle = new Rectangle(RandomAspect * 36, 0, 36, 36);
+        Vertical,
+        Cross,
+        Horizontal
+    }
+    
+    public Pipe(Game game, Point arrayPosition, byte xx, byte yy) : base(game, "Pipes", arrayPosition, xx, yy)
+    {
+        if (xx % 3 is not (int)Orientation.Cross)
+            Variation = Statics.Brandom.Next(2);
+        
+        DefaultRectangle = new Rectangle(Variation * 36, xx * 36, 36, 36);
     }
 
     public virtual IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Remastered;
     
     public virtual void Fix(IFixable.FidelityLevel _)
     {
-        RandomAspect = Statics.Brandom.Next(3);
-        DefaultRectangle = new Rectangle(RandomAspect * 36, 0, 36, 36);
+        Variation = Statics.Brandom.Next(3);
+        DefaultRectangle = new Rectangle(Variation * 36, FileValue * 33, 36, 36);
     }
 }
