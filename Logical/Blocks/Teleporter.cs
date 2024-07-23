@@ -16,7 +16,6 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     public static Teleporter SecondVerticalTp;
     private readonly SimpleImage _overlay;
     private static Texture2D _shadow;
-    private bool[] _closedPipes = new bool[4];
     private static readonly Vector2 ShadowOffset = new(10, 19);
     private Rectangle _shadowSource;
     private static readonly Vector2[] ClosedPipeOffsets =
@@ -26,7 +25,11 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
         new(26, 10), // Right
         new(10, 26)  // Down
     };
-    private static Texture2D[] _closedPipeTextures;
+    private int _shadowNum;
+    private bool _completelyOpen;
+    private static Texture2D _pipeClosings;
+    private Vector2 _closingsOffset;
+    private Rectangle _closingsSource;
     
     #endregion
 
@@ -35,13 +38,13 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
         _overlay = new SimpleImage(game, "Teleporters", Position + new Vector2(7, 7), 9)
             { DefaultRectangle = new Rectangle((xx - 0x08) * 22, 0, 22, 22)};
         
-        if (xx is 0x08 or 0x0A)
+        if (xx is not 0x09)
             if (FirstHorizontalTp is null)
                 FirstHorizontalTp = this;
             else if (SecondHorizontalTp is null)
                 SecondHorizontalTp = this;
             
-        if (xx is 0x09 or 0x0A)
+        if (xx is not 0x08)
             if (FirstVerticalTp is null)
                 FirstVerticalTp = this;
             else if (SecondVerticalTp is null)
@@ -51,12 +54,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     protected override void LoadContent()
     {
         _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/TeleporterShadows");
-        if (_closedPipeTextures is null)
-        {
-            _closedPipeTextures = new Texture2D[4];
-            for (var i = 0; i < 4; i++)
-                _closedPipeTextures[i] = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosed{(Direction)i}");
-        }
+        _pipeClosings ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosings");
         base.LoadContent();
     }
 
@@ -78,7 +76,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
 
     public void Reload(Block[,] blocks)
     {
-        _closedPipes = new[]
+         var closedPipes = new[]
         {
             FileValue is not 0x09 &&
             (Pos.X is 0 || (!HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue) &&
@@ -94,10 +92,20 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
                            FileValue is 0x09 or 0x0A)  // Down
         };
         
-        var shadowNum =
-            Convert.ToInt32(_closedPipes[(int)Direction.Right]) |
-            Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
-        _shadowSource = new Rectangle(shadowNum * 22 + Variation * 42, FileValue * 14, 22, 14);
+        _shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);
+        _shadowSource = new Rectangle(_shadowNum * 22 + Variation * 42, FileValue * 14, 22, 14);
+         
+        _completelyOpen = closedPipes.All(x => !x);
+        if (_completelyOpen) return;
+        
+        _closingsSource = new Rectangle(
+            closedPipes[(int)Direction.Left] ? 0 : 10,
+            closedPipes[(int)Direction.Up] ? 0 : 10,
+            36 - (closedPipes[(int)Direction.Left] ? 0 : 10) - (closedPipes[(int)Direction.Right] ? 0 : 10),
+            36 - (closedPipes[(int)Direction.Up] ? 0 : 10) - (closedPipes[(int)Direction.Down] ? 0 : 10)
+        );
+        _closingsOffset = _closingsSource.Location.ToVector2();
+        _closingsSource.X += Variation * 36;
     }
 
     protected override void Dispose(bool disposing)
@@ -118,23 +126,22 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     {
         base.Draw(gameTime);
 
-        for (int i = 0; i < 4; i++)
-            if (_closedPipes[i])
-                DrawAnotherTexture(_closedPipeTextures[i], ClosedPipeOffsets[i], 1);
+        // Pipe Closings
+        if (!_completelyOpen)
+            DrawAnotherTexture(_pipeClosings, _closingsOffset, 1, _closingsSource);
         
+        // Shadow
         DrawAnotherTexture(_shadow, ShadowOffset, 2, _shadowSource);
     }
     
     protected override void UnloadContent()
     {
-        _closedPipeTextures = null;
+        _pipeClosings = _shadow = null;
         Game.Content.UnloadAssets(new []
         {
             "Teleporters",
-            $"{Configs.GraphicSet}/PipeClosedLeft", 
-            $"{Configs.GraphicSet}/PipeClosedUp", 
-            $"{Configs.GraphicSet}/PipeClosedRight", 
-            $"{Configs.GraphicSet}/PipeClosedDown"  
+            $"{Configs.GraphicSet}/TeleporterShadows", 
+            $"{Configs.GraphicSet}/PipeClosings"
         });
         base.UnloadContent();
     }
@@ -152,9 +159,8 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
         if (fidelity >= base.Fidelity)
             base.Fix(fidelity);
         
-        var shadowNum =
-            Convert.ToInt32(_closedPipes[(int)Direction.Right]) |
-            Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
-        _shadowSource.X = shadowNum * 22 + Variation * 42;
+        _shadowSource.X = _shadowNum * 22 + Variation * 42;
+        if (!_completelyOpen)
+            _closingsSource.X = (int)_closingsOffset.X + Variation * 36;
     }
 }

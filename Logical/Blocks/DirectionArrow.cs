@@ -12,19 +12,13 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     #region Field
     private readonly Direction _direction;
     private static Texture2D _shadow;
-    private bool[] _closedPipes = new bool[4];
-    private readonly Vector2 _shadowOffset = new(12f, 13f);
+    private static readonly Vector2 ShadowOffset = new(12f, 13f);
     private Rectangle _shadowSource;
-    private static readonly Vector2[] ClosedPipeOffsets =
-    {
-        new( 0f, 10f), // Left
-        new(10f,  0f), // Up
-        new(26f, 10f), // Right
-        new(10f, 26f)  // Down
-    };
 
-    private static Texture2D[] _closedPipeTextures;
-
+    private static Texture2D _pipeClosings;
+    private Vector2 _closingsOffset;
+    private Rectangle _closingsSource;
+    private bool _completelyOpen;
     private SimpleImage _holder;
     private SimpleImage _arrow;
 
@@ -46,12 +40,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
 
     protected override void LoadContent()
     {
-        if (_closedPipeTextures is null)
-        {
-            _closedPipeTextures = new Texture2D[4];
-            for (var i = 0; i < 4; i++)
-                _closedPipeTextures[i] = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosed{(Direction)i}");
-        }
+        _pipeClosings ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosings");
         base.LoadContent();
         _holder = new SimpleImage(Game, "Holder", Position + new Vector2(9f), 8)
             { DefaultRectangle = new Rectangle(0, 1, 18, 17)};
@@ -68,7 +57,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
 
     public void Reload(Block[,] blocks)
     {
-        _closedPipes = new[]
+        var closedPipes = new[]
         {
             Pos.X == 0 || !HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue), // Left
             Pos.Y == 0 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue),  // Up
@@ -76,33 +65,39 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) // Down
         };
 
-        var shadowNum = 
-            Convert.ToInt32(_closedPipes[(int)Direction.Right]) |
-            Convert.ToInt32(_closedPipes[(int)Direction.Down]) << 2;
+        var shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);
         _shadowSource = new Rectangle(0, shadowNum * 18, 18, 18);
+
+        _completelyOpen = closedPipes.All(x => !x);
+        if (_completelyOpen) return;
+        
+        _closingsSource = new Rectangle(
+            closedPipes[(int)Direction.Left] ? 0 : 10,
+            closedPipes[(int)Direction.Up] ? 0 : 10,
+            36 - (closedPipes[(int)Direction.Left] ? 0 : 10) - (closedPipes[(int)Direction.Right] ? 0 : 10),
+            36 - (closedPipes[(int)Direction.Up] ? 0 : 10) - (closedPipes[(int)Direction.Down] ? 0 : 10)
+        );
+        _closingsOffset = _closingsSource.Location.ToVector2();
     }
 
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
         
-        for (var i = 0; i < 4; i++)
-            if (_closedPipes[i])
-                DrawAnotherTexture(_closedPipeTextures[i], ClosedPipeOffsets[i], 1);
+        // Pipe Closings
+        if (!_completelyOpen)
+            DrawAnotherTexture(_pipeClosings, _closingsOffset, 1, _closingsSource);
         
-        DrawAnotherTexture(_shadow, _shadowOffset, 2, _shadowSource);
+        // Shadow
+        DrawAnotherTexture(_shadow, ShadowOffset, 2, _shadowSource);
     }
 
     protected override void UnloadContent()
     {
-        _closedPipeTextures = null;
-        _shadow = null;
+        _pipeClosings = _shadow = null;
         Game.Content.UnloadAssets(new []
         {
-            $"{Configs.GraphicSet}/PipeClosedLeft", 
-            $"{Configs.GraphicSet}/PipeClosedUp", 
-            $"{Configs.GraphicSet}/PipeClosedRight", 
-            $"{Configs.GraphicSet}/PipeClosedDown",
+            $"{Configs.GraphicSet}/PipeClosings",
             "Holder",
             $"{Configs.GraphicSet}/DirectionArrows",
             $"{Configs.GraphicSet}/HolderShadows"
@@ -125,5 +120,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         var variation = Statics.Brandom.Next(3);
         DefaultRectangle = new Rectangle(72, variation * 36, 36, 36);
         _shadowSource.X = 18 * variation;
+        if (!_completelyOpen)
+            _closingsSource.X += 36 * variation;
     }
 }
