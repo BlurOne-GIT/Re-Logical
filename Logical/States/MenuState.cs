@@ -84,7 +84,7 @@ public class MenuState : GameState
                 break;
             case States.BlackOut:
                 if (_timer >= BlackTime)
-                    SwitchState(new LoadingState(Game));
+                    SwitchState(new PreviewState(Game));
                 break;
         }
         if (_state is not States.Standby)

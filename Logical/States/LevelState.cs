@@ -197,7 +197,7 @@ public class LevelState : GameState
                     _stateTimer = 0;
                     if (Spinner.ExplodedSpinners.Count is 0)
                         Leave(_successSfx,
-                            () => SwitchState(new LoadingState(Game, _timeLeft, _ballsLeft, ColorJobsFinished)));
+                            () => SwitchState(new PreviewState(Game, _timeLeft, _ballsLeft, ColorJobsFinished)));
                 }
                 break;
             case States.Leaving:
@@ -285,7 +285,7 @@ public class LevelState : GameState
     private void Lose(string reason)
     {
         InteractionEnabler(false);
-        Leave(_failSfx, () => SwitchState(new LoadingState(Game, reason)));
+        Leave(_failSfx, () => SwitchState(new PreviewState(Game, reason)));
         foreach (var ball in Ball.AllBalls.ToArray())
             ball.Dispose();
     }

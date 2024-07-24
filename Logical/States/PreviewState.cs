@@ -8,7 +8,7 @@ using MmgEngine;
 
 namespace Logical.States;
 
-public class LoadingState : GameState
+public class PreviewState : GameState
 {
     private Action _action;
     private States _state = States.BlackIn;
@@ -25,7 +25,7 @@ public class LoadingState : GameState
     }
     
     #region Constructors
-    public LoadingState(Game game) : base(game) // MAKE IT!
+    public PreviewState(Game game) : base(game) // MAKE IT!
     {
         if (Configs.Lives is 0 || Configs.Stage is 0)
         {
@@ -37,7 +37,7 @@ public class LoadingState : GameState
         _mode = Mode.Start;
     }
     
-    public LoadingState(Game game, string deathReason) : base(game) // YOU FAILED!
+    public PreviewState(Game game, string deathReason) : base(game) // YOU FAILED!
     {
         if (Configs.Lives != 0)
             Configs.Lives--;
@@ -46,7 +46,7 @@ public class LoadingState : GameState
         _displayMessages.Add(deathReason);
     }
     
-    public LoadingState(Game game, int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false) : base(game) // YOU MADE IT!
+    public PreviewState(Game game, int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false) : base(game) // YOU MADE IT!
     {
         _message = "YOU MADE IT!";
         _mode = Mode.Complete;
