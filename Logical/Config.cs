@@ -174,12 +174,16 @@ public static class Configs
         _jsonNode[nameof(SfxVolume)] = Math.Clamp(SfxVolume, 0, 10);
         
         if (_jsonNode[nameof(GraphicSet)] is null)
-            GraphicSet = 0;
-        _jsonNode[nameof(GraphicSet)] = Math.Clamp(GraphicSet, 0, 4);
+            GraphicSet = 1;
+        _jsonNode[nameof(GraphicSet)] = Math.Clamp(GraphicSet, 1, 5);
         
         if (_jsonNode[nameof(StereoSeparation)] is null)
             StereoSeparation = 3;
         _jsonNode[nameof(StereoSeparation)] = Math.Clamp(StereoSeparation, 0, 10);
+        
+        if (_jsonNode[nameof(FidelityLevel)] is null)
+            FidelityLevel = IFixable.FidelityLevel.Faithful;
+        _jsonNode[nameof(FidelityLevel)] = Math.Clamp((int)FidelityLevel, 0, 3);
         
         LoadGame();
     }
