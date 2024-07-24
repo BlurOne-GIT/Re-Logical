@@ -109,7 +109,12 @@ public class PreviewState : GameState
     protected override void LoadContent()
     {
         Statics.ShowCursor = false;
-        Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Loading"), new Vector2(0, 28), 0));
+        Components.Add(new SimpleImage(
+            Game, 
+            Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/Preview"),
+            new Vector2(0, 28),
+            0
+            ));
         Components.Add(new TextComponent(Game, Statics.LightFont, _message, new Vector2(84, 43), 1, anchor: Alignment.TopCenter));
         var pinkBall = Game.Content.Load<Texture2D>("SpinnerBalls");
         for (int i = 0; i < Configs.Lives; i++)
