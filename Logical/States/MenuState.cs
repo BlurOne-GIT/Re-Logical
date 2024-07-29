@@ -41,7 +41,7 @@ public class MenuState : GameState
         MediaPlayer.Play(_choose);
         MediaPlayer.IsRepeating = true;
         
-        _background = new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Titlescreen"), Vector2.Zero, 0);
+        _background = new SimpleImage(Game, $"{Configs.GraphicSet}/UI/MainMenu", new Vector2(39, 28), 0);
         Components.Add(_background);
         
         _defaultPanel = new DefaultPanel(Game);
