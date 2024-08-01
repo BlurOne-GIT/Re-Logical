@@ -110,8 +110,8 @@ public class PreviewState : GameState
     {
         Statics.ShowCursor = false;
         Components.Add(new SimpleImage(
-            Game, 
-            Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/Preview"),
+            Game,
+            $"{Configs.GraphicSet}/UI/Preview",
             new Vector2(0, 28),
             0
             ));

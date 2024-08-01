@@ -84,12 +84,12 @@ public class LevelState : GameState
             Components.Add(gameObject);
         }
 
-        Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/MainPipe"), new Vector2(16, 30), 0));
-        _oTimeBar = new SimpleImage(Game, Game.Content.Load<Texture2D>("MainPipeTime"), new Vector2(304f, 35f), 1);
+        Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipe", new Vector2(16, 30), 0));
+        _oTimeBar = new SimpleImage(Game, "MainPipeTime", new Vector2(304f, 35f), 1);
         Components.Add(_oTimeBar);
         for (int i = 0; i < 8; i++)
             if (_tileset[i, 0].FileValue is 0x01 or 0x16)
-                Components.Add(new SimpleImage(Game, Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/MainPipeOpen"), new Vector2(25 + 36 * i, 41), 1));
+                Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipeOpen", new Vector2(25 + 36 * i, 41), 1));
 
         Spinner.AllDone += Win;
         _oTimeLoopCounter = _oTime;

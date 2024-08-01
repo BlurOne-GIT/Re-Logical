@@ -25,7 +25,7 @@ public class TitleState : GameState
     protected override void LoadContent()
     {
         _titel = Game.Content.Load<Song>("Titel");
-        _background = new SimpleImage(Game, Game.Content.Load<Texture2D>("Credit"), new Vector2(0f, 28f), 0);
+        _background = new SimpleImage(Game, "Credit", new Vector2(0f, 28f), 0);
         Components.Add(_background);
         MediaPlayer.Play(_titel);
         MediaPlayer.MediaStateChanged += EndCaller;
