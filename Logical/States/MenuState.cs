@@ -17,8 +17,7 @@ public class MenuState : GameState
     private Song _choose;
     private SoundEffect _beginSfx;
     private SimpleImage _background;
-    private DefaultPanel _defaultPanel;
-    private SettingsPanel _settingsPanel;
+    private MenuPanel _menuPanel;
     private States _state = States.BlackIn;
     private int _timer;
     private const int BlackTime = 660;
@@ -44,14 +43,37 @@ public class MenuState : GameState
         _background = new SimpleImage(Game, $"{Configs.GraphicSet}/UI/MainMenu", new Vector2(39, 28), 0);
         Components.Add(_background);
         
-        _defaultPanel = new DefaultPanel(Game);
-        Components.Add(_defaultPanel);
-        
-        _settingsPanel = new SettingsPanel(Game);
-        _settingsPanel.Enabled = false;
-        _settingsPanel.Visible = false;
-        Components.Add(_settingsPanel);
+        SwitchMenuPanel(new MainPanel(Game) { Enabled = false });
     }
+    
+    private void SwitchMenuPanel(MenuPanel newGameState)
+    {
+        if (_menuPanel is not null)
+        {
+            Components.Remove(_menuPanel);
+            _menuPanel.OnStateSwitched -= OnMenuPanelSwitched;
+            if (_menuPanel is MainPanel mainPanel)
+            {
+                mainPanel.StartButton.LeftClicked -= StartGame;
+                mainPanel.GraphicsSetButton.LeftClicked -= GraphicSet;
+                mainPanel.GraphicsSetButton.RightClicked -= GraphicSet;
+            }
+            _menuPanel.Dispose();
+        }
+
+        _menuPanel = newGameState;
+
+        Components.Add(_menuPanel);
+
+        _menuPanel.OnStateSwitched += OnMenuPanelSwitched;
+        
+        if (_menuPanel is not MainPanel mainPanel2) return; // Having to add a 2 to this just makes no sense.
+        mainPanel2.StartButton.LeftClicked += StartGame;
+        mainPanel2.GraphicsSetButton.LeftClicked += GraphicSet;
+        mainPanel2.GraphicsSetButton.RightClicked += GraphicSet;
+    }
+
+    private void OnMenuPanelSwitched(object s, GameState e) => SwitchMenuPanel(e as MenuPanel);
 
     public override void Update(GameTime gameTime)
     {
@@ -70,7 +92,7 @@ public class MenuState : GameState
                 {
                     _state = States.Standby;
                     _timer = 0;
-                    ButtonSubscriber();
+                    _menuPanel.Enabled = true;
                 }
                 break;
             case States.FadeOut:
@@ -118,46 +140,31 @@ public class MenuState : GameState
 
     protected override void Dispose(bool disposing)
     {
-        _defaultPanel.SettingsButton.LeftClicked -= Settings;
-        _defaultPanel.StartButton.LeftClicked -= StartGame;
-        _settingsPanel.BackButton.LeftClicked -= Back;
-        _defaultPanel.Dispose();
-        _settingsPanel.Dispose();
+        if (_menuPanel is MainPanel mainPanel)
+        {
+            mainPanel.StartButton.LeftClicked -= StartGame;
+            mainPanel.GraphicsSetButton.LeftClicked -= GraphicSet;
+            mainPanel.GraphicsSetButton.RightClicked -= GraphicSet;
+        }
+        _menuPanel.OnStateSwitched -= OnMenuPanelSwitched;
         base.Dispose(disposing);
     }
     #endregion
 
     #region Methods
-    private void ButtonSubscriber()
-    {
-        _defaultPanel.SettingsButton.LeftClicked += Settings;
-        _defaultPanel.StartButton.LeftClicked += StartGame;
-        _settingsPanel.BackButton.LeftClicked += Back;
-    }
-    
-    private void Settings(object s, EventArgs e)
-    {
-        _defaultPanel.Enabled = false;
-        _defaultPanel.Visible = false;
-        _settingsPanel.Enabled = true;
-        _settingsPanel.Visible = true;
-    }
-    
     private void StartGame(object s, EventArgs e)
     {
         if (Configs.Stage is 0)
             Configs.Stage = 1;
         MediaPlayer.Stop();
         _state = States.FadeOut;
-        _defaultPanel.Enabled = false;
+        _menuPanel.Enabled = false;
     }
-    
-    private void Back(object s, EventArgs e)
+
+    private void GraphicSet(object s, EventArgs e)
     {
-        _settingsPanel.Enabled = false;
-        _settingsPanel.Visible = false;
-        _defaultPanel.Enabled = true;
-        _defaultPanel.Visible = true;
+        Game.Content.UnloadAsset($"{Configs.GraphicSet}/UI/MainMenu");
+        _background.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/MainMenu");
     }
     #endregion
 }
