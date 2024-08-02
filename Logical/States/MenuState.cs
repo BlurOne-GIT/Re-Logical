@@ -11,13 +11,18 @@ namespace Logical.States;
 
 public class MenuState : GameState
 {
-    public MenuState(Game game) : base(game) => Statics.ShowCursor = true;
+    public MenuState(Game game) : base(game)
+    {
+        Statics.ShowCursor = true;
+        _menuManager = new GameStateManager<MenuPanel>(Components);
+        _menuManager.Switched += MenuManagerOnSwitched;
+    }
 
     #region Fields
     private Song _choose;
     private SoundEffect _beginSfx;
     private SimpleImage _background;
-    private MenuPanel _menuPanel;
+    private readonly GameStateManager<MenuPanel> _menuManager;
     private States _state = States.BlackIn;
     private int _timer;
     private const int BlackTime = 660;
@@ -43,37 +48,24 @@ public class MenuState : GameState
         _background = new SimpleImage(Game, $"{Configs.GraphicSet}/UI/MainMenu", new Vector2(39, 28), 0);
         Components.Add(_background);
         
-        SwitchMenuPanel(new MainPanel(Game) { Enabled = false });
+        _menuManager.GameState = new MainPanel(Game) { Enabled = false };
     }
     
-    private void SwitchMenuPanel(MenuPanel newGameState)
+    private void MenuManagerOnSwitched(object sender, SwitchingGameStateEventArgs<MenuPanel> e)
     {
-        if (_menuPanel is not null)
+        if (e.OldGameState is MainPanel oldMainPanel)
         {
-            Components.Remove(_menuPanel);
-            _menuPanel.OnStateSwitched -= OnMenuPanelSwitched;
-            if (_menuPanel is MainPanel mainPanel)
-            {
-                mainPanel.StartButton.LeftClicked -= StartGame;
-                mainPanel.GraphicsSetButton.LeftClicked -= GraphicSet;
-                mainPanel.GraphicsSetButton.RightClicked -= GraphicSet;
-            }
-            _menuPanel.Dispose();
+            oldMainPanel.StartButton.LeftClicked -= StartGame;
+            oldMainPanel.GraphicsSetButton.LeftClicked -= GraphicSet;
+            oldMainPanel.GraphicsSetButton.RightClicked -= GraphicSet;
         }
-
-        _menuPanel = newGameState;
-
-        Components.Add(_menuPanel);
-
-        _menuPanel.OnStateSwitched += OnMenuPanelSwitched;
-        
-        if (_menuPanel is not MainPanel mainPanel2) return; // Having to add a 2 to this just makes no sense.
-        mainPanel2.StartButton.LeftClicked += StartGame;
-        mainPanel2.GraphicsSetButton.LeftClicked += GraphicSet;
-        mainPanel2.GraphicsSetButton.RightClicked += GraphicSet;
+        else if (e.NewGameState is MainPanel newMainPanel)
+        {
+            newMainPanel.StartButton.LeftClicked += StartGame;
+            newMainPanel.GraphicsSetButton.LeftClicked += GraphicSet;
+            newMainPanel.GraphicsSetButton.RightClicked += GraphicSet;
+        }
     }
-
-    private void OnMenuPanelSwitched(object s, GameState e) => SwitchMenuPanel(e as MenuPanel);
 
     public override void Update(GameTime gameTime)
     {
@@ -92,7 +84,7 @@ public class MenuState : GameState
                 {
                     _state = States.Standby;
                     _timer = 0;
-                    _menuPanel.Enabled = true;
+                    _menuManager.GameState!.Enabled = true;
                 }
                 break;
             case States.FadeOut:
@@ -121,32 +113,19 @@ public class MenuState : GameState
 
     protected override void UnloadContent()
     {
-        Game.Content.UnloadAsset("Choose Music");
         //Game.Content.UnloadAsset("Sfx/1/Success"); // DEBUG //
-        Game.Content.UnloadAsset("Sfx/Button");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/Titlescreen");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/OwnSet");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/Password");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/About");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/Settings");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/GraphicSet");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/StartGame");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/Scale");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/Fullscreen");
-        Game.Content.UnloadAsset("Plus");
-        Game.Content.UnloadAsset("Minus");
-        Game.Content.UnloadAsset($"{Configs.GraphicSet}/Back");
+        Game.Content.UnloadAssets(new []
+        {
+            "Choose Music",
+            "Sfx/Button",
+            $"{Configs.GraphicSet}/UI/MainMenu"
+        });
     }
 
     protected override void Dispose(bool disposing)
     {
-        if (_menuPanel is MainPanel mainPanel)
-        {
-            mainPanel.StartButton.LeftClicked -= StartGame;
-            mainPanel.GraphicsSetButton.LeftClicked -= GraphicSet;
-            mainPanel.GraphicsSetButton.RightClicked -= GraphicSet;
-        }
-        _menuPanel.OnStateSwitched -= OnMenuPanelSwitched;
+        _menuManager.GameState = null;
+        _menuManager.Switched -= MenuManagerOnSwitched;
         base.Dispose(disposing);
     }
     #endregion
@@ -158,7 +137,7 @@ public class MenuState : GameState
             Configs.Stage = 1;
         MediaPlayer.Stop();
         _state = States.FadeOut;
-        _menuPanel.Enabled = false;
+        _menuManager.GameState!.Enabled = false;
     }
 
     private void GraphicSet(object s, EventArgs e)

@@ -42,7 +42,8 @@ public class LogicalGame : EngineGame
         Configs.ResolutionChanged += ReloadScale;
         Configs.FullscreenChanged += Fullscreen;
         Configs.MusicVolumeChanged += UpdateVolume;
-        SwitchGameState(new TitleState(this));
+        GameStateManager.Switched += OnGameStateSwitch;
+        GameStateManager.GameState = new TitleState(this);
         base.Initialize();
     }
 
@@ -68,14 +69,12 @@ public class LogicalGame : EngineGame
         #if DEBUG
         _version = new TextComponent(this, Statics.LightFont, _versionString.ToUpper().Replace('.', '_'), new Vector2(0, 248), 1);
         #endif
-        
     }
 
-    protected override void SwitchGameState(GameState newGameState)
+    private static void OnGameStateSwitch(object s, SwitchingGameStateEventArgs<GameState> e)
     {
-        if (CurrentGameState is not null or TitleState)
+        if (e.OldGameState is not null or TitleState)
             Configs.SaveFile();
-        base.SwitchGameState(newGameState);
     }
 
     protected override void Update(GameTime gameTime)
