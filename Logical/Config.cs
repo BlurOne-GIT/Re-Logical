@@ -52,7 +52,7 @@ public static class Configs
         set
         {
             if (Fullscreen) return;
-            _jsonNode[nameof(Scale)] = value > MaxScale ? 1 : value < 1 ? MaxScale : value;
+            _jsonNode[nameof(Scale)] = Math.Clamp(1, MaxScale, value);
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
         }
     }
@@ -176,7 +176,7 @@ public static class Configs
             Fullscreen = false;
         
         if (_jsonNode[nameof(Scale)] is null)
-            Scale = 2;
+            Scale = MaxScale / 2;
         _jsonNode[nameof(Scale)] = Math.Clamp(Scale, 1, MaxScale);
         
         if (_jsonNode[nameof(MusicVolume)] is null)
