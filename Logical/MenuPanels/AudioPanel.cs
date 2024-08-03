@@ -19,20 +19,20 @@ public class AudioPanel : MenuPanel
     
     public AudioPanel(Game game) : base(game)
     {
-        Components.Add(_bgmVolUpButton = new Button(Game, new Rectangle(108, 132, 10, 10)));
-        Components.Add(_bgmVolDownButton = new Button(Game, new Rectangle(134, 132, 10, 10)));
+        Components.Add(_bgmVolUpButton = new Button(Game, new Rectangle(161, 89, 10, 10)));
+        Components.Add(_bgmVolDownButton = new Button(Game, new Rectangle(187, 89, 10, 10)));
         Components.Add(
-            _bgmVol = new TextComponent(Game, Statics.BoldFont, $"{Configs.MusicVolume:00}", new Vector2(118, 133), 3)
+            _bgmVol = new TextComponent(Game, Statics.BoldFont, $"{Configs.MusicVolume:00}", new Vector2(171, 90), 3)
         );
-        Components.Add(_sfxVolUpButton = new Button(Game, new Rectangle(108, 155, 10, 10)));
-        Components.Add(_sfxVolDownButton = new Button(Game, new Rectangle(134, 155, 10, 10)));
+        Components.Add(_sfxVolUpButton = new Button(Game, new Rectangle(161, 111, 10, 10)));
+        Components.Add(_sfxVolDownButton = new Button(Game, new Rectangle(187, 111, 10, 10)));
         Components.Add(
-            _sfxVol = new TextComponent(Game, Statics.BoldFont, $"{Configs.SfxVolume:00}", new Vector2(118, 156), 3)
+            _sfxVol = new TextComponent(Game, Statics.BoldFont, $"{Configs.SfxVolume:00}", new Vector2(171, 112), 3)
         );
-        Components.Add(_stereoSplitUpButton = new Button(Game, new Rectangle(108, 179, 10, 10)));
-        Components.Add(_stereoSplitDownButton = new Button(Game, new Rectangle(142, 179, 10, 10)));
+        Components.Add(_stereoSplitUpButton = new Button(Game, new Rectangle(157, 139, 10, 10)));
+        Components.Add(_stereoSplitDownButton = new Button(Game, new Rectangle(191, 139, 10, 10)));
         Components.Add(
-            _stereoSplit = new TextComponent(Game, Statics.BoldFont, $"{Configs.StereoSeparation:00}0", new Vector2(118, 180), 3)
+            _stereoSplit = new TextComponent(Game, Statics.BoldFont, $"{Configs.StereoSeparation:00}0", new Vector2(167, 140), 3)
         );
         Components.Add(_backButton = new Button(Game, new Rectangle(108, 201, 103, 16)));
 

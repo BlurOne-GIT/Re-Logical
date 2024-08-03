@@ -70,6 +70,7 @@ public class MainPanel : MenuPanel
     private void About(object s, EventArgs e)
     {
         throw new NotImplementedException("Missing about panel.");
+        SwitchState(new AboutPanel(Game));
     }
     
     private void Settings(object s, EventArgs e) => SwitchState(new SettingsPanel(Game));
