@@ -28,11 +28,7 @@ public abstract class MenuPanel : GameState
 
     protected override void UnloadContent()
     {
-        Game.Content.UnloadAssets(new []
-        {
-            "Sfx/Button",
-            $"{Configs.GraphicSet}/UI/{GetType().Name}"
-        });
+        Game.Content.UnloadAsset($"{Configs.GraphicSet}/UI/{GetType().Name}");
         base.UnloadContent();
     }
 
