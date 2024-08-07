@@ -29,10 +29,10 @@ public class AudioPanel : MenuPanel
         Components.Add(
             _sfxVol = new TextComponent(Game, Statics.BoldFont, $"{Configs.SfxVolume:00}", new Vector2(171, 112), 3)
         );
-        Components.Add(_stereoSplitUpButton = new Button(Game, new Rectangle(157, 139, 10, 10)));
-        Components.Add(_stereoSplitDownButton = new Button(Game, new Rectangle(191, 139, 10, 10)));
+        Components.Add(_stereoSplitUpButton = new Button(Game, new Rectangle(157, 134, 10, 10)));
+        Components.Add(_stereoSplitDownButton = new Button(Game, new Rectangle(191, 134, 10, 10)));
         Components.Add(
-            _stereoSplit = new TextComponent(Game, Statics.BoldFont, $"{Configs.StereoSeparation:00}0", new Vector2(167, 140), 3)
+            _stereoSplit = new TextComponent(Game, Statics.BoldFont, $"{Configs.StereoSeparation:00}0", new Vector2(167, 135), 3)
         );
         Components.Add(_backButton = new Button(Game, new Rectangle(108, 201, 103, 16)));
 

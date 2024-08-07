@@ -14,9 +14,9 @@ public class FixesPanel : MenuPanel
     
     public FixesPanel(Game game) : base(game)
     {
-        Components.Add(_fidelityLevelButton = new Button(Game, new Rectangle(108, 109, 103, 16)));
+        Components.Add(_fidelityLevelButton = new Button(Game, new Rectangle(108, 87, 103, 16)));
         Components.Add(_fidelityLevelImage =
-            new SimpleImage(Game, $"{Configs.GraphicSet}/UI/FidelityLevels", new Vector2(108, 109), 3)
+            new SimpleImage(Game, $"{Configs.GraphicSet}/UI/FidelityLevels", new Vector2(108, 87), 3)
             { DefaultRectangle = FidelityLevelRectangle }
         );
         Components.Add(_backButton = new Button(Game, new Rectangle(108, 201, 103, 16)));

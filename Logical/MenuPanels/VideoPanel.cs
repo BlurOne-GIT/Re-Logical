@@ -18,9 +18,9 @@ public class VideoPanel : MenuPanel
     
     public VideoPanel(Game game) : base(game)
     {
-        Components.Add(_windowModeButton = new Button(Game, new Rectangle(108, 109, 103, 16)));
+        Components.Add(_windowModeButton = new Button(Game, new Rectangle(108, 87, 103, 16)));
         Components.Add(_windowModeImage =
-            new SimpleImage(Game, $"{Configs.GraphicSet}/UI/WindowMode", new Vector2(108, 109), 3)
+            new SimpleImage(Game, $"{Configs.GraphicSet}/UI/WindowMode", new Vector2(108, 87), 3)
             { DefaultRectangle = WindowModeRectangle }
         );
         Components.Add(_scaleUpButton = new Button(Game, new Rectangle(158, 111,10, 10)));
