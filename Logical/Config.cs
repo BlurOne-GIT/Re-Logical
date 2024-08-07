@@ -52,7 +52,7 @@ public static class Configs
         set
         {
             if (Fullscreen) return;
-            _jsonNode[nameof(Scale)] = Math.Clamp(1, MaxScale, value);
+            _jsonNode[nameof(Scale)] = Math.Clamp(value, 1, MaxScale);
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
         }
     }
@@ -73,7 +73,7 @@ public static class Configs
         get => _jsonNode[nameof(MusicVolume)]!.GetValue<int>();
         set
         {
-            _jsonNode[nameof(MusicVolume)] = Math.Clamp(0, 10, value);
+            _jsonNode[nameof(MusicVolume)] = Math.Clamp(value, 0, 10);
             MusicVolumeChanged?.Invoke(null, EventArgs.Empty);
         }
     }
@@ -83,7 +83,7 @@ public static class Configs
         get => _jsonNode[nameof(SfxVolume)]!.GetValue<int>();
         set
         {
-            _jsonNode[nameof(SfxVolume)] = Math.Clamp(0, 10, value);
+            _jsonNode[nameof(SfxVolume)] = Math.Clamp(value, 0, 10);
             SfxVolumeChaged?.Invoke(null, EventArgs.Empty);
         }
     }
@@ -103,7 +103,7 @@ public static class Configs
     public static int StereoSeparation
     {
         get => _jsonNode[nameof(StereoSeparation)]!.GetValue<int>();
-        set => _jsonNode[nameof(StereoSeparation)] = Math.Clamp(0, 10, value);
+        set => _jsonNode[nameof(StereoSeparation)] = Math.Clamp(value, 0, 10);
     }
     
     public static IFixable.FidelityLevel FidelityLevel
