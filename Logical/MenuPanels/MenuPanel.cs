@@ -47,7 +47,7 @@ public abstract class MenuPanel : GameState
     protected override void Dispose(bool disposing)
     {
         Components.ComponentAdded -= OnButtonAdded;
-        Components.ComponentRemoved -= OnButtonRemoved;
         base.Dispose(disposing);
+        Components.ComponentRemoved -= OnButtonRemoved;
     }
 }
