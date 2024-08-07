@@ -27,6 +27,7 @@ public class TitleState : GameState
         _titel = Game.Content.Load<Song>("Titel");
         _background = new SimpleImage(Game, "Credit", new Vector2(0f, 28f), 0);
         Components.Add(_background);
+        Configs.MusicVolume = Configs.MusicVolume;
         MediaPlayer.Play(_titel);
         MediaPlayer.MediaStateChanged += EndCaller;
     }
