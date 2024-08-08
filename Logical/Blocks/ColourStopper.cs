@@ -14,7 +14,7 @@ public class ColourStopper : Pipe, IOverlayable
     private static Texture2D _shadow;
     private static Texture2D _balls;
     private static readonly Vector2 BallOffset = new(14f);
-    private static readonly Vector2 ShadowOffset = new(10f, 11f);
+    private static readonly Vector2 ShadowOffset = new(10f, 19f);
     private readonly Rectangle _ballSource;
     private Rectangle _shadowSource;
     #endregion
