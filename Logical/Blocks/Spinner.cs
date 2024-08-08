@@ -122,7 +122,7 @@ public class Spinner : Block, IReloadable, IFixable
         _spinningTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerSpin");
         _explodingTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerExplode");
         _ballsTexture ??= Game.Content.Load<Texture2D>("SpinnerBalls");
-        _spinningTexture ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosings");
+        _spinnerClosings ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/SpinnerClosings");
         _popInSfx ??= Game.Content.Load<SoundEffect>("Sfx/PopIn");
         _popOutSfx ??= Game.Content.Load<SoundEffect>("Sfx/PopOut");
         _spinSfx ??= Game.Content.Load<SoundEffect>("Sfx/Spin");
@@ -144,9 +144,6 @@ public class Spinner : Block, IReloadable, IFixable
         {
             _slotButtons[0] = new Button(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
             _slotButtons[0].LeftClicked += PopOut;
-        }
-        else
-        {
             _closingsOffset.X = _closingsSource.X = 10;
             _closingsSource.Width = 26;
         }
@@ -158,9 +155,6 @@ public class Spinner : Block, IReloadable, IFixable
                 _slotButtons[1] = new Button(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10))) {Enabled = false};
                 _slotButtons[1].LeftClicked += PopOut;
             }
-        }
-        else
-        {
             _closingsOffset.Y = _closingsSource.Y = 10;
             _closingsSource.Height = 26;
         }
@@ -169,9 +163,7 @@ public class Spinner : Block, IReloadable, IFixable
         {
             _slotButtons[2] = new Button(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
             _slotButtons[2].LeftClicked += PopOut;
-        }
-        else
-        {
+            
             _closingsSource.Width -= 10;
             if (_closingsSource.Width is 16 && _closingsSource.Y is 10)
             {
@@ -185,20 +177,19 @@ public class Spinner : Block, IReloadable, IFixable
             if (blocks[Pos.X, Pos.Y + 1].FileValue is 0x16) return;
             _slotButtons[3] = new Button(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10))) {Enabled = false};
             _slotButtons[3].LeftClicked += PopOut;
-            return;
+            
+            if (_closingsSource.Height is 4)
+            {
+                _closingsSource = default;
+                return;
+            }
+            
+            _closingsSource.Height -= 10;
+            if (_closingsSource.Height is not 16 || _closingsSource.X is not 10) return;
+            
+            _closingsOffset.X = _closingsSource.X = 32;
+            _closingsSource.Width = 4;
         }
-
-        if (_closingsSource.Height is 4)
-        {
-            _closingsSource = default;
-            return;
-        }
-        
-        _closingsSource.Height -= 10;
-        if (_closingsSource.Height is not 16 || _closingsSource.X is not 10) return;
-        
-        _closingsOffset.X = _closingsSource.X = 32;
-        _closingsSource.Width = 4;
     }
 
     private void Spin(object s, EventArgs e)
