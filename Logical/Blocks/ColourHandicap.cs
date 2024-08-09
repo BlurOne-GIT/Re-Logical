@@ -41,7 +41,7 @@ public class ColourHandicap : Block, IFixable
         
         SteveJobs = this;
         
-        DefaultRectangle = new Rectangle(0, 0, 36, 36);
+        DefaultSource = new Rectangle(0, 0, 36, 36);
     }
 
     protected override void LoadContent()
@@ -88,7 +88,7 @@ public class ColourHandicap : Block, IFixable
 
     public void Fix(IFixable.FidelityLevel fidelity)
     {
-        var rectangle = DefaultRectangle!.Value;
+        var rectangle = DefaultSource!.Value;
         if (Configs.GraphicSet >= 4)
             rectangle.Y = 36;
 
@@ -98,6 +98,6 @@ public class ColourHandicap : Block, IFixable
             _ballOffsets = FixedBallOffsets;
         }
 
-        DefaultRectangle = rectangle;
+        DefaultSource = rectangle;
     }
 }

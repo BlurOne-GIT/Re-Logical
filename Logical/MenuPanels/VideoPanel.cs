@@ -21,7 +21,7 @@ public class VideoPanel : MenuPanel
         Components.Add(_windowModeButton = new Button(Game, new Rectangle(108, 87, 103, 16)));
         Components.Add(_windowModeImage =
             new SimpleImage(Game, $"{Configs.GraphicSet}/UI/WindowMode", new Vector2(108, 87), 3)
-            { DefaultRectangle = WindowModeRectangle }
+            { DefaultSource = WindowModeRectangle }
         );
         Components.Add(_scaleUpButton = new Button(Game, new Rectangle(158, 111,10, 10)));
         Components.Add(_scaleText = new TextComponent(Game, Statics.BoldFont, $"{Configs.Scale:00}", new Vector2(168, 112), 3));
@@ -41,7 +41,7 @@ public class VideoPanel : MenuPanel
     private void Fullscreen(object s, EventArgs e)
     {
         Configs.Fullscreen ^= true;
-        _windowModeImage.DefaultRectangle = WindowModeRectangle;
+        _windowModeImage.DefaultSource = WindowModeRectangle;
     }
     
     private void Back(object s, EventArgs e) => SwitchState(new SettingsPanel(Game));

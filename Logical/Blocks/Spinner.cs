@@ -107,14 +107,14 @@ public class Spinner : Block, IReloadable, IFixable
     public Spinner(Game game, Point arrayPosition, byte xx, byte yy) 
         : base(game, "Spinner", arrayPosition, xx, yy)
     {
-        DefaultRectangle = new Rectangle(0, 0, 36, 36);
+        DefaultSource = new Rectangle(0, 0, 36, 36);
         _spinButton = new Button(game, new Rectangle(Position.ToPoint(), new Point(36)));
         _spinButton.RightClicked += Spin;
         if (Pos.Y is 0)
             _registers[(int)Direction.Up] = new Vector2(13f, -13f);
         ExplodedSpinners.Capacity++;
         if (Configs.GraphicSet is 1)
-            DefaultRectangle = new Rectangle(0, 0, 36, 36);
+            DefaultSource = new Rectangle(0, 0, 36, 36);
     }
 
     protected override void LoadContent()
@@ -297,7 +297,7 @@ public class Spinner : Block, IReloadable, IFixable
                 button.Enabled = false;
         // Intentional break for Faithful parity
         if (Configs.GraphicSet is 1)
-            DefaultRectangle = new Rectangle(DefaultRectangle!.Value.X, 36, 36, 36);
+            DefaultSource = new Rectangle(DefaultSource!.Value.X, 36, 36, 36);
         _explodeAnimation.Start();
         _hasExploded = true;
         for (int i = 0; i < 4; i++)
@@ -381,7 +381,7 @@ public class Spinner : Block, IReloadable, IFixable
     public void Fix(IFixable.FidelityLevel fidelity)
     {
         if (Configs.GraphicSet is 1)
-            DefaultRectangle = new Rectangle(36, 0, 36, 36);
+            DefaultSource = new Rectangle(36, 0, 36, 36);
         for (int i = 0; i < _explodeAnimation.Length; ++i)
             _explodeAnimation.Frames[i].Y = 29;
         if (fidelity is IFixable.FidelityLevel.Remastered)

@@ -55,7 +55,7 @@ public class Hourglass : Block, IFixable
         BruceCook = this;
         
         if (Configs.GraphicSet is 1)
-            DefaultRectangle = new Rectangle(0, 0, 36, 36);
+            DefaultSource = new Rectangle(0, 0, 36, 36);
     }
 
     protected override void LoadContent()
@@ -162,7 +162,7 @@ public class Hourglass : Block, IFixable
         ++_sandStreamSource.Height;
 
         if (Configs.GraphicSet is 1 && Fidelity >= IFixable.FidelityLevel.Refined)
-            DefaultRectangle = new Rectangle(36, 0, 36, 36);
+            DefaultSource = new Rectangle(36, 0, 36, 36);
     }
     
     protected override void UnloadContent()

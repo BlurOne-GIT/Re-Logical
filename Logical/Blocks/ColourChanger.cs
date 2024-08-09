@@ -64,6 +64,6 @@ public class ColourChanger : Pipe, IOverlayable
     public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] 
     {
         new SimpleImage(Game, "ColourChangers", Position + _indicatorOffset, 9)
-        { DefaultRectangle = _indicatorSource }
+        { DefaultSource = _indicatorSource }
     };
 }

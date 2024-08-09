@@ -18,7 +18,7 @@ public class Dropper : Block
     public Dropper(Game game, Point arrayPosition, byte xx, byte yy)
         : base(game, "PipeVertical", arrayPosition, xx, yy)
     {
-        DefaultRectangle = new Rectangle(0, 0, 36, 36);
+        DefaultSource = new Rectangle(0, 0, 36, 36);
     }
 
     protected override void LoadContent()

@@ -36,7 +36,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     public Teleporter(Game game, Point arrayPosition, byte xx, byte yy) : base(game, arrayPosition, xx, yy)
     {
         _overlay = new SimpleImage(game, "Teleporters", Position + new Vector2(7, 7), 9)
-            { DefaultRectangle = new Rectangle((xx - 0x08) * 22, 0, 22, 22)};
+            { DefaultSource = new Rectangle((xx - 0x08) * 22, 0, 22, 22)};
         
         if (xx is not 0x09)
             if (FirstHorizontalTp is null)
@@ -154,7 +154,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     public override void Fix(IFixable.FidelityLevel fidelity)
     {
         if (FileValue is 0x0A)
-            _overlay.DefaultRectangle = new Rectangle(66, 0, 22, 22);
+            _overlay.DefaultSource = new Rectangle(66, 0, 22, 22);
         
         if (fidelity >= base.Fidelity)
             base.Fix(fidelity);

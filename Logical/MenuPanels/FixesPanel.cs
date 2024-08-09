@@ -17,7 +17,7 @@ public class FixesPanel : MenuPanel
         Components.Add(_fidelityLevelButton = new Button(Game, new Rectangle(108, 87, 103, 16)));
         Components.Add(_fidelityLevelImage =
             new SimpleImage(Game, $"{Configs.GraphicSet}/UI/FidelityLevels", new Vector2(108, 87), 3)
-            { DefaultRectangle = FidelityLevelRectangle }
+            { DefaultSource = FidelityLevelRectangle }
         );
         Components.Add(_backButton = new Button(Game, new Rectangle(108, 201, 103, 16)));
         
@@ -35,7 +35,7 @@ public class FixesPanel : MenuPanel
         else
             ++Configs.FidelityLevel;
         
-        _fidelityLevelImage.DefaultRectangle = FidelityLevelRectangle;
+        _fidelityLevelImage.DefaultSource = FidelityLevelRectangle;
     }
     
     protected override void Dispose(bool disposing)

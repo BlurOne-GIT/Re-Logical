@@ -19,7 +19,7 @@ public class Pipe : Block, IFixable
         if (xx % 3 is not (int)Orientation.Cross)
             Variation = Statics.Brandom.Next(2);
 
-        DefaultRectangle = DefaultRectangleFormula;
+        DefaultSource = DefaultRectangleFormula;
     }
 
     public virtual IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Remastered;
@@ -27,6 +27,6 @@ public class Pipe : Block, IFixable
     public virtual void Fix(IFixable.FidelityLevel _)
     {
         Variation = Statics.Brandom.Next(3);
-        DefaultRectangle = DefaultRectangleFormula;
+        DefaultSource = DefaultRectangleFormula;
     }
 }
