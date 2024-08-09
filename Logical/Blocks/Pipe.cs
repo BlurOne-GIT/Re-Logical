@@ -6,6 +6,7 @@ namespace Logical.Blocks;
 public class Pipe : Block, IFixable
 {
     protected int Variation { get; private set; }
+    private Rectangle DefaultRectangleFormula => new(Variation * 36, FileValue * 36, 36, 36);
     public enum Orientation
     {
         Vertical,
@@ -17,8 +18,8 @@ public class Pipe : Block, IFixable
     {
         if (xx % 3 is not (int)Orientation.Cross)
             Variation = Statics.Brandom.Next(2);
-        
-        DefaultRectangle = new Rectangle(Variation * 36, xx * 36, 36, 36);
+
+        DefaultRectangle = DefaultRectangleFormula;
     }
 
     public virtual IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Remastered;
@@ -26,6 +27,6 @@ public class Pipe : Block, IFixable
     public virtual void Fix(IFixable.FidelityLevel _)
     {
         Variation = Statics.Brandom.Next(3);
-        DefaultRectangle = new Rectangle(Variation * 36, FileValue * 33, 36, 36);
+        DefaultRectangle = DefaultRectangleFormula;
     }
 }
