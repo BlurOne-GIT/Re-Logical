@@ -32,7 +32,7 @@ public class LogicalGame : EngineGame
             .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute),
                 false)[0]).InformationalVersion;
 
-        _versionString = "v" + fullInfoVersion.Split('+')[0];// + "+" + fullInfoVersion.Split('+')[1][..7];
+        _versionString = "v" + fullInfoVersion.Split('+')[0];
         _commitString = fullInfoVersion.Split('+')[1][..7];
         #endif
         
@@ -80,11 +80,11 @@ public class LogicalGame : EngineGame
         Statics.LoadFonts(Content);
         #if DEBUG
         Components.Add(_version =
-            new TextComponent(this, Statics.TopazFont, _versionString, new Vector2(0, 248), 1)
+            new TextComponent(this, Statics.TopazFont, _versionString, new Vector2(0, 256), 1, Alignment.BottomLeft)
                 { Scale = new Vector2(1f, .5f) }
         );
         Components.Add(_commit =
-            new TextComponent(this, Statics.TopazFont, _commitString, new Vector2(320, 248), 1, Alignment.TopRight)
+            new TextComponent(this, Statics.TopazFont, _commitString, new Vector2(320, 256), 1, Alignment.BottomRight)
                 { Scale = new Vector2(1f, .5f) }
         );
         #endif
