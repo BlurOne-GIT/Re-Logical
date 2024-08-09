@@ -26,7 +26,7 @@ public static class Statics
     public static SpriteFont TextureFont { get; private set; }
     public static SpriteFont TopazFont => Configs.FidelityLevel is IFixable.FidelityLevel.Remastered ? _topazPlus : _topaz;
     public static Color TopazColor => TopazColors[Configs.GraphicSet-1];
-    public static SpriteFont LightFont { get; private set; }
+    public static SpriteFont DisplayFont { get; private set; }
     public static bool ShowCursor { get; set; }
     public static float BackdropOpacity { get; set; }
     public static Random Brandom = new();
@@ -45,18 +45,18 @@ public static class Statics
     // TODO: after exporting the complete font sprite, turn into an actual font to use along a local spritefont description
     public static void LoadFonts(ContentManager content)
     {
-        var fontTexture = content.Load<Texture2D>("Fonts");
+        var fontTexture = content.Load<Texture2D>("Fonts/DisplayFont");
         var kernings = new List<Vector3>();
         var glyphRectangles = new List<Rectangle>();
         var fontRectangles = new List<Rectangle>();
-        var characters = content.Load<List<char>>("LightFontCharacters");
+        var characters = content.Load<List<char>>("Fonts/DisplayFontCharset");
         for (int i = 0; i < characters.Count; i++)
         {
             glyphRectangles.Add(new Rectangle(i*8, 0, 8, 7));
             fontRectangles.Add(new Rectangle(0, 0, 8, 7));
             kernings.Add(new Vector3(0, 8, 0));
         }
-        LightFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
+        DisplayFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
         
         _topaz = content.Load<SpriteFont>("Fonts/Topaz");
         for (int i = 0; i < _topaz.Glyphs.Length; i++)

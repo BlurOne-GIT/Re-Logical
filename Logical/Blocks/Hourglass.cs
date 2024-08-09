@@ -141,7 +141,7 @@ public class Hourglass : Block, IFixable
         
         #if DEBUG
         spriteBatch.DrawString(
-            Statics.LightFont,
+            Statics.DisplayFont,
             $"{_cyclesLeft} * {_currentCycle.Minutes}:{_currentCycle.Seconds:00}",
             Position - new Vector2(2f, 0f),
             Color,

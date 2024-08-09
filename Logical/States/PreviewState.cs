@@ -115,20 +115,20 @@ public class PreviewState : GameState
             new Vector2(0, 28),
             0
             ));
-        Components.Add(new TextComponent(Game, Statics.LightFont, _message, new Vector2(84, 43), 1, anchor: Alignment.TopCenter));
+        Components.Add(new TextComponent(Game, Statics.DisplayFont, _message, new Vector2(84, 43), 1, anchor: Alignment.TopCenter));
         var pinkBall = Game.Content.Load<Texture2D>("SpinnerBalls");
         for (int i = 0; i < Configs.Lives; i++)
             Components.Add(new SimpleImage(Game, pinkBall, new Vector2(72 + 12 * i, 82), 1) { DefaultSource = new Rectangle(0, 0, 8, 8) });
-        Components.Add(new TextComponent(Game, Statics.LightFont, $"{Configs.Stage:00} {/*Statics.LevelPassword*/ new Lexer(Game).GetLevelName(Configs.Stage)}", new Vector2(16, 123), 1));
+        Components.Add(new TextComponent(Game, Statics.DisplayFont, $"{Configs.Stage:00} {/*Statics.LevelPassword*/ new Lexer(Game).GetLevelName(Configs.Stage)}", new Vector2(16, 123), 1));
         if (_mode is not Mode.Start)
         {
             // TODO: Implement changingDisplay with displayMessages
-            _changingDisplay = new TextComponent(Game, Statics.LightFont, _displayMessages[0], new Vector2(24, 163), 1);
+            _changingDisplay = new TextComponent(Game, Statics.DisplayFont, _displayMessages[0], new Vector2(24, 163), 1);
             Components.Add(_changingDisplay);
             if (_mode is Mode.Complete)
             {
                 // TODO: Implement bonusMessage with bonuses
-                _bonusMessage = new TextComponent(Game, Statics.LightFont, $"= {_bonuses[0]:000000}", new Vector2(232, 163), 1);
+                _bonusMessage = new TextComponent(Game, Statics.DisplayFont, $"= {_bonuses[0]:000000}", new Vector2(232, 163), 1);
                 Components.Add(_bonusMessage);
             }
         }

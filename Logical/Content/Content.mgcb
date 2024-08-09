@@ -349,11 +349,6 @@
 /processorParam:TextureFormat=Color
 /build:Balls.png
 
-#begin BoldFontCharacters.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:BoldFontCharacters.xml
-
 #begin ColourChangers.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -402,7 +397,7 @@
 /processorParam:TextureFormat=Color
 /build:Cursor.png
 
-#begin Fonts.png
+#begin Fonts/DisplayFont.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -412,7 +407,12 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Fonts.png
+/build:Fonts/DisplayFont.png
+
+#begin Fonts/DisplayFontCharset.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Fonts/DisplayFontCharset.xml
 
 #begin Fonts/Topaz_a500_v1.0.ttf
 /copy:Fonts/Topaz_a500_v1.0.ttf
@@ -457,11 +457,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Indicators.png
-
-#begin LightFontCharacters.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:LightFontCharacters.xml
 
 #begin MainPipeTime.png
 /importer:TextureImporter
