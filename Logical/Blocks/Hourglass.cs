@@ -24,11 +24,11 @@ public class Hourglass : Block, IFixable
     {
         set
         {
-            _sandLeftOffset.Y += 9 - value;
-            _sandLeftSource.Height = value + 1;
-            _sandStreamSource.Height -= value + 1;
-            _sandUsedOffset.Y += value + 1;
-            _sandUsedSource.Height -= value + 1;
+            _sandLeftOffset.Y += 10 - value;
+            _sandLeftSource.Height = value;
+            _sandStreamSource.Height = value + 2;
+            _sandUsedOffset.Y += value;
+            _sandUsedSource.Height -= value;
             _cyclesLeft = value + 1;
             _initialCycles = value + 1;
             _initialTicks = ClockCycleReference.Ticks * value; // TODO: check if when having a double clock half time, the reference initial ticks is just 
@@ -77,7 +77,7 @@ public class Hourglass : Block, IFixable
         var data = new Color[elementCount];
         _sandStream.GetData(0, _sandStreamSource, data, 0, elementCount);
         for (int i = 0; i < elementCount; ++i)
-            if (data[i].A is not 0xFF)
+            if (data[i].A is 0xFF)
                 data[i] = RandomSandColor();
         _sandStream.SetData(0, _sandStreamSource, data, 0, elementCount);
     }
@@ -126,7 +126,7 @@ public class Hourglass : Block, IFixable
             _sandStream,
             _sandStreamOffset,
             1,
-            _sandLeftSource,
+            _sandStreamSource,
             spriteEffectsOverride: SpriteEffects.FlipVertically
         );
         
