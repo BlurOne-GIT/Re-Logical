@@ -24,7 +24,13 @@ public class VideoPanel : MenuPanel
             { DefaultSource = WindowModeRectangle }
         );
         Components.Add(_scaleUpButton = new Button(Game, new Rectangle(158, 111,10, 10)));
-        Components.Add(_scaleText = new TextComponent(Game, Statics.BoldFont, $"{Configs.Scale:00}", new Vector2(168, 112), 3));
+        Components.Add(_scaleText =
+            new TextComponent(Game, Statics.TopazFont, $"{Configs.Scale:00}", new Vector2(168, 112), 3)
+            {
+                Scale = new Vector2(1f, .5f),
+                Color = Statics.TopazColor
+            }
+        );
         Components.Add(_scaleDownButton = new Button(Game, new Rectangle(184, 111, 10, 10)));
         Components.Add(_backButton = new Button(Game, new Rectangle(108, 201, 103, 16)));
         

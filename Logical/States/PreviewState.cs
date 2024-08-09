@@ -132,7 +132,10 @@ public class PreviewState : GameState
                 Components.Add(_bonusMessage);
             }
         }
-        Components.Add(new TextComponent(Game, Statics.BoldFont/*DEBUG TextureFont*/, $"{Configs.Score:000000}", new Vector2(209, 188), 1));
+        Components.Add(
+            new TextComponent(Game, Statics.TopazFont/*DEBUG TextureFont*/, $"{Configs.Score:000000}", new Vector2(209, 188), 1)
+                { Scale = new Vector2(1f, .5f) }
+            );
     }
 
     public override void HandleInput(object s, InputKeyEventArgs e)

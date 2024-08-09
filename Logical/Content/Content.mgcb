@@ -414,6 +414,26 @@
 /processorParam:TextureFormat=Color
 /build:Fonts.png
 
+#begin Fonts/Topaz_a500_v1.0.ttf
+/copy:Fonts/Topaz_a500_v1.0.ttf
+
+#begin Fonts/Topaz.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Topaz.spritefont
+
+#begin Fonts/TopazPlus_a500_v1.0.ttf
+/copy:Fonts/TopazPlus_a500_v1.0.ttf
+
+#begin Fonts/TopazPlus.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/TopazPlus.spritefont
+
 #begin Holder.png
 /importer:TextureImporter
 /processor:TextureProcessor

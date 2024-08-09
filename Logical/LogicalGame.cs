@@ -16,14 +16,26 @@ public class LogicalGame : EngineGame
     private Texture2D _backdropTexture;
     private Vector2 _backdropSize;
     #if DEBUG
-    private readonly string _versionString = "v" + ((AssemblyInformationalVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)[0]).InformationalVersion.Split('+')[0];
+    private readonly string _versionString;
+    private readonly string _commitString;
     private TextComponent _version;
+    private TextComponent _commit;
     #endif
 #endregion
 
 #region Default Methods
     public LogicalGame()
     {
+        #if DEBUG
+        var fullInfoVersion =
+            ((AssemblyInformationalVersionAttribute)Assembly.GetExecutingAssembly()
+            .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute),
+                false)[0]).InformationalVersion;
+
+        _versionString = "v" + fullInfoVersion.Split('+')[0];// + "+" + fullInfoVersion.Split('+')[1][..7];
+        _commitString = fullInfoVersion.Split('+')[1][..7];
+        #endif
+        
         IsMouseVisible = false;
         Window.AllowAltF4 = true;
         Window.AllowUserResizing = false;
@@ -67,7 +79,14 @@ public class LogicalGame : EngineGame
         _backdropSize = new Vector2(Configs.NativeWidth, Configs.NativeHeight);
         Statics.LoadFonts(Content);
         #if DEBUG
-        _version = new TextComponent(this, Statics.LightFont, _versionString.ToUpper().Replace('.', '_'), new Vector2(0, 248), 1);
+        Components.Add(_version =
+            new TextComponent(this, Statics.TopazFont, _versionString, new Vector2(0, 248), 1)
+                { Scale = new Vector2(1f, .5f) }
+        );
+        Components.Add(_commit =
+            new TextComponent(this, Statics.TopazFont, _commitString, new Vector2(320, 248), 1, Alignment.TopRight)
+                { Scale = new Vector2(1f, .5f) }
+        );
         #endif
     }
 
@@ -115,9 +134,6 @@ public class LogicalGame : EngineGame
                 SpriteEffects.None,
                 1f
                 );
-        #if DEBUG
-        _version.Draw(gameTime);
-        #endif
         SpriteBatch.End();
     }
 
