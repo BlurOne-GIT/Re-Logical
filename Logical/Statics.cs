@@ -9,7 +9,7 @@ namespace Logical;
 public static class Statics
 {
     #region Fields
-    public const string StandardSet = "./alf.dat";
+    public const string StandardSet = "./Content/alf.dat";
     private static SpriteFont _topaz;
     private static SpriteFont _topazPlus;
     private static readonly Color[] TopazColors = {
