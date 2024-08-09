@@ -8,7 +8,11 @@ namespace Logical.States;
 
 public class TitleState : GameState
 {
-    public TitleState(Game game) : base(game) => Statics.ShowCursor = false;
+    public TitleState(Game game) : base(game)
+    {
+        Statics.ShowCursor = false;
+        Game.Window.KeyDown += HandleInput;
+    }
 
     #region Fields
 
@@ -24,6 +28,7 @@ public class TitleState : GameState
 
     protected override void LoadContent()
     {
+        Game.Services.GetService<MouseHelper>().ButtonDown += HandleInput;
         _titel = Game.Content.Load<Song>("Titel");
         _background = new SimpleImage(Game, "Credit", new Vector2(0f, 28f), 0);
         Components.Add(_background);
@@ -57,15 +62,15 @@ public class TitleState : GameState
         Game.Content.UnloadAsset("Credit");
     }
 
-    public override void HandleInput(object s, InputKeyEventArgs e) => EndCaller(s, e);
-    public override void HandleInput(object s, ButtonEventArgs e) => EndCaller(s, e);
+    private void HandleInput(object s, InputKeyEventArgs e) => EndCaller(s, e);
+    private void HandleInput(object s, MouseButtons e) => EndCaller(s, e);
     #endregion
 
     #region Custom Methods
     private void EndCaller(object s, object e)
     {
         Game.Window.KeyDown -= HandleInput;
-        Input.ButtonDown -= HandleInput;
+        Game.Services.GetService<MouseHelper>().ButtonDown -= HandleInput;
         MediaPlayer.MediaStateChanged -= EndCaller;
         if (Configs.MusicVolume is 0)
             _transitionCounter = MusicTransitionTime;

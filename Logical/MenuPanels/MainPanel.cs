@@ -7,32 +7,31 @@ namespace Logical.MenuPanels;
 
 public class MainPanel : MenuPanel
 {
-    private readonly Button _ownSetButton;
-    private readonly Button _passwordButton;
-    private readonly Button _aboutButton;
-    private readonly Button _settingsButton;
-    public readonly Button GraphicsSetButton;
-    public readonly Button StartButton;
+    private readonly ClickableArea _ownSetButton;
+    private readonly ClickableArea _passwordButton;
+    private readonly ClickableArea _aboutButton;
+    private readonly ClickableArea _settingsButton;
+    public readonly ClickableArea GraphicsSetButton;
+    public readonly ClickableArea StartButton;
     
     public MainPanel(Game game) : base(game)
     {
-        Components.Add(_ownSetButton = new Button(Game, new Rectangle(108, 87, 103, 16)));
-        Components.Add(_passwordButton = new Button(Game, new Rectangle(108, 109, 103, 16)));
-        Components.Add(_aboutButton = new Button(Game, new Rectangle(108, 132, 103, 16)));
-        Components.Add(_settingsButton = new Button(Game, new Rectangle(108, 155, 103, 16)));
-        Components.Add(GraphicsSetButton = new Button(Game, new Rectangle(108, 179, 103, 16)));
-        Components.Add(StartButton = new Button(Game, new Rectangle(108, 201, 103, 16)));
+        Components.Add(_ownSetButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), false));
+        Components.Add(_passwordButton = new ClickableArea(Game, new Rectangle(108, 109, 103, 16), false));
+        Components.Add(_aboutButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), false));
+        Components.Add(_settingsButton = new ClickableArea(Game, new Rectangle(108, 155, 103, 16), false));
+        Components.Add(GraphicsSetButton = new ClickableArea(Game, new Rectangle(108, 179, 103, 16), false));
+        Components.Add(StartButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
         
-        _ownSetButton.LeftClicked += OwnSet;
-        _passwordButton.LeftClicked += Password;
-        _aboutButton.LeftClicked += About;
-        _settingsButton.LeftClicked += Settings;
-        GraphicsSetButton.LeftClicked += GraphicSet;
-        GraphicsSetButton.RightClicked += GraphicSet;
+        _ownSetButton.LeftButtonDown += OwnSet;
+        _passwordButton.LeftButtonDown += Password;
+        _aboutButton.LeftButtonDown += About;
+        _settingsButton.LeftButtonDown += Settings;
+        GraphicsSetButton.ButtonDown += GraphicSet;
         
-        GraphicsSetButton.RightClicked += PlaySfx;
+        GraphicsSetButton.RightButtonDown += PlaySfx;
     }
-    
+
     private void OwnSet(object s, EventArgs e)
     {
         throw new NotImplementedException("Missing inputs and interchangeable sets.");
@@ -75,26 +74,27 @@ public class MainPanel : MenuPanel
     
     private void Settings(object s, EventArgs e) => SwitchState(new SettingsPanel(Game));
 
-    private void GraphicSet(object s, ButtonEventArgs e)
+    private void GraphicSet(object s, MouseButtons e)
     {
         throw new NotImplementedException("Missing graphic sets.");
+        if ((e & (MouseButtons.MiddleButton | MouseButtons.XButton1 | MouseButtons.XButton2)) != 0) return;
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/UI/{nameof(MainPanel)}");
-        if (e.Button is "RightButton")
-            --Configs.GraphicSet;
-        else
+        if (e.HasFlag(MouseButtons.LeftButton))
             ++Configs.GraphicSet;
+        else
+            --Configs.GraphicSet;
         PanelBackground.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/{nameof(MainPanel)}");
     }
 
     protected override void Dispose(bool disposing)
     {
-        _ownSetButton.LeftClicked -= OwnSet;
-        _passwordButton.LeftClicked -= Password;
-        _aboutButton.LeftClicked -= About;
-        _settingsButton.LeftClicked -= Settings;
-        GraphicsSetButton.LeftClicked -= GraphicSet;
+        _ownSetButton.LeftButtonDown -= OwnSet;
+        _passwordButton.LeftButtonDown -= Password;
+        _aboutButton.LeftButtonDown -= About;
+        _settingsButton.LeftButtonDown -= Settings;
+        GraphicsSetButton.ButtonDown -= GraphicSet;
         
-        GraphicsSetButton.RightClicked -= PlaySfx;
+        GraphicsSetButton.RightButtonDown -= PlaySfx;
         
         base.Dispose(disposing);
     }

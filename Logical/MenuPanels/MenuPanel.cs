@@ -16,7 +16,7 @@ public abstract class MenuPanel : GameState
         Components.ComponentAdded += OnButtonAdded;
         Components.ComponentRemoved += OnButtonRemoved;
     }
-
+    
     protected override void LoadContent()
     {
         _clickSfx = Game.Content.Load<SoundEffect>("Sfx/Button");
@@ -36,12 +36,12 @@ public abstract class MenuPanel : GameState
 
     private void OnButtonAdded(object s, GameComponentCollectionEventArgs e)
     {
-        if (e.GameComponent is Button button) button.LeftClicked += PlaySfx;
+        if (e.GameComponent is ClickableArea button) button.LeftButtonDown += PlaySfx;
     }
     
     private void OnButtonRemoved(object s, GameComponentCollectionEventArgs e)
     {
-        if (e.GameComponent is Button button) button.LeftClicked -= PlaySfx;
+        if (e.GameComponent is ClickableArea button) button.LeftButtonDown -= PlaySfx;
     }
 
     protected override void Dispose(bool disposing)

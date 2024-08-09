@@ -146,7 +146,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
         base.UnloadContent();
     }
 
-    public IEnumerable<DrawableGameComponent> GetOverlayables()
+    public IEnumerable<GameComponent> GetOverlayables()
         => new DrawableGameComponent[] { _overlay };
 
     public override IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;

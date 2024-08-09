@@ -102,6 +102,8 @@ public class LevelState : GameState
 
         if (ColorJobLayout.Count != 0 || TrafficLights.Count != 0)
             Spinner.ConditionClear += RecheckConditioned;
+        
+        Game.Window.KeyDown += HandleInput;
     }
 
     protected override void LoadContent()
@@ -140,7 +142,7 @@ public class LevelState : GameState
         InteractionEnabler(false);
         Components.Add(_fakeCursor = new SimpleImage(Game,
             Game.Content.Load<Texture2D>("Cursor"),
-            Input.MousePoint.ToVector2() - Statics.CursorTextureOffset,
+            MouseHelper.MouseVector - Statics.CursorTextureOffset,
             10));
         _ballsLeft = Ball.AllBalls.Count - 1;
         foreach (var ball in Ball.AllBalls.ToArray())
@@ -228,7 +230,7 @@ public class LevelState : GameState
         base.Update(gameTime);
     }
 
-    public override void HandleInput(object s, InputKeyEventArgs e)
+    private void HandleInput(object s, InputKeyEventArgs e)
     {
         switch (e.Key)
         {
@@ -239,7 +241,7 @@ public class LevelState : GameState
                         State = States.Paused;
                         Components.Add(_fakeCursor = new SimpleImage(Game,
                             Game.Content.Load<Texture2D>("Cursor"),
-                            Input.MousePoint.ToVector2() - Statics.CursorTextureOffset,
+                            MouseHelper.MouseVector - Statics.CursorTextureOffset,
                             10));
                         InteractionEnabler(false);
                         break;
@@ -299,6 +301,7 @@ public class LevelState : GameState
 
     protected override void Dispose(bool disposing)
     {
+        Game.Window.KeyDown -= HandleInput;
         ColorJobLayout.Clear();
         TrafficLights.Clear();
         Spinner.ClearList();

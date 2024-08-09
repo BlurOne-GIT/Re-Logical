@@ -138,7 +138,14 @@ public class PreviewState : GameState
             );
     }
 
-    public override void HandleInput(object s, InputKeyEventArgs e)
+    public override void Initialize()
+    {
+        Game.Window.KeyDown += HandleInput;
+        Game.Services.GetService<MouseHelper>().ButtonDown += HandleInput;
+        base.Initialize();
+    }
+
+    private void HandleInput(object s, InputKeyEventArgs e)
     {
         if (_state != States.Standby) return;
         
@@ -146,9 +153,9 @@ public class PreviewState : GameState
         _state = States.FadeOut;
     }
 
-    public override void HandleInput(object s, ButtonEventArgs e)
+    private void HandleInput(object s, MouseButtons e)
     {
-        if (e.Button is not ("LeftButton" or "RightButton") || _state != States.Standby) return;
+        if ((e & (MouseButtons.LeftButton | MouseButtons.RightButton)) is MouseButtons.None || _state != States.Standby) return;
         _action = Exit;
         _state = States.FadeOut;
     }
@@ -214,5 +221,12 @@ public class PreviewState : GameState
             _timer += gameTime.ElapsedGameTime.Milliseconds;
         base.Update(gameTime);
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        Game.Window.KeyDown -= HandleInput;
+        base.Dispose(disposing);
+    }
+
     #endregion
 }

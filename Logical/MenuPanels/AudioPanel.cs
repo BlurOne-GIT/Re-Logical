@@ -6,21 +6,21 @@ namespace Logical.MenuPanels;
 
 public class AudioPanel : MenuPanel
 {
-    private readonly Button _bgmVolUpButton;
-    private readonly Button _bgmVolDownButton;
-    private readonly Button _sfxVolUpButton;
-    private readonly Button _sfxVolDownButton;
-    private readonly Button _stereoSplitUpButton;
-    private readonly Button _stereoSplitDownButton;
-    private readonly Button _backButton;
+    private readonly ClickableArea _bgmVolUpButton;
+    private readonly ClickableArea _bgmVolDownButton;
+    private readonly ClickableArea _sfxVolUpButton;
+    private readonly ClickableArea _sfxVolDownButton;
+    private readonly ClickableArea _stereoSplitUpButton;
+    private readonly ClickableArea _stereoSplitDownButton;
+    private readonly ClickableArea _backButton;
     private readonly TextComponent _bgmVol;
     private readonly TextComponent _sfxVol;
     private readonly TextComponent _stereoSplit;
     
     public AudioPanel(Game game) : base(game)
     {
-        Components.Add(_bgmVolUpButton = new Button(Game, new Rectangle(161, 89, 10, 10)));
-        Components.Add(_bgmVolDownButton = new Button(Game, new Rectangle(187, 89, 10, 10)));
+        Components.Add(_bgmVolUpButton = new ClickableArea(Game, new Rectangle(161, 89, 10, 10), false));
+        Components.Add(_bgmVolDownButton = new ClickableArea(Game, new Rectangle(187, 89, 10, 10), false));
         Components.Add(
             _bgmVol = new TextComponent(Game, Statics.TopazFont, $"{Configs.MusicVolume:00}", new Vector2(171, 90), 3)
             {
@@ -28,8 +28,8 @@ public class AudioPanel : MenuPanel
                 Color = Statics.TopazColor
             }
         );
-        Components.Add(_sfxVolUpButton = new Button(Game, new Rectangle(161, 111, 10, 10)));
-        Components.Add(_sfxVolDownButton = new Button(Game, new Rectangle(187, 111, 10, 10)));
+        Components.Add(_sfxVolUpButton = new ClickableArea(Game, new Rectangle(161, 111, 10, 10), false));
+        Components.Add(_sfxVolDownButton = new ClickableArea(Game, new Rectangle(187, 111, 10, 10), false));
         Components.Add(
             _sfxVol = new TextComponent(Game, Statics.TopazFont, $"{Configs.SfxVolume:00}", new Vector2(171, 112), 3)
             {
@@ -37,8 +37,8 @@ public class AudioPanel : MenuPanel
                 Color = Statics.TopazColor
             }
         );
-        Components.Add(_stereoSplitUpButton = new Button(Game, new Rectangle(157, 134, 10, 10)));
-        Components.Add(_stereoSplitDownButton = new Button(Game, new Rectangle(191, 134, 10, 10)));
+        Components.Add(_stereoSplitUpButton = new ClickableArea(Game, new Rectangle(157, 134, 10, 10), false));
+        Components.Add(_stereoSplitDownButton = new ClickableArea(Game, new Rectangle(191, 134, 10, 10), false));
         Components.Add(
             _stereoSplit = new TextComponent(Game, Statics.TopazFont, $"{Configs.StereoSeparation:00}0", new Vector2(167, 135), 3)
             {
@@ -46,17 +46,17 @@ public class AudioPanel : MenuPanel
                 Color = Statics.TopazColor
             }
         );
-        Components.Add(_backButton = new Button(Game, new Rectangle(108, 201, 103, 16)));
-
-        _bgmVolUpButton.LeftClicked += BgmVolUp;
-        _bgmVolDownButton.LeftClicked += BgmVolDown;
-        _sfxVolUpButton.LeftClicked += SfxVolUp;
-        _sfxVolDownButton.LeftClicked += SfxVolDown;
-        _stereoSplitUpButton.LeftClicked += StereoSplitUp;
-        _stereoSplitDownButton.LeftClicked += StereoSplitDown;
-        _backButton.LeftClicked += Back;
+        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
+        
+        _bgmVolUpButton.LeftButtonDown += BgmVolUp;
+        _bgmVolDownButton.LeftButtonDown += BgmVolDown;
+        _sfxVolUpButton.LeftButtonDown += SfxVolUp;
+        _sfxVolDownButton.LeftButtonDown += SfxVolDown;
+        _stereoSplitUpButton.LeftButtonDown += StereoSplitUp;
+        _stereoSplitDownButton.LeftButtonDown += StereoSplitDown;
+        _backButton.LeftButtonDown += Back;
     }
-    
+
     private void BgmVolUp(object s, EventArgs e) => _bgmVol.Text = $"{++Configs.MusicVolume:00}";
 
     private void BgmVolDown(object s, EventArgs e) => _bgmVol.Text = $"{--Configs.MusicVolume:00}";
@@ -73,13 +73,13 @@ public class AudioPanel : MenuPanel
     
     protected override void Dispose(bool disposing)
     {
-        _bgmVolUpButton.LeftClicked -= BgmVolUp;
-        _bgmVolDownButton.LeftClicked -= BgmVolDown;
-        _sfxVolUpButton.LeftClicked -= SfxVolUp;
-        _sfxVolDownButton.LeftClicked -= SfxVolDown;
-        _stereoSplitUpButton.LeftClicked -= StereoSplitUp;
-        _stereoSplitDownButton.LeftClicked -= StereoSplitDown;
-        _backButton.LeftClicked -= Back;
+        _bgmVolUpButton.LeftButtonDown -= BgmVolUp;
+        _bgmVolDownButton.LeftButtonDown -= BgmVolDown;
+        _sfxVolUpButton.LeftButtonDown -= SfxVolUp;
+        _sfxVolDownButton.LeftButtonDown -= SfxVolDown;
+        _stereoSplitUpButton.LeftButtonDown -= StereoSplitUp;
+        _stereoSplitDownButton.LeftButtonDown -= StereoSplitDown;
+        _backButton.LeftButtonDown -= Back;
         base.Dispose(disposing);
     }
 }

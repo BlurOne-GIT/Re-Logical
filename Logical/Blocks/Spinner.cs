@@ -9,7 +9,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class Spinner : Block, IReloadable, IFixable
+public class Spinner : Block, IReloadable, IFixable, IOverlayable
 {
     #region Fields
     public static readonly List<Spinner> ExplodedSpinners = new(0);
@@ -19,9 +19,9 @@ public class Spinner : Block, IReloadable, IFixable
     private static SoundEffect _popOutSfx;
     private static SoundEffect _spinSfx;
     private static SoundEffect _explodeSfx;
-    private readonly Button _spinButton;
+    private readonly ClickableArea _spinButton;
     private bool _hasExploded;
-    private readonly Button[] _slotButtons = new Button[4];
+    private readonly ClickableArea[] _slotButtons = new ClickableArea[4];
     private bool[] _closedPipes = new bool[4];
     private readonly List<BallColors?> _slotBalls = new(4) { null, null, null, null };
     
@@ -108,8 +108,8 @@ public class Spinner : Block, IReloadable, IFixable
         : base(game, "Spinner", arrayPosition, xx, yy)
     {
         DefaultSource = new Rectangle(0, 0, 36, 36);
-        _spinButton = new Button(game, new Rectangle(Position.ToPoint(), new Point(36)));
-        _spinButton.RightClicked += Spin;
+        _spinButton = new ClickableArea(game, new Rectangle(Position.ToPoint(), new Point(36)), false);
+        _spinButton.RightButtonDown += Spin;
         if (Pos.Y is 0)
             _registers[(int)Direction.Up] = new Vector2(13f, -13f);
         ExplodedSpinners.Capacity++;
@@ -142,8 +142,8 @@ public class Spinner : Block, IReloadable, IFixable
         
         if (!_closedPipes[(int)Direction.Left])
         {
-            _slotButtons[0] = new Button(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
-            _slotButtons[0].LeftClicked += PopOut;
+            _slotButtons[0] = new ClickableArea(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9)), false) {Enabled = false};
+            _slotButtons[0].LeftButtonDown += PopOut;
             _closingsOffset.X = _closingsSource.X = 10;
             _closingsSource.Width = 26;
         }
@@ -152,8 +152,8 @@ public class Spinner : Block, IReloadable, IFixable
         {
             if (Pos.Y != 0 && blocks[Pos.X, Pos.Y - 1].FileValue is not 0x16)
             {
-                _slotButtons[1] = new Button(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10))) {Enabled = false};
-                _slotButtons[1].LeftClicked += PopOut;
+                _slotButtons[1] = new ClickableArea(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10)), false) {Enabled = false};
+                _slotButtons[1].LeftButtonDown += PopOut;
             }
             _closingsOffset.Y = _closingsSource.Y = 10;
             _closingsSource.Height = 26;
@@ -161,8 +161,9 @@ public class Spinner : Block, IReloadable, IFixable
         
         if (!_closedPipes[(int)Direction.Right])
         {
-            _slotButtons[2] = new Button(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9))) {Enabled = false};
-            _slotButtons[2].LeftClicked += PopOut;
+            _slotButtons[2] = new ClickableArea(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9)), false)
+                { Enabled = false };
+            _slotButtons[2].LeftButtonDown += PopOut;
             
             _closingsSource.Width -= 10;
             if (_closingsSource.Width is 16 && _closingsSource.Y is 10)
@@ -175,8 +176,9 @@ public class Spinner : Block, IReloadable, IFixable
         if (!_closedPipes[(int)Direction.Down])
         {
             if (blocks[Pos.X, Pos.Y + 1].FileValue is 0x16) return;
-            _slotButtons[3] = new Button(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10))) {Enabled = false};
-            _slotButtons[3].LeftClicked += PopOut;
+            _slotButtons[3] = new ClickableArea(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10)), false)
+            { Enabled = false };
+            _slotButtons[3].LeftButtonDown += PopOut;
             
             if (_closingsSource.Height is 4)
             {
@@ -233,7 +235,7 @@ public class Spinner : Block, IReloadable, IFixable
         if (LevelState.MovesLeft == 0)
             return;
 
-        var index = Array.IndexOf(_slotButtons, sender as Button);
+        var index = Array.IndexOf(_slotButtons, sender as ClickableArea);
 
         if (index is -1)
             throw new ArgumentException("External button is subscribed to the spinner event.");
@@ -323,12 +325,12 @@ public class Spinner : Block, IReloadable, IFixable
 
     protected override void Dispose(bool disposing)
     {
-        _spinButton.RightClicked -= Spin;
+        _spinButton.RightButtonDown -= Spin;
         _spinButton.Dispose();
         foreach (var button in _slotButtons)
         {
             if (button is not null)
-                button.LeftClicked -= PopOut;
+                button.LeftButtonDown -= PopOut;
             button?.Dispose();
         }
         base.Dispose(disposing);
@@ -387,5 +389,12 @@ public class Spinner : Block, IReloadable, IFixable
         if (fidelity is IFixable.FidelityLevel.Remastered)
             _explodeAnimation.Frames[1] = _explodeAnimation.Frames[4] = new Rectangle(116, 0, 30, 30);
         // TODO: Implement fixes for the other problems
+    }
+
+    public IEnumerable<GameComponent> GetOverlayables()
+    {
+        var list = new List<GameComponent> { _spinButton };
+        list.AddRange(_slotButtons.Where(button => button is not null));
+        return list;
     }
 }

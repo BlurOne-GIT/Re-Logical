@@ -18,8 +18,6 @@ public class LogicalGame : EngineGame
     #if DEBUG
     private readonly string _versionString;
     private readonly string _commitString;
-    private TextComponent _version;
-    private TextComponent _commit;
     #endif
 #endregion
 
@@ -79,11 +77,11 @@ public class LogicalGame : EngineGame
         _backdropSize = new Vector2(Configs.NativeWidth, Configs.NativeHeight);
         Statics.LoadFonts(Content);
         #if DEBUG
-        Components.Add(_version =
+        Components.Add(
             new TextComponent(this, Statics.TopazFont, _versionString, new Vector2(0, 256), 1, Alignment.BottomLeft)
                 { Scale = new Vector2(1f, .5f) }
         );
-        Components.Add(_commit =
+        Components.Add(
             new TextComponent(this, Statics.TopazFont, _commitString, new Vector2(320, 256), 1, Alignment.BottomRight)
                 { Scale = new Vector2(1f, .5f) }
         );
@@ -96,13 +94,6 @@ public class LogicalGame : EngineGame
             Configs.SaveFile();
     }
 
-    protected override void Update(GameTime gameTime)
-    {
-        // TODO: Add your update logic here
-        Input.UpdateMouseInput(Mouse.GetState());
-        base.Update(gameTime);
-    }
-
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.Black);
@@ -113,7 +104,7 @@ public class LogicalGame : EngineGame
         if (Statics.ShowCursor)
             SpriteBatch.Draw(
                 _cursorTexture,
-                Input.MousePoint.ToVector2(),
+                MouseHelper.MouseVector,
                 null,
                 Color.White,
                 0,

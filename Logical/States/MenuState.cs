@@ -16,6 +16,7 @@ public class MenuState : GameState
         Statics.ShowCursor = true;
         _menuManager = new GameStateManager<MenuPanel>(Components);
         _menuManager.Switched += MenuManagerOnSwitched;
+        Game.Window.KeyDown += HandleInput;
     }
 
     #region Fields
@@ -55,15 +56,15 @@ public class MenuState : GameState
     {
         if (e.OldGameState is MainPanel oldMainPanel)
         {
-            oldMainPanel.StartButton.LeftClicked -= StartGame;
-            oldMainPanel.GraphicsSetButton.LeftClicked -= GraphicSet;
-            oldMainPanel.GraphicsSetButton.RightClicked -= GraphicSet;
+            oldMainPanel.StartButton.LeftButtonDown -= StartGame;
+            oldMainPanel.GraphicsSetButton.LeftButtonDown -= GraphicSet;
+            oldMainPanel.GraphicsSetButton.RightButtonDown -= GraphicSet;
         }
         else if (e.NewGameState is MainPanel newMainPanel)
         {
-            newMainPanel.StartButton.LeftClicked += StartGame;
-            newMainPanel.GraphicsSetButton.LeftClicked += GraphicSet;
-            newMainPanel.GraphicsSetButton.RightClicked += GraphicSet;
+            newMainPanel.StartButton.LeftButtonDown += StartGame;
+            newMainPanel.GraphicsSetButton.LeftButtonDown += GraphicSet;
+            newMainPanel.GraphicsSetButton.RightButtonDown += GraphicSet;
         }
     }
 
@@ -106,7 +107,7 @@ public class MenuState : GameState
         base.Update(gameTime);
     }
 
-    public override void HandleInput(object s, InputKeyEventArgs e)
+    private void HandleInput(object s, InputKeyEventArgs e)
     {
         if (e.Key == Keys.Escape) Game.Exit();
     }
@@ -124,6 +125,7 @@ public class MenuState : GameState
 
     protected override void Dispose(bool disposing)
     {
+        Game.Window.KeyDown -= HandleInput;
         _menuManager.GameState = null;
         _menuManager.Switched -= MenuManagerOnSwitched;
         base.Dispose(disposing);

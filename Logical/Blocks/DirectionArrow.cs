@@ -105,7 +105,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         base.UnloadContent();
     }
 
-    public IEnumerable<DrawableGameComponent> GetOverlayables()
+    public IEnumerable<GameComponent> GetOverlayables()
         => new DrawableGameComponent[] { _holder, _arrow };
 
     public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;

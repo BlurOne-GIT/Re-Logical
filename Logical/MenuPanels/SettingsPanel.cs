@@ -6,22 +6,22 @@ namespace Logical.MenuPanels;
 
 public class SettingsPanel : MenuPanel
 {
-    private readonly Button _videoButton;
-    private readonly Button _audioButton;
-    private readonly Button _fixesButton;
-    private readonly Button _backButton;
+    private readonly ClickableArea _videoButton;
+    private readonly ClickableArea _audioButton;
+    private readonly ClickableArea _fixesButton;
+    private readonly ClickableArea _backButton;
     
     public SettingsPanel(Game game) : base(game)
     {
-        Components.Add(_videoButton = new Button(Game, new Rectangle(108, 87, 103, 16)));
-        Components.Add(_audioButton = new Button(Game, new Rectangle(108, 109, 103, 16)));
-        Components.Add(_fixesButton = new Button(Game, new Rectangle(108, 132, 103, 16)));
-        Components.Add(_backButton = new Button(Game, new Rectangle(108, 201, 103, 16)));
+        Components.Add(_videoButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), false));
+        Components.Add(_audioButton = new ClickableArea(Game, new Rectangle(108, 109, 103, 16), false));
+        Components.Add(_fixesButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), false));
+        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
         
-        _videoButton.LeftClicked += Video;
-        _audioButton.LeftClicked += Audio;
-        _fixesButton.LeftClicked += Fixes;
-        _backButton.LeftClicked += Back;
+        _videoButton.LeftButtonDown += Video;
+        _audioButton.LeftButtonDown += Audio;
+        _fixesButton.LeftButtonDown += Fixes;
+        _backButton.LeftButtonDown += Back;
     }
 
     private void Video(object s, EventArgs e) => SwitchState(new VideoPanel(Game));
@@ -34,10 +34,10 @@ public class SettingsPanel : MenuPanel
 
     protected override void Dispose(bool disposing)
     {
-        _videoButton.LeftClicked -= Video;
-        _audioButton.LeftClicked -= Audio;
-        _fixesButton.LeftClicked -= Fixes;
-        _backButton.LeftClicked -= Back;
+        _videoButton.LeftButtonDown -= Video;
+        _audioButton.LeftButtonDown -= Audio;
+        _fixesButton.LeftButtonDown -= Fixes;
+        _backButton.LeftButtonDown -= Back;
         
         base.Dispose(disposing);
     }

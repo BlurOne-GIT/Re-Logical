@@ -66,7 +66,7 @@ public class ColourStopper : Pipe, IOverlayable
         _shadowSource = new Rectangle(22 * Variation, FileValue * 14, 22, 14);
     }
 
-    public IEnumerable<DrawableGameComponent> GetOverlayables() => new DrawableGameComponent[] {
+    public IEnumerable<GameComponent> GetOverlayables() => new DrawableGameComponent[] {
         new SimpleImage(Game,  "ColourStoppers", Position + new Vector2(7f), 9)
         {DefaultSource = new Rectangle(22 * (int)_ballColor, 0, 22, 22)}
     };

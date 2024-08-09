@@ -72,5 +72,5 @@ public interface IReloadable
 
 public interface IOverlayable
 {
-    public IEnumerable<DrawableGameComponent> GetOverlayables();
+    public IEnumerable<GameComponent> GetOverlayables();
 }
