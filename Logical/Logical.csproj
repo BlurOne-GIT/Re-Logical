@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MmgEngine\MmgEngine\MmgEngine.csproj" />
+    <PackageReference Include="NativeFileDialogSharp" Version="0.6.0-alpha" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
