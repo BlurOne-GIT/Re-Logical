@@ -141,15 +141,15 @@ public class Hourglass : Block, IFixable
         
         #if DEBUG
         spriteBatch.DrawString(
-            Statics.DisplayFont,
-            $"{_cyclesLeft} * {_currentCycle.Minutes}:{_currentCycle.Seconds:00}",
+            Statics.TopazFont,
+            $"{_cyclesLeft} *\n{(ClockCycleReference-_currentCycle).Minutes}:{(ClockCycleReference-_currentCycle).Seconds:00}",
             Position - new Vector2(2f, 0f),
-            Color,
+            Color.Black,
             0f,
             Vector2.Zero,
-            1f,
+            new Vector2(1f, .5f),
             SpriteEffects.None,
-            0.1f
+            1f
         );
         #endif
     }

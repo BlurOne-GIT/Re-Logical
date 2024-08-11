@@ -265,6 +265,18 @@
 /processorParam:TextureFormat=Color
 /build:1/UI/FixesPanel.png
 
+#begin 1/UI/Levelset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:1/UI/Levelset.png
+
 #begin 1/UI/MainMenu.png
 /importer:TextureImporter
 /processor:TextureProcessor
