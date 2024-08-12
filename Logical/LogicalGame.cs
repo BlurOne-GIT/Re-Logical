@@ -38,6 +38,7 @@ public class LogicalGame : EngineGame
         Window.AllowAltF4 = true;
         Window.AllowUserResizing = false;
         Window.IsBorderless = false;
+        TargetElapsedTime = TimeSpan.FromTicks(200000L);
     }
 
     protected override void Initialize()
