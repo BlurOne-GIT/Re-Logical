@@ -109,7 +109,8 @@ public class MenuState : GameState
 
     private void HandleInput(object s, InputKeyEventArgs e)
     {
-        if (e.Key == Keys.Escape) Game.Exit();
+        if (_menuManager.GameState is MainPanel && Statics.ShowCursor && e.Key is Keys.Escape)
+            Game.Exit();
     }
 
     protected override void UnloadContent()
