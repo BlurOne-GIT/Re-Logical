@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,15 +14,19 @@ public class MainPanel : MenuPanel
     private readonly ClickableArea _passwordButton;
     private readonly ClickableArea _aboutButton;
     private readonly ClickableArea _settingsButton;
-    public readonly ClickableArea GraphicsSetButton;
-    public readonly ClickableArea StartButton;
+    public  readonly ClickableArea GraphicsSetButton;
+    public  readonly ClickableArea StartButton;
 
-    private readonly SimpleImage _levelset;
+    private readonly SimpleImage   _levelsetImage;
     private readonly ClickableArea _standardLevelsetButton;
     private readonly ClickableArea _customLevelsetButton;
     private readonly ClickableArea _cancelLeveldiskButton;
     private readonly ClickableArea _selectLeveldiskButton;
     private readonly TextComponent _leveldiskErrorText;
+
+    private readonly SimpleImage _passwordImage;
+    private readonly TextInput   _passwordInput;
+    private readonly TextInput.Caret _passwordCaret;
     
     public MainPanel(Game game) : base(game)
     {
@@ -31,7 +36,8 @@ public class MainPanel : MenuPanel
         Components.Add(_settingsButton = new ClickableArea(Game, new Rectangle(108, 155, 103, 16), false));
         Components.Add(GraphicsSetButton = new ClickableArea(Game, new Rectangle(108, 179, 103, 16), false));
         Components.Add(StartButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
-        Components.Add(_levelset =
+        
+        Components.Add(_levelsetImage =
             new SimpleImage(Game, $"{Configs.GraphicSet}/UI/Levelset", new Vector2(7, 87), 4)
                 { Enabled = false, Visible = false }
         );
@@ -56,6 +62,19 @@ public class MainPanel : MenuPanel
                 { Enabled = false, Visible = false, Color = Statics.TopazColor, Scale = new Vector2(1f, .5f)}
         );
         
+        Components.Add(_passwordImage =
+            new SimpleImage(Game, $"{Configs.GraphicSet}/UI/Password", new Vector2(85, 109), 4)
+                { Enabled = false, Visible = false }
+        );
+        Components.Add(_passwordInput =
+            new TextInput(Game, Statics.DisplayFont, "", new Vector2(95, 114), 5, false, new Regex("^[A-Z 0-9]{0,15}$"), charFunc: char.ToUpper)
+                { Enabled = false, Visible = false }
+        );
+        Components.Add(_passwordCaret =
+            new TextInput.Caret(Game, Statics.DisplayFont.Texture, Vector2.Zero, _passwordInput)
+                { DefaultSource = new Rectangle(360, 0, 8, 7) }
+        );
+        
         _ownSetButton.LeftButtonDown += OwnSet;
         _passwordButton.LeftButtonDown += Password;
         _aboutButton.LeftButtonDown += About;
@@ -71,40 +90,28 @@ public class MainPanel : MenuPanel
     }
 
     #region PanelButtons
+    private bool BunkEnabled
+    {
+        set => _ownSetButton.Enabled = _passwordButton.Enabled = _aboutButton.Enabled = _settingsButton.Enabled = GraphicsSetButton.Enabled = StartButton.Enabled = value;
+    }
+    
     private void OwnSet(object s, EventArgs e)
     {
-        _levelset.DefaultSource = new Rectangle(0, 0, 304, 18);
-        _levelset.Visible = _standardLevelsetButton.Enabled = _customLevelsetButton.Enabled = true;
-        _ownSetButton.Enabled = _passwordButton.Enabled = _aboutButton.Enabled = _settingsButton.Enabled = GraphicsSetButton.Enabled = StartButton.Enabled = false;
+        _levelsetImage.DefaultSource = new Rectangle(0, 0, 304, 18);
+        _levelsetImage.Visible = _standardLevelsetButton.Enabled = _customLevelsetButton.Enabled = true;
+        BunkEnabled = false;
     }
 
     private void Password(object s, EventArgs e)
     {
-        Console.Write("Insert stage key: ");
-        var read = Console.ReadLine()?.ToUpper().TrimEnd();
-        if (read != null && read.StartsWith("ELO WANTS "))
-        {
-            read = read.Remove(0, 10);
-            try
-            {
-                Configs.Stage = Convert.ToByte(read);
-            } catch (FormatException)
-            {
-                throw new NotImplementedException();
-            }
-            Console.WriteLine("NEW LEVEL: " + Configs.Stage);
-            return;
-        }
-
-        var search = new Lexer(Game).GetLevelNumber(read);
-        if (search is 0)
-        {
-            Console.WriteLine("WRONG PASSWORD");
-            return;
-        }
-
-        Configs.Stage = search;
-        Console.WriteLine("NEW LEVEL: " + Configs.Stage);
+        // TODO: replicate feel of input opening
+        var mouseHelper = Game.Services.GetService<MouseHelper>();
+        mouseHelper.Enabled = Statics.ShowCursor = BunkEnabled = false;
+        _passwordInput.Text = string.Empty;
+        _passwordInput.CaretIndex = 0;
+        _passwordImage.Visible = _passwordInput.Visible = _passwordInput.Enabled = true;
+        _passwordInput.Escaped += PasswordEscaped;
+        _passwordInput.Returned += PasswordReturned;
     }
     
     private void About(object s, EventArgs e)
@@ -129,7 +136,7 @@ public class MainPanel : MenuPanel
         else
             --Configs.GraphicSet;
         PanelBackground.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/{nameof(MainPanel)}");
-        _levelset.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/Levelset");
+        _levelsetImage.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/Levelset");
         _leveldiskErrorText.Color = Statics.TopazColor;
     }
     #endregion
@@ -137,7 +144,7 @@ public class MainPanel : MenuPanel
     #region LevelsetMethods
     private void CustomLevelset(object sender, EventArgs e)
     {
-        _levelset.DefaultSource = new Rectangle(0, 18, 304, 18);
+        _levelsetImage.DefaultSource = new Rectangle(0, 18, 304, 18);
         _standardLevelsetButton.Enabled = _customLevelsetButton.Enabled = false;
         _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = true;
     }
@@ -165,31 +172,99 @@ public class MainPanel : MenuPanel
             return;
         }
         
-        _levelset.DefaultSource = new Rectangle(0, 36, 304, 18);
+        _levelsetImage.DefaultSource = new Rectangle(0, 36, 304, 18);
         _leveldiskErrorText.Text = result.ErrorMessage;
         _leveldiskErrorText.Visible = true;
     }
     
-    private void BeepOnFileSelect(object sender, MouseButtons e) => Console.Beep();
+    private static void BeepOnFileSelect(object sender, MouseButtons e) => Console.Beep();
 
     private void LevelsetComplete(object sender = null, EventArgs e = null)
     {
-        _levelset.Visible               =
+        _levelsetImage.Visible               =
         _standardLevelsetButton.Enabled =
         _customLevelsetButton.Enabled   =
         _cancelLeveldiskButton.Enabled  =
         _selectLeveldiskButton.Enabled  =
         _leveldiskErrorText.Visible     = false;
         
-        _ownSetButton.Enabled     =
-        _passwordButton.Enabled   =
-        _aboutButton.Enabled      =
-        _settingsButton.Enabled   =
-        GraphicsSetButton.Enabled =
-        StartButton.Enabled       = true;
+        BunkEnabled = true;
     }
     #endregion
 
+    #region PasswordMethods
+    private void PasswordEscaped(object s = null, EventArgs e = null)
+    {
+        var mouseHelper = Game.Services.GetService<MouseHelper>();
+        _passwordImage.Visible = _passwordInput.Visible = false;
+        _passwordInput.Escaped -= PasswordEscaped;
+        _passwordInput.Returned -= PasswordReturned;
+        mouseHelper.Enabled = Statics.ShowCursor = BunkEnabled = true;
+    }
+    
+    private void PasswordReturned(object s, EventArgs e)
+    {
+        var read = _passwordInput.Text.TrimEnd();
+        if (read.Length is 0)
+        {
+            PasswordEscaped();
+            return;
+        }
+        
+        if (read.StartsWith("ELO WANTS"))
+        {
+            try
+            {
+                if (read[9] is not ' ')
+                {
+                    WrongPassword();
+                    return;
+                }
+                read = read.Remove(0, 10);
+                if (read.Length > 2)
+                    read = read.Remove(2);
+                NewLevel(byte.Parse(read));
+            } catch (Exception)
+            {
+                EnterTheEditor();
+            }
+            return;
+        }
+
+        if (read is "THE FINAL CUT")
+        {
+            EnterTheEditor();
+            return;
+        }
+
+        var search = new Lexer(Game).GetLevelNumber(read);
+        NewLevel(search);
+    }
+
+    private void NewLevel(byte newLevel)
+    {
+        if (newLevel is 0)
+        {
+            WrongPassword();
+            return;
+        }
+        
+        _passwordInput.Text = $"NEW LEVEL: {Configs.Stage = newLevel}";
+        Components.Add(new TimeDelayedAction(Game, TimeSpan.FromSeconds(1.4), () => PasswordEscaped()));
+    }
+
+    private void WrongPassword()
+    {
+        _passwordInput.Text = " WRONG PASSWORD";
+        Components.Add(new TimeDelayedAction(Game, TimeSpan.FromSeconds(1.4), () => PasswordEscaped()));
+    }
+    
+    private void EnterTheEditor()
+    {
+        throw new NotImplementedException("Level editor not implemented.");
+    }
+    #endregion
+    
     protected override void Dispose(bool disposing)
     {
         _ownSetButton.LeftButtonDown -= OwnSet;
