@@ -25,7 +25,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     #endregion
 
     public DirectionArrow(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, "Pipe", arrayPosition, xx, yy)
+        : base(game, "Pipes", arrayPosition, xx, yy)
     {
         _direction = xx switch
         {
