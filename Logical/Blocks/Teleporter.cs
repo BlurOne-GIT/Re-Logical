@@ -79,16 +79,16 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
          var closedPipes = new[]
         {
             FileValue is not 0x09 &&
-            (Pos.X is 0 || (!HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue) &&
+            (Point.X is 0 || (!IBlock.HorizontalAttachables.Contains(blocks[Point.X - 1, Point.Y].FileValue) &&
                             FileValue is 0x08 or 0x0A)), // Left
             FileValue is not 0x08 &&
-            Pos.Y is 0 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue) &&
+            Point.Y is 0 || (!IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y - 1].FileValue) &&
                            FileValue is 0x09 or 0x0A), // Up
             FileValue is not 0x09 &&
-            Pos.X is 7 || (!HorizontalAttachables.Contains(blocks[Pos.X + 1, Pos.Y].FileValue) &&
+            Point.X is 7 || (!IBlock.HorizontalAttachables.Contains(blocks[Point.X + 1, Point.Y].FileValue) &&
                            FileValue is 0x08 or 0x0A), // Right
             FileValue is not 0x08 &&
-            Pos.Y is 4 || (!VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) &&
+            Point.Y is 4 || (!IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y + 1].FileValue) &&
                            FileValue is 0x09 or 0x0A)  // Down
         };
         

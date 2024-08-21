@@ -23,7 +23,19 @@ public static class Statics
     #endregion
 
     #region Properties
-    public static string Set { get; set; } = StandardSet;
+    private static string _levelSetPath = StandardSet;
+
+    public static string LevelSetPath
+    {
+        get => _levelSetPath;
+        set
+        {
+            _levelSetPath = value;
+            LevelSet = new LevelSet(value);
+        }
+    }
+
+    public static LevelSet LevelSet { get; private set; } = new(StandardSet);
     public static SpriteFont TextureFont { get; private set; }
     public static SpriteFont TopazFont => Configs.FidelityLevel is IFixable.FidelityLevel.Remastered ? _topazPlus : _topaz;
     public static Color TopazColor => TopazColors[Configs.GraphicSet-1];

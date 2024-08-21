@@ -59,10 +59,10 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     {
         var closedPipes = new[]
         {
-            Pos.X == 0 || !HorizontalAttachables.Contains(blocks[Pos.X - 1, Pos.Y].FileValue), // Left
-            Pos.Y == 0 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y - 1].FileValue),  // Up
-            Pos.X == 7 || !HorizontalAttachables.Contains(blocks[Pos.X+1, Pos.Y].FileValue), // Right
-            Pos.Y == 4 || !VerticalAttachables.Contains(blocks[Pos.X, Pos.Y + 1].FileValue) // Down
+            Point.X == 0 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X - 1, Point.Y].FileValue), // Left
+            Point.Y == 0 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y - 1].FileValue),  // Up
+            Point.X == 7 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X+1, Point.Y].FileValue), // Right
+            Point.Y == 4 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y + 1].FileValue) // Down
         };
 
         var shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);

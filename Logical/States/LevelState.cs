@@ -22,8 +22,8 @@ public class LevelState : GameState
     private int _oTimeLoopCounter;
     public static List<BallColors> ColorJobLayout = new(4);
     public static BallColors NextBall { get; private set; }
-    private static bool IsTimed => Hourglass.BruceCook is not null;
     private readonly Block[,] _tileset;
+    private readonly Level _level;
     private Ball _mainPipeBall;
     private SoundEffect _successSfx;
     private SoundEffect _failSfx;
@@ -66,16 +66,19 @@ public class LevelState : GameState
         ColorJobsFinished = 0;
         Ball.BallCreated += AddBall;
         Ball.BallDestroyed += RemoveBall;
-        var lexer = new Lexer(game);
-        _tileset = lexer.GetLevelBlocks(Configs.Stage, out _oTime, out var timeLeft, out _, out _);
-        _oTime++;
-        if (IsTimed)
+        _level = Statics.LevelSet.GetLevel(Configs.Stage);
+        _tileset = new Block[8,5];
+        _oTime = _level.BallTime + 1;
+        for (var i = 0; i < _level.Blocks.Length; i++)
         {
-            Hourglass.BruceCook.InitialCycles = timeLeft;
-            Hourglass.TimeOut += OnTimeOut;
+            var x = i % 8;
+            var y = i / 8;
+            _tileset[x, y] = ((FileBlock)_level.Blocks[x, y]).ToGameBlock(game);
         }
         foreach (var gameObject in _tileset)
         {
+            Components.Add(gameObject);
+            
             if (gameObject is IReloadable reloadable)
                 reloadable.Reload(_tileset);
             
@@ -85,15 +88,18 @@ public class LevelState : GameState
             
             if (gameObject is IFixable fixable && fixable.ShallFix(Configs.FidelityLevel))
                 fixable.Fix(Configs.FidelityLevel);
-            
-            Components.Add(gameObject);
+        }
+        if (_level.IsTimed)
+        {
+            Hourglass.BruceCook.InitialCycles = _level.Time;
+            Hourglass.TimeOut += OnTimeOut;
         }
 
         Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipe", new Vector2(16, 30), 0));
         _oTimeBar = new SimpleImage(Game, "MainPipeTime", new Vector2(304f, 35f), 1);
         Components.Add(_oTimeBar);
         for (int x = 0; x < 8; x++)
-            if (_tileset[x, 0].FileValue is 0x01 or 0x16)
+            if (_level.Blocks[x, 0].FileValue is 0x01 or 0x16)
                 Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipeOpen", new Vector2(25 + 36 * x, 41), 1));
 
         Spinner.AllDone += Win;
@@ -153,7 +159,7 @@ public class LevelState : GameState
 
         Configs.Stage++;
 
-        _timeLeft = IsTimed ? Hourglass.BruceCook.TimeLeftPoints : 100;
+        _timeLeft = _level.IsTimed ? Hourglass.BruceCook.TimeLeftPoints : 100;
     }
 
 

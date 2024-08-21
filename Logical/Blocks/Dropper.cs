@@ -28,7 +28,7 @@ public class Dropper : Block
 
     public override void Update(GameTime gameTime)
     {
-        if (Pos.Y != 0)
+        if (Point.Y != 0)
             return;
 
         foreach (var ball in Ball.AllBalls.ToArray())

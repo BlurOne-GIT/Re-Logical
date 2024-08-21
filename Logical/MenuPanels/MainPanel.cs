@@ -151,10 +151,11 @@ public class MainPanel : MenuPanel
 
     private void StandardLevelset(object sender, EventArgs e)
     {
-        Statics.Set = Statics.StandardSet;
+        Statics.LevelSetPath = Statics.StandardSet;
         LevelsetComplete();
     }
     
+    // TODO: extra errors (LevelSet constructor exceptions, selected file is default set)
     private async void SelectLeveldisk(object sender, EventArgs e)
     {
         var mouseHelper = Game.Services.GetService<MouseHelper>();
@@ -165,7 +166,7 @@ public class MainPanel : MenuPanel
         Statics.ShowCursor = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = true;
         
         if (result.IsOk)
-            Statics.Set = result.Path;
+            Statics.LevelSetPath = result.Path;
         if (!result.IsError)
         {
             LevelsetComplete();
@@ -237,7 +238,7 @@ public class MainPanel : MenuPanel
             return;
         }
 
-        var search = new Lexer(Game).GetLevelNumber(read);
+        var search = Statics.LevelSet.GetLevelNumber(read);
         NewLevel(search);
     }
 
