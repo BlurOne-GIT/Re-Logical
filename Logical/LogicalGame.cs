@@ -135,7 +135,7 @@ public class LogicalGame : EngineGame
         base.UnloadContent();
     }
 
-    protected override void OnExiting(object sender, EventArgs args)
+    protected override void OnExiting(object sender, ExitingEventArgs args)
     {
         Configs.CloseFile();
         Configs.ResolutionChanged -= ReloadScale;

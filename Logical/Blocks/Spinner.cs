@@ -12,7 +12,7 @@ namespace Logical.Blocks;
 public class Spinner : Block, IReloadable, IFixable, IOverlayable
 {
     #region Fields
-    public static readonly List<Spinner> ExplodedSpinners = new(0);
+    public static readonly List<Spinner> ExplodedSpinners = [];
     public static event EventHandler AllDone;
     public static event EventHandler ConditionClear;
     private static SoundEffect _popInSfx;
@@ -23,35 +23,36 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     private bool _hasExploded;
     private readonly ClickableArea[] _slotButtons = new ClickableArea[4];
     private bool[] _closedPipes = new bool[4];
-    private readonly List<BallColors?> _slotBalls = new(4) { null, null, null, null };
+    private readonly List<BallColors?> _slotBalls = [null, null, null, null];
     
     #region Coordinates
-    private readonly Animation<Vector2>[] _ballOffsetAnimations = {
-        new(new Vector2[]{
-            new(11f,  6f),
-            new(8f),
-            new( 6f, 11f),
-            new( 5f, 14f)
-        }, false), // Left
-        new(new Vector2[]{
-            new(22f, 11f),
-            new(20f,  8f),
-            new(17f,  6f),
-            new(14f,  5f)
-        }, false), // Up
-        new(new Vector2[]{
-            new(17f, 22f),
-            new(20f),
-            new(22f, 17f),
-            new(23f, 14f)
-        }, false), // Right
-        new(new Vector2[]{
-            new( 6f, 17f),
-            new( 8f, 20f),
-            new(11f, 22f),
-            new(14f, 23f)
-        }, false) // Down
-    };
+    private readonly Animation<Vector2>[] _ballOffsetAnimations =
+    [
+        new Animation<Vector2>([
+            new Vector2(11f,  6f),
+            new Vector2(8f),
+            new Vector2( 6f, 11f),
+            new Vector2( 5f, 14f)
+        ], false), // Left
+        new Animation<Vector2>([
+            new Vector2(22f, 11f),
+            new Vector2(20f,  8f),
+            new Vector2(17f,  6f),
+            new Vector2(14f,  5f)
+        ], false), // Up
+        new Animation<Vector2>([
+            new Vector2(17f, 22f),
+            new Vector2(20f),
+            new Vector2(22f, 17f),
+            new Vector2(23f, 14f)
+        ], false), // Right
+        new Animation<Vector2>([
+            new Vector2( 6f, 17f),
+            new Vector2( 8f, 20f),
+            new Vector2(11f, 22f),
+            new Vector2(14f, 23f)
+        ], false) // Down
+    ];
     /*private readonly Vector2[] _buttonOffsets =
     {
         new(4f, 13f), // Left
@@ -59,21 +60,22 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         new(23f, 13f), // Right
         new(13f, 23f) // Down
     };*/
-    private readonly Vector2[] _registers = {
-        new( 0f, 13f), // Left
-        new(13f,  0f), // Up
-        new(26f, 13f), // Right
-        new(13f, 26f)  // Down
-    };
+    private readonly Vector2[] _registers =
+    [
+        new Vector2( 0f, 13f), // Left
+        new Vector2(13f,  0f), // Up
+        new Vector2(26f, 13f), // Right
+        new Vector2(13f, 26f)  // Down
+    ];
 
     private static readonly Rectangle[] BallRectangles =
-    {
-        new(0, 0, 8, 8),
-        new(8, 0, 8, 8),
-        new(16, 0, 8, 8),
-        new(24, 0, 8, 8),
-        new(32, 0, 8, 8)
-    };
+    [
+        new Rectangle(0, 0, 8, 8),
+        new Rectangle(8, 0, 8, 8),
+        new Rectangle(16, 0, 8, 8),
+        new Rectangle(24, 0, 8, 8),
+        new Rectangle(32, 0, 8, 8)
+    ];
     private static readonly Vector2 SpinTextureOffset = new(5f);
     private static readonly Vector2 ExplodeTextureOffset = new(3f);
     #endregion
@@ -81,16 +83,15 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     private readonly Animation<Rectangle> _spinAnimation =
         Animation<Rectangle>.TextureAnimation(new Point(26), new Point(78, 26), false);
 
-    private readonly Animation<Rectangle> _explodeAnimation = new(new Rectangle[]
-    {
-        new(58, 0, 29, 29), // 2
-        new( 0, 0, 29, 29), // 0
-        new(29, 0, 29, 29), // 1
-        new(29, 0, 29, 29), // 1
-        new( 0, 0, 29, 29), // 0
-        new(58, 0, 29, 29), // 2
-        new(87, 0, 29, 29)  // 3
-    }, false);
+    private readonly Animation<Rectangle> _explodeAnimation = new([
+        new Rectangle(58, 0, 29, 29), // 2
+        new Rectangle( 0, 0, 29, 29), // 0
+        new Rectangle(29, 0, 29, 29), // 1
+        new Rectangle(29, 0, 29, 29), // 1
+        new Rectangle( 0, 0, 29, 29), // 0
+        new Rectangle(58, 0, 29, 29), // 2
+        new Rectangle(87, 0, 29, 29)  // 3
+    ], false);
 
     #region Textures
     private static Texture2D _spinningTexture;
@@ -363,18 +364,14 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     protected override void UnloadContent()
     {
         _popInSfx = _popOutSfx = _spinSfx = _explodeSfx = null;
-        _spinningTexture = null;
-        _explodingTexture = null;
-        _ballsTexture = null;
-        _spinnerClosings = null;
-        Game.Content.UnloadAssets(new []
-        {
+        _spinningTexture = _explodingTexture = _ballsTexture = _spinnerClosings = null;
+        Game.Content.UnloadAssets([
             "Sfx/PopIn", "Sfx/PopOut", "Sfx/Spin", "Sfx/Explode",
             "SpinnerBalls",
             $"{Configs.GraphicSet}/SpinnerSpin",
             $"{Configs.GraphicSet}/SpinnerExplode",
             $"{Configs.GraphicSet}/SpinnerClosings"
-        });
+        ]);
         base.UnloadContent();
     }
 

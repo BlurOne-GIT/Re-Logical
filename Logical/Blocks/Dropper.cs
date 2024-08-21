@@ -2,7 +2,6 @@ using System;
 using Logical.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
@@ -16,7 +15,7 @@ public class Dropper : Block
     #endregion
 
     public Dropper(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, "PipeVertical", arrayPosition, xx, yy)
+        : base(game, "Pipes", arrayPosition, xx, yy)
     {
         DefaultSource = new Rectangle(0, 0, 36, 36);
     }
@@ -32,7 +31,7 @@ public class Dropper : Block
         if (Pos.Y != 0)
             return;
 
-        foreach (var ball in Ball.AllBalls) // This had .ToArray()
+        foreach (var ball in Ball.AllBalls.ToArray())
         {
             if (LevelState.MovesLeft > 1 && ball.Position == _inRegister + Position)
             {

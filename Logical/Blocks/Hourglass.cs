@@ -168,7 +168,7 @@ public class Hourglass : Block, IFixable
     protected override void UnloadContent()
     {
         _sandUsed = _sandLeft = null;
-        Game.Content.UnloadAssets(new [] { "SandLeft", "SandStreamTemplate", "SandUsed" });
+        Game.Content.UnloadAssets(["SandLeft", "SandStreamTemplate", "SandUsed"]);
         base.UnloadContent();
     }
 

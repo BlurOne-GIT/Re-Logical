@@ -57,7 +57,7 @@ public class ColourChanger : Pipe, IOverlayable
     protected override void UnloadContent()
     {
         _shadow = _indicator = null;
-        Game.Content.UnloadAssets(new []{"ColourChangers", "Indicators"});
+        Game.Content.UnloadAssets(["ColourChangers", "Indicators"]);
         base.UnloadContent();
     }
 

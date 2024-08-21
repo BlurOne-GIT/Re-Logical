@@ -116,12 +116,11 @@ public class MenuState : GameState
     protected override void UnloadContent()
     {
         //Game.Content.UnloadAsset("Sfx/1/Success"); // DEBUG //
-        Game.Content.UnloadAssets(new []
-        {
+        Game.Content.UnloadAssets([
             "Choose Music",
             "Sfx/Button",
             $"{Configs.GraphicSet}/UI/MainMenu"
-        });
+        ]);
     }
 
     protected override void Dispose(bool disposing)

@@ -12,13 +12,14 @@ public static class Statics
     public const string StandardSet = "./Content/alf.dat";
     private static SpriteFont _topaz;
     private static SpriteFont _topazPlus;
-    private static readonly Color[] TopazColors = {
-        new(0xFF334466U), // packed ABGR for #643 (GS1)
-        new(0xFF335555U), // packed ABGR for #553 (GS2)
-        new(0xFF664466U), // packed ABGR for #646 (GS3)
-        new(0xFF114455U), // packed ABGR for #541 (GS4)
-        new(0xFF115588U)  // packed ABGR for #851 (GS4R)
-    };
+    private static readonly Color[] TopazColors =
+    [
+        new Color(0xFF334466U), // packed ABGR for #643 (GS1)
+        new Color(0xFF335555U), // packed ABGR for #553 (GS2)
+        new Color(0xFF664466U), // packed ABGR for #646 (GS3)
+        new Color(0xFF114455U), // packed ABGR for #541 (GS4)
+        new Color(0xFF115588U)  // packed ABGR for #851 (GS4R)
+    ];
     #endregion
 
     #region Properties
@@ -29,7 +30,7 @@ public static class Statics
     public static SpriteFont DisplayFont { get; private set; }
     public static bool ShowCursor { get; set; }
     public static float BackdropOpacity { get; set; }
-    public static Random Brandom = new();
+    public static readonly Random Brandom = new();
     public static readonly Dictionary<Direction, Direction> ReverseDirection = new(4)
     {
         {Direction.Left, Direction.Right},

@@ -19,12 +19,12 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     private static readonly Vector2 ShadowOffset = new(10, 19);
     private Rectangle _shadowSource;
     private static readonly Vector2[] ClosedPipeOffsets =
-    {
-        new(0, 10),  // Left
-        new(10, 0),  // Up
-        new(26, 10), // Right
-        new(10, 26)  // Down
-    };
+    [
+        new Vector2(0, 10),  // Left
+        new Vector2(10, 0),  // Up
+        new Vector2(26, 10), // Right
+        new Vector2(10, 26)  // Down
+    ];
     private int _shadowNum;
     private bool _completelyOpen;
     private static Texture2D _pipeClosings;
@@ -137,12 +137,11 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
     protected override void UnloadContent()
     {
         _pipeClosings = _shadow = null;
-        Game.Content.UnloadAssets(new []
-        {
+        Game.Content.UnloadAssets([
             "Teleporters",
             $"{Configs.GraphicSet}/TeleporterShadows", 
             $"{Configs.GraphicSet}/PipeClosings"
-        });
+        ]);
         base.UnloadContent();
     }
 

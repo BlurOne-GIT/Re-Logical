@@ -43,7 +43,7 @@ public class ColourForecast : Block, IFixable
     protected override void UnloadContent()
     {
         _holder = _indicators = _shadow = null;
-        Game.Content.UnloadAssets(new []{"Holder", "Indicators", $"{Configs.GraphicSet}/HolderShadows"});
+        Game.Content.UnloadAssets(["Holder", "Indicators", $"{Configs.GraphicSet}/HolderShadows"]);
         base.UnloadContent();
     }
 

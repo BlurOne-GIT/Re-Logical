@@ -165,7 +165,7 @@ public static class Configs
         {
             _fileStream?.Close();
             _fileStream = System.IO.File.Create(File);
-            _fileStream.Write(new[] {(byte)'{', (byte)'}'});
+            _fileStream.Write("{}"u8);
             _fileStream.Flush();
             _fileStream.Close();
             _fileStream = System.IO.File.Open(File, FileMode.Open);

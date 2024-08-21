@@ -14,11 +14,11 @@ public class TrafficLights : Block
     public bool DisableTraffic;
 
     private static readonly Vector2[] BallOffsets =
-    {
-        new(14f, 5f),
-        new(14f, 14f),
-        new(14f, 23f)
-    };
+    [
+        new Vector2(14f, 5f),
+        new Vector2(14f, 14f),
+        new Vector2(14f, 23f)
+    ];
     private readonly Rectangle[] _rectangles = new Rectangle[3];
     #endregion
 

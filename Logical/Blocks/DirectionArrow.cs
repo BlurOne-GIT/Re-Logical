@@ -95,13 +95,12 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     protected override void UnloadContent()
     {
         _pipeClosings = _shadow = null;
-        Game.Content.UnloadAssets(new []
-        {
+        Game.Content.UnloadAssets([
             $"{Configs.GraphicSet}/PipeClosings",
             "Holder",
             $"{Configs.GraphicSet}/DirectionArrows",
             $"{Configs.GraphicSet}/HolderShadows"
-        });
+        ]);
         base.UnloadContent();
     }
 

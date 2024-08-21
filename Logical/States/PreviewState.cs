@@ -93,9 +93,9 @@ public class PreviewState : GameState
     private readonly Mode _mode;
     private readonly string _message;
     private TextComponent _changingDisplay;
-    private readonly List<string> _displayMessages = new();
+    private readonly List<string> _displayMessages = [];
     private TextComponent _bonusMessage;
-    private readonly List<int> _bonuses = new();
+    private readonly List<int> _bonuses = [];
 
     private enum Mode
     {

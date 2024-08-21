@@ -4,21 +4,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
-public class MarbleDisplay : Block
+public class MarbleDisplay(Game game, Point arrayPosition, byte xx, byte yy)
+    : Block(game, "MarbleDisplay", arrayPosition, xx, yy)
 {
     #region Field
     private static Texture2D _blue;
     private static readonly Vector2[] BlueOffsets =
-    {
-        new(7f, 9f),
-        new(7f, 14f),
-        new(7f, 19f),
-        new(7f, 24f)
-    };
+    [
+        new Vector2(7f, 9f),
+        new Vector2(7f, 14f),
+        new Vector2(7f, 19f),
+        new Vector2(7f, 24f)
+    ];
     #endregion
-
-    public MarbleDisplay(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, "MarbleDisplay", arrayPosition, xx, yy) { }
 
     protected override void LoadContent()
     {

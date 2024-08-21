@@ -11,23 +11,20 @@ public class ColourHandicap : Block, IFixable
     public bool DisableJobs;
     private static Texture2D _balls;
     private static readonly Vector2[] BallOffsets =
-    {
-        new( 5f, 15f), // Left
-        new(14f,  5f), // Up
-        new(23f, 15f), // Right
-        new(14f, 23f)  // Down
-    };
+    [
+        new Vector2( 5f, 15f), // Left
+        new Vector2(14f,  5f), // Up
+        new Vector2(23f, 15f), // Right
+        new Vector2(14f, 23f)  // Down
+    ];
     private static readonly Vector2[] FixedBallOffsets =
-    {
-        new( 5f, 14f), // Left
-        new(14f,  5f), // Up
-        new(23f, 14f), // Right
-        new(14f, 23f)  // Down
-    };
+    [
+        new Vector2( 5f, 14f), // Left
+        new Vector2(14f,  5f), // Up
+        new Vector2(23f, 14f), // Right
+        new Vector2(14f, 23f)  // Down
+    ];
 
-    // Uncomment when MonoGame moves to .Net 7+
-    //private ref Vector2[] ballOffsets = ref BallOffsets;
-    // In the meanwhile, we're stuck with copying the array values
     private Vector2[] _ballOffsets = BallOffsets;
     
     private readonly Rectangle[] _rectangles = new Rectangle[4];
