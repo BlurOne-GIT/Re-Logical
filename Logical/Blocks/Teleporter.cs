@@ -74,7 +74,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable
                     ball.Position = DetectionPoint + FirstVerticalTp.Position;
     }
 
-    public void Reload(Block[,] blocks)
+    public void Reload(IBlock[,] blocks)
     {
          var closedPipes = new[]
         {

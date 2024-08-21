@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Linq;
 using Logical.Blocks;
 using Microsoft.Xna.Framework;
@@ -14,6 +15,7 @@ public readonly struct Level
         Time = time;
         Name = name;
         EncodedName = encodedName;
+        IsTimed = Blocks.OfType<IBlock>().Any(x => x.FileValue is 0x13); // Hourglass
     }
     
     public Level(IBlock[,] blocks, byte number, byte ballTime, byte time, string name)
@@ -26,7 +28,7 @@ public readonly struct Level
     public byte Number { get; init; }
     public byte BallTime { get; init; }
     public byte Time { get; init; }
-    public bool IsTimed => Blocks.OfType<IBlock>().Any(x => x.FileValue is 0x13); // Hourglass
+    public bool IsTimed { get; init; }
     public string Name { get; init; }
     public byte[] EncodedName { get; init; }
 }
@@ -37,7 +39,8 @@ public interface IBlock
     public byte Argument { get; }
     public Point Point { get; }
     public sealed bool HasArgument => Argument is not 0;
-    protected static readonly byte[] VerticalAttachables =
+    
+    protected static readonly ImmutableHashSet<byte> VerticalAttachables =
     [
         0x01,
         0x03,
@@ -54,7 +57,8 @@ public interface IBlock
         0x11,
         0x16
     ];
-    protected static readonly byte[] HorizontalAttachables =
+    
+    protected static readonly ImmutableHashSet<byte> HorizontalAttachables =
     [
         0x01,
         0x02,
@@ -72,12 +76,8 @@ public interface IBlock
     ];
 }
 
-public readonly struct FileBlock(byte xx, byte yy, Point point) : IBlock
+public readonly record struct FileBlock(byte FileValue, byte Argument, Point Point) : IBlock
 {
-    public byte FileValue { get; init; } = xx;
-    public byte Argument { get; init; } = yy;
-    public Point Point { get; init; } = point;
-
     public Block ToGameBlock(Game game) => FileValue switch
     {
         0x00 => new EmptyBlock(game, Point, FileValue, Argument),

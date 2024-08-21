@@ -131,15 +131,15 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         base.LoadContent();
     }
 
-    public void Reload(Block[,] blocks)
+    public void Reload(IBlock[,] blocks)
     {
-        _closedPipes = new[]
-        {
-            Point.X == 0 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X - 1, Point.Y].FileValue), // Left
+        _closedPipes =
+        [
+            Point.X is 0 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X - 1, Point.Y].FileValue), // Left
             Point.Y != 0 && !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y - 1].FileValue),   // Up
-            Point.X == 7 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X + 1, Point.Y].FileValue), // Right
-            Point.Y == 4 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y + 1].FileValue)    // Down
-        };
+            Point.X is 7 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X + 1, Point.Y].FileValue), // Right
+            Point.Y is 4 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y + 1].FileValue)    // Down
+        ];
         
         if (!_closedPipes[(int)Direction.Left])
         {

@@ -55,14 +55,14 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             ball.MovementDirection = _direction;
     }
 
-    public void Reload(Block[,] blocks)
+    public void Reload(IBlock[,] blocks)
     {
         var closedPipes = new[]
         {
-            Point.X == 0 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X - 1, Point.Y].FileValue), // Left
-            Point.Y == 0 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y - 1].FileValue),  // Up
-            Point.X == 7 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X+1, Point.Y].FileValue), // Right
-            Point.Y == 4 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y + 1].FileValue) // Down
+            Point.X is 0 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X - 1, Point.Y].FileValue), // Left
+            Point.Y is 0 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y - 1].FileValue),  // Up
+            Point.X is 7 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X + 1, Point.Y].FileValue), // Right
+            Point.Y is 4 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y + 1].FileValue) // Down
         };
 
         var shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);

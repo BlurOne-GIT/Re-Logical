@@ -19,12 +19,12 @@ public abstract class Block(Game game, string textureName, Point arrayPosition, 
     #endregion
 
     public static explicit operator FileBlock(Block block)
-        => new() { FileValue = block.FileValue, Argument = block.Argument };
+        => new(block.FileValue, block.Argument, block.Point);
 }
 
 public interface IReloadable
 {
-    public void Reload(Block[,] blocks);
+    public void Reload(IBlock[,] blocks);
 }
 
 public interface IOverlayable
