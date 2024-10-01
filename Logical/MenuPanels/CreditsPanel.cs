@@ -10,7 +10,7 @@ public class CreditsPanel : MenuPanel
     
     public CreditsPanel(Game game) : base(game)
     {
-        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
+        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         _backButton.LeftButtonDown += Back;
     }
 

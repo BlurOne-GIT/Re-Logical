@@ -13,10 +13,10 @@ public class SettingsPanel : MenuPanel
     
     public SettingsPanel(Game game) : base(game)
     {
-        Components.Add(_videoButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), false));
-        Components.Add(_audioButton = new ClickableArea(Game, new Rectangle(108, 109, 103, 16), false));
-        Components.Add(_fixesButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), false));
-        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
+        Components.Add(_videoButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_audioButton = new ClickableArea(Game, new Rectangle(108, 109, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_fixesButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         
         _videoButton.LeftButtonDown += Video;
         _audioButton.LeftButtonDown += Audio;

@@ -30,31 +30,31 @@ public class MainPanel : MenuPanel
     
     public MainPanel(Game game) : base(game)
     {
-        Components.Add(_ownSetButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), false));
-        Components.Add(_passwordButton = new ClickableArea(Game, new Rectangle(108, 109, 103, 16), false));
-        Components.Add(_aboutButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), false));
-        Components.Add(_settingsButton = new ClickableArea(Game, new Rectangle(108, 155, 103, 16), false));
-        Components.Add(GraphicsSetButton = new ClickableArea(Game, new Rectangle(108, 179, 103, 16), false));
-        Components.Add(StartButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
+        Components.Add(_ownSetButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_passwordButton = new ClickableArea(Game, new Rectangle(108, 109, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_aboutButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_settingsButton = new ClickableArea(Game, new Rectangle(108, 155, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(GraphicsSetButton = new ClickableArea(Game, new Rectangle(108, 179, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(StartButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         
         Components.Add(_levelsetImage =
             new SimpleImage(Game, $"{Configs.GraphicSet}/UI/Levelset", new Vector2(7, 87), 4)
                 { Enabled = false, Visible = false }
         );
         Components.Add(_standardLevelsetButton =
-            new ClickableArea(Game, new Rectangle(187, 87, 70, 18), false)
+            new ClickableArea(Game, new Rectangle(187, 87, 70, 18), outsideBehaviour: ClickableArea.OutsideBehaviour.None)
                 { Enabled = false }
         );
         Components.Add(_customLevelsetButton =
-            new ClickableArea(Game, new Rectangle(257, 87, 54, 18), false)
+            new ClickableArea(Game, new Rectangle(257, 87, 54, 18), outsideBehaviour: ClickableArea.OutsideBehaviour.None)
                 { Enabled = false }
         );
         Components.Add(_cancelLeveldiskButton =
-            new ClickableArea(Game, new Rectangle(203, 87, 54, 18), false)
+            new ClickableArea(Game, new Rectangle(203, 87, 54, 18), outsideBehaviour: ClickableArea.OutsideBehaviour.None)
                 { Enabled = false }
         );
         Components.Add(_selectLeveldiskButton =
-            new ClickableArea(Game, new Rectangle(257, 87, 54, 18), false)
+            new ClickableArea(Game, new Rectangle(257, 87, 54, 18), outsideBehaviour: ClickableArea.OutsideBehaviour.None)
                 { Enabled = false }
         );
         Components.Add(_leveldiskErrorText =
@@ -105,7 +105,7 @@ public class MainPanel : MenuPanel
     private void Password(object s, EventArgs e)
     {
         // TODO: replicate feel of input opening
-        var mouseHelper = Game.Services.GetService<MouseHelper>();
+        var mouseHelper = Game.Services.GetService<ClickableWindow>();
         mouseHelper.Enabled = Statics.ShowCursor = BunkEnabled = false;
         _passwordInput.Text = string.Empty;
         _passwordInput.CaretIndex = 0;
@@ -158,7 +158,7 @@ public class MainPanel : MenuPanel
     // TODO: extra errors (LevelSet constructor exceptions, selected file is default set)
     private async void SelectLeveldisk(object sender, EventArgs e)
     {
-        var mouseHelper = Game.Services.GetService<MouseHelper>();
+        var mouseHelper = Game.Services.GetService<ClickableWindow>();
         mouseHelper.ButtonDown += BeepOnFileSelect;
         Statics.ShowCursor = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = false;
         var result = await Task.Run(() => Dialog.FileOpen("dat"));
@@ -196,7 +196,7 @@ public class MainPanel : MenuPanel
     #region PasswordMethods
     private void PasswordEscaped(object s = null, EventArgs e = null)
     {
-        var mouseHelper = Game.Services.GetService<MouseHelper>();
+        var mouseHelper = Game.Services.GetService<ClickableWindow>();
         _passwordImage.Visible = _passwordInput.Visible = false;
         _passwordInput.Escaped -= PasswordEscaped;
         _passwordInput.Returned -= PasswordReturned;

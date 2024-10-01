@@ -19,8 +19,8 @@ public class AudioPanel : MenuPanel
     
     public AudioPanel(Game game) : base(game)
     {
-        Components.Add(_bgmVolUpButton = new ClickableArea(Game, new Rectangle(161, 89, 10, 10), false));
-        Components.Add(_bgmVolDownButton = new ClickableArea(Game, new Rectangle(187, 89, 10, 10), false));
+        Components.Add(_bgmVolUpButton = new ClickableArea(Game, new Rectangle(161, 89, 10, 10), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_bgmVolDownButton = new ClickableArea(Game, new Rectangle(187, 89, 10, 10), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(
             _bgmVol = new TextComponent(Game, Statics.TopazFont, $"{Configs.MusicVolume:00}", new Vector2(171, 90), 3)
             {
@@ -28,8 +28,8 @@ public class AudioPanel : MenuPanel
                 Color = Statics.TopazColor
             }
         );
-        Components.Add(_sfxVolUpButton = new ClickableArea(Game, new Rectangle(161, 111, 10, 10), false));
-        Components.Add(_sfxVolDownButton = new ClickableArea(Game, new Rectangle(187, 111, 10, 10), false));
+        Components.Add(_sfxVolUpButton = new ClickableArea(Game, new Rectangle(161, 111, 10, 10), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_sfxVolDownButton = new ClickableArea(Game, new Rectangle(187, 111, 10, 10), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(
             _sfxVol = new TextComponent(Game, Statics.TopazFont, $"{Configs.SfxVolume:00}", new Vector2(171, 112), 3)
             {
@@ -37,8 +37,8 @@ public class AudioPanel : MenuPanel
                 Color = Statics.TopazColor
             }
         );
-        Components.Add(_stereoSplitUpButton = new ClickableArea(Game, new Rectangle(157, 134, 10, 10), false));
-        Components.Add(_stereoSplitDownButton = new ClickableArea(Game, new Rectangle(191, 134, 10, 10), false));
+        Components.Add(_stereoSplitUpButton = new ClickableArea(Game, new Rectangle(157, 134, 10, 10), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_stereoSplitDownButton = new ClickableArea(Game, new Rectangle(191, 134, 10, 10), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(
             _stereoSplit = new TextComponent(Game, Statics.TopazFont, $"{Configs.StereoSeparation:00}0", new Vector2(167, 135), 3)
             {
@@ -46,7 +46,7 @@ public class AudioPanel : MenuPanel
                 Color = Statics.TopazColor
             }
         );
-        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
+        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         
         _bgmVolUpButton.LeftButtonDown += BgmVolUp;
         _bgmVolDownButton.LeftButtonDown += BgmVolDown;

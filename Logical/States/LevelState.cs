@@ -148,7 +148,7 @@ public class LevelState : GameState
         InteractionEnabler(false);
         Components.Add(_fakeCursor = new SimpleImage(Game,
             Game.Content.Load<Texture2D>("Cursor"),
-            MouseHelper.MouseVector - Statics.CursorTextureOffset,
+            ClickableArea.MouseVector - Statics.CursorTextureOffset,
             10));
         _ballsLeft = Ball.AllBalls.Count - 1;
         foreach (var ball in Ball.AllBalls.ToArray())
@@ -247,7 +247,7 @@ public class LevelState : GameState
                         State = States.Paused;
                         Components.Add(_fakeCursor = new SimpleImage(Game,
                             Game.Content.Load<Texture2D>("Cursor"),
-                            MouseHelper.MouseVector - Statics.CursorTextureOffset,
+                            ClickableArea.MouseVector - Statics.CursorTextureOffset,
                             10));
                         InteractionEnabler(false);
                         break;

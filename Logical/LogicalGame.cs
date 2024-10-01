@@ -105,7 +105,7 @@ public class LogicalGame : EngineGame
         if (Statics.ShowCursor)
             SpriteBatch.Draw(
                 _cursorTexture,
-                MouseHelper.MouseVector,
+                ClickableArea.MouseVector,
                 null,
                 Color.White,
                 0,

@@ -141,7 +141,7 @@ public class PreviewState : GameState
     public override void Initialize()
     {
         Game.Window.KeyDown += HandleInput;
-        Game.Services.GetService<MouseHelper>().ButtonDown += HandleInput;
+        Game.Services.GetService<ClickableWindow>().ButtonDown += HandleInput;
         base.Initialize();
     }
 

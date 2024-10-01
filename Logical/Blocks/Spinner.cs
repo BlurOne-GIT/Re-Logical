@@ -109,7 +109,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         : base(game, "Spinner", arrayPosition, xx, yy)
     {
         DefaultSource = new Rectangle(0, 0, 36, 36);
-        _spinButton = new ClickableArea(game, new Rectangle(Position.ToPoint(), new Point(36)), false);
+        _spinButton = new ClickableArea(game, new Rectangle(Position.ToPoint(), new Point(36)), outsideBehaviour: ClickableArea.OutsideBehaviour.None);
         _spinButton.RightButtonDown += Spin;
         if (Point.Y is 0)
             _registers[(int)Direction.Up] = new Vector2(13f, -13f);
@@ -143,7 +143,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         
         if (!_closedPipes[(int)Direction.Left])
         {
-            _slotButtons[0] = new ClickableArea(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9)), false) {Enabled = false};
+            _slotButtons[0] = new ClickableArea(Game, new Rectangle((Position + new Vector2(4f, 13f)).ToPoint(), new Point(10, 9)), outsideBehaviour: ClickableArea.OutsideBehaviour.None) {Enabled = false};
             _slotButtons[0].LeftButtonDown += PopOut;
             _closingsOffset.X = _closingsSource.X = 10;
             _closingsSource.Width = 26;
@@ -153,7 +153,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         {
             if (Point.Y != 0 && blocks[Point.X, Point.Y - 1].FileValue is not 0x16)
             {
-                _slotButtons[1] = new ClickableArea(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10)), false) {Enabled = false};
+                _slotButtons[1] = new ClickableArea(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10)), outsideBehaviour: ClickableArea.OutsideBehaviour.None) {Enabled = false};
                 _slotButtons[1].LeftButtonDown += PopOut;
             }
             _closingsOffset.Y = _closingsSource.Y = 10;
@@ -162,7 +162,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         
         if (!_closedPipes[(int)Direction.Right])
         {
-            _slotButtons[2] = new ClickableArea(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9)), false)
+            _slotButtons[2] = new ClickableArea(Game, new Rectangle((Position + new Vector2(23f, 13f)).ToPoint(), new Point(10, 9)), outsideBehaviour: ClickableArea.OutsideBehaviour.None)
                 { Enabled = false };
             _slotButtons[2].LeftButtonDown += PopOut;
             
@@ -177,7 +177,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         if (!_closedPipes[(int)Direction.Down])
         {
             if (blocks[Point.X, Point.Y + 1].FileValue is 0x16) return;
-            _slotButtons[3] = new ClickableArea(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10)), false)
+            _slotButtons[3] = new ClickableArea(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10)), outsideBehaviour: ClickableArea.OutsideBehaviour.None)
             { Enabled = false };
             _slotButtons[3].LeftButtonDown += PopOut;
             

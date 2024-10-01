@@ -28,7 +28,7 @@ public class TitleState : GameState
 
     protected override void LoadContent()
     {
-        Game.Services.GetService<MouseHelper>().ButtonDown += HandleInput;
+        Game.Services.GetService<ClickableWindow>().ButtonDown += HandleInput;
         _titel = Game.Content.Load<Song>("Titel");
         _background = new SimpleImage(Game, "Credit", new Vector2(0f, 28f), 0);
         Components.Add(_background);
@@ -70,7 +70,7 @@ public class TitleState : GameState
     private void EndCaller(object s, object e)
     {
         Game.Window.KeyDown -= HandleInput;
-        Game.Services.GetService<MouseHelper>().ButtonDown -= HandleInput;
+        Game.Services.GetService<ClickableWindow>().ButtonDown -= HandleInput;
         MediaPlayer.MediaStateChanged -= EndCaller;
         if (Configs.MusicVolume is 0)
             _transitionCounter = MusicTransitionTime;

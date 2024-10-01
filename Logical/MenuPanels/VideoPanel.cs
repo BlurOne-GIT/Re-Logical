@@ -18,12 +18,12 @@ public class VideoPanel : MenuPanel
     
     public VideoPanel(Game game) : base(game)
     {
-        Components.Add(_windowModeButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), false));
+        Components.Add(_windowModeButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(_windowModeImage =
             new SimpleImage(Game, $"{Configs.GraphicSet}/UI/WindowMode", new Vector2(108, 87), 3)
             { DefaultSource = WindowModeRectangle }
         );
-        Components.Add(_scaleUpButton = new ClickableArea(Game, new Rectangle(158, 111,10, 10), false));
+        Components.Add(_scaleUpButton = new ClickableArea(Game, new Rectangle(158, 111,10, 10), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(_scaleText =
             new TextComponent(Game, Statics.TopazFont, $"{Configs.Scale:00}", new Vector2(168, 112), 3)
             {
@@ -31,8 +31,8 @@ public class VideoPanel : MenuPanel
                 Color = Statics.TopazColor
             }
         );
-        Components.Add(_scaleDownButton = new ClickableArea(Game, new Rectangle(184, 111, 10, 10), false));
-        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
+        Components.Add(_scaleDownButton = new ClickableArea(Game, new Rectangle(184, 111, 10, 10), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         
         _scaleUpButton.LeftButtonDown += ScaleUp;
         _scaleDownButton.LeftButtonDown += ScaleDown;

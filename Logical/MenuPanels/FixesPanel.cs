@@ -14,12 +14,12 @@ public class FixesPanel : MenuPanel
     
     public FixesPanel(Game game) : base(game)
     {
-        Components.Add(_fidelityLevelButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), false));
+        Components.Add(_fidelityLevelButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(_fidelityLevelImage =
             new SimpleImage(Game, $"{Configs.GraphicSet}/UI/FidelityLevels", new Vector2(108, 87), 3)
             { DefaultSource = FidelityLevelRectangle }
         );
-        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), false));
+        Components.Add(_backButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         
         _fidelityLevelButton.ButtonDown += FidelityLevel;
         _backButton.LeftButtonDown += Back;
