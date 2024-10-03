@@ -24,6 +24,7 @@ public static class Statics
 
     #region Properties
     private static string _levelSetPath = StandardSet;
+    private static readonly SpriteFont[] TextureFonts = new SpriteFont[5]; // TODO: add texture font fidelity levels
 
     public static string LevelSetPath
     {
@@ -36,7 +37,7 @@ public static class Statics
     }
 
     public static LevelSet LevelSet { get; private set; } = new(StandardSet);
-    public static SpriteFont TextureFont { get; private set; }
+    public static SpriteFont TextureFont => TextureFonts[Configs.GraphicSet-1];
     public static SpriteFont TopazFont => Configs.FidelityLevel is IFixable.FidelityLevel.Remastered ? _topazPlus : _topaz;
     public static Color TopazColor => TopazColors[Configs.GraphicSet-1];
     public static SpriteFont DisplayFont { get; private set; }
@@ -77,6 +78,23 @@ public static class Statics
         _topazPlus = content.Load<SpriteFont>("Fonts/TopazPlus");
         for (int i = 0; i < _topazPlus.Glyphs.Length; i++)
             ++_topazPlus.Glyphs[i].Cropping.X;
+        
+        characters = content.Load<List<char>>("Fonts/TextureFontCharset");
+        kernings = [];
+        glyphRectangles = [];
+        fontRectangles = [];
+        for (int i = 0; i < characters.Count; ++i)
+        {
+            glyphRectangles.Add(new Rectangle(i*16, 0, 16, 16));
+            fontRectangles.Add(new Rectangle(0, 0, 16, 16));
+            kernings.Add(new Vector3(0, 16, 0));
+        }
+        // TODO: add all texture fonts
+        for (int gs = 0; gs < 1/*5*/; ++gs)
+        {
+            fontTexture = content.Load<Texture2D>($"{gs+1}/UI/Font");
+            TextureFonts[gs] = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
+        }
     }
     #endregion
 }
