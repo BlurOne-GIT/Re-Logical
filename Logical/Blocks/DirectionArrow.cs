@@ -35,7 +35,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             0x11 => Direction.Down,
             _ => throw new ArgumentException("Invalid Bumper direction")
         };
-        DefaultSource = new Rectangle(0, 72, 36, 36);
+        DefaultSource = new Rectangle(0, 36, 36, 36);
     }
 
     protected override void LoadContent()
