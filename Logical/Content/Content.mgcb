@@ -265,6 +265,18 @@
 /processorParam:TextureFormat=Color
 /build:1/UI/FixesPanel.png
 
+#begin 1/UI/Font.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:1/UI/Font.png
+
 #begin 1/UI/Levelset.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -440,6 +452,11 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Fonts/DisplayFontCharset.xml
+
+#begin Fonts/TextureFontCharset.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Fonts/TextureFontCharset.xml
 
 #begin Fonts/Topaz_a500_v1.0.ttf
 /copy:Fonts/Topaz_a500_v1.0.ttf
