@@ -75,6 +75,11 @@ public class LevelState : GameState
             var y = i / 8;
             _tileset[x, y] = ((FileBlock)_level.Blocks[x, y]).ToGameBlock(game);
         }
+        if (_level.IsTimed)
+        {
+            Hourglass.BruceCook.InitialCycles = _level.Time;
+            Hourglass.TimeOut += OnTimeOut;
+        }
         foreach (var gameObject in _tileset)
         {
             Components.Add(gameObject);
@@ -88,11 +93,6 @@ public class LevelState : GameState
             
             if (gameObject is IFixable fixable && fixable.ShallFix(Configs.FidelityLevel))
                 fixable.Fix(Configs.FidelityLevel);
-        }
-        if (_level.IsTimed)
-        {
-            Hourglass.BruceCook.InitialCycles = _level.Time;
-            Hourglass.TimeOut += OnTimeOut;
         }
 
         Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipe", new Vector2(16, 30), 0));
