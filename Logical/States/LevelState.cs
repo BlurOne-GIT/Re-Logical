@@ -4,7 +4,6 @@ using System.Linq;
 using Logical.Blocks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MmgEngine;
 
@@ -30,7 +29,9 @@ public class LevelState : GameState
     private int _ballsLeft;
     private int _timeLeft;
     private const int BlackTime = 660;
-    private const int FadeTime = 280;
+    private const int FadeTime = 300;
+    private const int DelayTime = 40;
+    private const int PauserTime = 2*FadeTime + DelayTime; 
     private States _state = States.BlackIn;
     private States State
     {
@@ -45,7 +46,7 @@ public class LevelState : GameState
     private int _stateTimer;
     private double _leavingDuration;
     private Action _blackOutAction;
-    private SimpleImage _fakeCursor;
+    private readonly TextComponent _pausedText;
     
     private enum States
     {
@@ -96,8 +97,9 @@ public class LevelState : GameState
         }
 
         Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipe", new Vector2(16, 30), 0));
-        _oTimeBar = new SimpleImage(Game, "MainPipeTime", new Vector2(304f, 35f), 1);
-        Components.Add(_oTimeBar);
+        Components.Add(
+            _oTimeBar = new SimpleImage(Game, "MainPipeTime", new Vector2(304f, 35f), 1)
+        );
         for (int x = 0; x < 8; x++)
             if (_level.Blocks[x, 0].FileValue is 0x01 or 0x16)
                 Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipeOpen", new Vector2(25 + 36 * x, 41), 1));
@@ -110,6 +112,16 @@ public class LevelState : GameState
             Spinner.ConditionClear += RecheckConditioned;
         
         Game.Window.KeyDown += HandleInput;
+        Components.Add(
+            _pausedText = new TextComponent(Game, Statics.TextureFont, "PAUSED", new Vector2(113, 119), 10)
+            {
+                Opacity = 0f,
+                Enabled = false, // Somehow writing Enable = Visible = false
+                Visible = false // makes the whole state not render, who knows...
+            }
+        );
+
+        Statics.Cursor.Enabled = true; // TODO: refactor this Cursor Visible/Enabled logic 
     }
 
     protected override void LoadContent()
@@ -146,10 +158,10 @@ public class LevelState : GameState
         State = States.Won;
         _stateTimer = 1;
         InteractionEnabler(false);
-        Components.Add(_fakeCursor = new SimpleImage(Game,
+        Statics.Cursor.Enabled = false; /*Components.Add(_fakeCursor = new SimpleImage(Game,
             Game.Content.Load<Texture2D>("Cursor"),
-            ClickableArea.MouseVector - Statics.CursorTextureOffset,
-            10));
+            HoverableArea.MouseVector - Statics.CursorTextureOffset,
+            10));*/
         _ballsLeft = Ball.AllBalls.Count - 1;
         foreach (var ball in Ball.AllBalls.ToArray())
             if (ball != _mainPipeBall)
@@ -165,6 +177,7 @@ public class LevelState : GameState
 
     public override void Update(GameTime gameTime)
     {
+        // This piece of code looks absolutely horrible, I may change it up later by making a proper state machine or using SyncRunnables
         switch (State)
         {
             case States.BlackIn:
@@ -172,17 +185,29 @@ public class LevelState : GameState
                     State = States.FadeIn;
                 break;
             case States.FadeIn:
+                Statics.Backdrop.Opacity = Math.Clamp(1f - _stateTimer / (float)FadeTime, 0f, 1f);
+                
+                if (_stateTimer < FadeTime)
+                    break;
+                
+                _mainPipeBall = new Ball(Game, new Vector2(295, 33), Direction.Left, (BallColors)Statics.Brandom.Next(0, 4), false) { Enabled = false };
+                InteractionEnabler(true);
+                foreach (var ball in Ball.AllBalls)
+                    ball.Visible = true;
+                State = States.Playing;
+                break;
             case States.Unpausing:
-                Statics.BackdropOpacity = Math.Clamp(1f - _stateTimer / (float) FadeTime, 0f, 1f);
-                if (_stateTimer >= FadeTime)
-                {
-                    if (State is States.FadeIn)
-                        _mainPipeBall = new Ball(Game, new Vector2(295, 33), Direction.Left, (BallColors)Statics.Brandom.Next(0, 4), false) { Enabled = false };
-                    InteractionEnabler(true);
-                    foreach (var ball in Ball.AllBalls)
-                        ball.Visible = true;
-                    State = States.Playing;
-                }
+                _pausedText.Opacity = Math.Clamp(1f - _stateTimer / (float)FadeTime, 0f, 1f);
+                Statics.Backdrop.Opacity = Math.Clamp(1f - (_stateTimer - FadeTime - DelayTime) / (float)FadeTime, 0f, 1f);
+
+                if (_stateTimer < PauserTime)
+                    break;
+                
+                InteractionEnabler(true);
+                foreach (var ball in Ball.AllBalls)
+                    ball.Visible = true;
+                State = States.Playing;
+                _pausedText.Visible = false;
                 break;
             case States.Playing:
                 if (_mainPipeBall.Position.X is 15 or 297)
@@ -200,25 +225,26 @@ public class LevelState : GameState
                 _oTimeLoopCounter = _oTimeLoopCounter == 0 ? _oTime : _oTimeLoopCounter-1;
                 break;
             case States.Paused:
-                Statics.BackdropOpacity = Math.Clamp(_stateTimer / (float) FadeTime, 0f, 1f);
+                Statics.Backdrop.Opacity = Math.Clamp(_stateTimer / (float)FadeTime, 0f, 1f);
+                _pausedText.Opacity = Math.Clamp((_stateTimer - FadeTime - DelayTime) / (float)FadeTime, 0f, 1f);
                 break;
             case States.Won:
-                if (_stateTimer >= 9)
-                {
-                    _ballsLeft += Spinner.ExplodedSpinners.First().FinalBoom();
-                    Spinner.ExplodedSpinners.RemoveAt(0);
-                    _stateTimer = 0;
-                    if (Spinner.ExplodedSpinners.Count is 0)
-                        Leave(_successSfx,
-                            () => SwitchState(new PreviewState(Game, _timeLeft, _ballsLeft, ColorJobsFinished)));
-                }
+                if (_stateTimer < 9)
+                    break;
+                
+                _ballsLeft += Spinner.ExplodedSpinners.First().FinalBoom();
+                Spinner.ExplodedSpinners.RemoveAt(0);
+                _stateTimer = 0;
+                if (Spinner.ExplodedSpinners.Count is 0)
+                    Leave(_successSfx,
+                        () => SwitchState(new PreviewState(Game, _timeLeft, _ballsLeft, ColorJobsFinished)));
                 break;
             case States.Leaving:
                 if (_stateTimer >= _leavingDuration)
                     State = States.FadeOut;
                 break;
             case States.FadeOut:
-                Statics.BackdropOpacity = Math.Clamp(_stateTimer / (float) FadeTime, 0f, 1f);
+                Statics.Backdrop.Opacity = Math.Clamp(_stateTimer / (float)FadeTime, 0f, 1f);
                 if (_stateTimer >= FadeTime)
                     State = States.BlackOut;
                 break;
@@ -245,14 +271,16 @@ public class LevelState : GameState
                 {
                     case States.Playing:
                         State = States.Paused;
-                        Components.Add(_fakeCursor = new SimpleImage(Game,
+                        Statics.Cursor.Enabled = false; /*Components.Add(_fakeCursor = new SimpleImage(Game,
                             Game.Content.Load<Texture2D>("Cursor"),
-                            ClickableArea.MouseVector - Statics.CursorTextureOffset,
-                            10));
+                            HoverableArea.MouseVector - Statics.CursorTextureOffset,
+                            10));*/
                         InteractionEnabler(false);
+                        _pausedText.Visible = true;
                         break;
                     case States.Paused:
-                        Components.Remove(_fakeCursor);
+                        Statics.Cursor.Visible = false;
+                        Statics.Cursor.Enabled = true; //Components.Remove(_fakeCursor);
                         foreach (var ball in Ball.AllBalls)
                             ball.Visible = false;
                         State = States.Unpausing;
@@ -278,7 +306,8 @@ public class LevelState : GameState
 
     private void InteractionEnabler(bool enable)
     {
-        Statics.ShowCursor = enable;
+        if (enable)
+            Statics.Cursor.Visible = true; //Statics.ShowCursor = enable;
         foreach (var block in _tileset)
             block.Enabled = enable;
         foreach (var ball in Ball.AllBalls)
@@ -287,7 +316,7 @@ public class LevelState : GameState
 
     private void Leave(SoundEffect sfx, Action action)
     {
-        Components.Remove(_fakeCursor);
+        Statics.Cursor.Visible = false; //Statics.Cursor.Enabled = false; //Components.Remove(_fakeCursor);
         _mainPipeBall.Dispose();
         sfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         _leavingDuration = sfx.Duration.TotalMilliseconds - FadeTime;
@@ -297,6 +326,7 @@ public class LevelState : GameState
     
     private void Lose(string reason)
     {
+        Statics.Cursor.Visible = false;
         InteractionEnabler(false);
         Leave(_failSfx, () => SwitchState(new PreviewState(Game, reason)));
         foreach (var ball in Ball.AllBalls.ToArray())

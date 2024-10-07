@@ -106,7 +106,7 @@ public class MainPanel : MenuPanel
     {
         // TODO: replicate feel of input opening
         var mouseHelper = Game.Services.GetService<ClickableWindow>();
-        mouseHelper.Enabled = Statics.ShowCursor = BunkEnabled = false;
+        mouseHelper.Enabled = Statics.Cursor.Visible /*Statics.ShowCursor*/ = BunkEnabled = false;
         _passwordInput.Text = string.Empty;
         _passwordInput.CaretIndex = 0;
         _passwordImage.Visible = _passwordInput.Visible = _passwordInput.Enabled = true;
@@ -160,10 +160,10 @@ public class MainPanel : MenuPanel
     {
         var mouseHelper = Game.Services.GetService<ClickableWindow>();
         mouseHelper.ButtonDown += BeepOnFileSelect;
-        Statics.ShowCursor = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = false;
+        Statics.Cursor.Visible /*Statics.ShowCursor*/ = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = false;
         var result = await Task.Run(() => Dialog.FileOpen("dat"));
         mouseHelper.ButtonDown -= BeepOnFileSelect;
-        Statics.ShowCursor = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = true;
+        Statics.Cursor.Visible /*Statics.ShowCursor*/ = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = true;
         
         if (result.IsOk)
             Statics.LevelSetPath = result.Path;
@@ -200,7 +200,7 @@ public class MainPanel : MenuPanel
         _passwordImage.Visible = _passwordInput.Visible = false;
         _passwordInput.Escaped -= PasswordEscaped;
         _passwordInput.Returned -= PasswordReturned;
-        mouseHelper.Enabled = Statics.ShowCursor = BunkEnabled = true;
+        mouseHelper.Enabled = Statics.Cursor.Visible /*Statics.ShowCursor*/ = BunkEnabled = true;
     }
     
     private void PasswordReturned(object s, EventArgs e)

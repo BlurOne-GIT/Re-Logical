@@ -14,8 +14,7 @@ public class LogicalGame : EngineGame
 #region Instances
     private Texture2D _cursorTexture;
     private Texture2D _backdropTexture;
-    private Vector2 _backdropSize;
-    #if DEBUG
+#if DEBUG
     private readonly string _versionString;
     private readonly string _commitString;
     #endif
@@ -74,8 +73,15 @@ public class LogicalGame : EngineGame
         
         _cursorTexture = Content.Load<Texture2D>("Cursor");
         _backdropTexture = new Texture2D(Graphics.GraphicsDevice, 1, 1);
-        _backdropTexture.SetData(new[] { Color.Black });
-        _backdropSize = new Vector2(Configs.NativeWidth, Configs.NativeHeight);
+        _backdropTexture.SetData([Color.Black]);
+        
+        Components.Add(
+            Statics.Cursor = new Cursor(this) { Enabled = false, Visible = false, DrawOrder = 10, UpdateOrder = 0}
+        );
+        Components.Add(
+            Statics.Backdrop = new SimpleImage(this, _backdropTexture, Vector2.Zero, 10)
+                { Enabled = false, Opacity = 0f, Scale = new Vector2(Configs.NativeWidth, Configs.NativeHeight) }
+        );
         Statics.LoadFonts(Content);
         #if DEBUG
         Components.Add(
@@ -102,10 +108,10 @@ public class LogicalGame : EngineGame
         // TODO: Add your drawing code here
         SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: ViewportMatrix);
         base.Draw(gameTime);
-        if (Statics.ShowCursor)
+        /*if (Statics.ShowCursor)
             SpriteBatch.Draw(
                 _cursorTexture,
-                ClickableArea.MouseVector,
+                HoverableArea.MouseVector,
                 null,
                 Color.White,
                 0,
@@ -114,7 +120,7 @@ public class LogicalGame : EngineGame
                 SpriteEffects.None,
                 1f
             );
-        if (Statics.BackdropOpacity > 0)
+        /*if (Statics.BackdropOpacity > 0)
             SpriteBatch.Draw(
                 _backdropTexture,
                 Vector2.Zero,
@@ -124,8 +130,8 @@ public class LogicalGame : EngineGame
                 Vector2.Zero,
                 _backdropSize,
                 SpriteEffects.None,
-                1f
-                );
+                0f
+                );*/
         SpriteBatch.End();
     }
 

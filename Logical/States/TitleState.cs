@@ -10,7 +10,7 @@ public class TitleState : GameState
 {
     public TitleState(Game game) : base(game)
     {
-        Statics.ShowCursor = false;
+        //Statics.Cursor.Visible = false; //Statics.ShowCursor = false;
         Game.Window.KeyDown += HandleInput;
     }
 
@@ -45,7 +45,7 @@ public class TitleState : GameState
             MediaPlayer.Volume = MathHelper.LerpPrecise(MathF.Pow(Configs.MusicVolume * 0.1f, 2), 0f, _transitionCounter / (float) MusicTransitionTime);
         else
         {
-            Statics.BackdropOpacity = 1;
+            Statics.Backdrop.Opacity = 1;
             MediaPlayer.Stop();
             MediaPlayer.Volume = Configs.MusicVolume * 0.1f;
         }

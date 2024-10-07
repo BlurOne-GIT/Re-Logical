@@ -13,7 +13,7 @@ public class MenuState : GameState
 {
     public MenuState(Game game) : base(game)
     {
-        Statics.ShowCursor = true;
+        Statics.Cursor.Enabled = Statics.Cursor.Visible = true; //Statics.ShowCursor = true;
         _menuManager = new GameStateManager<MenuPanel>(Components);
         _menuManager.Switched += MenuManagerOnSwitched;
         Game.Window.KeyDown += HandleInput;
@@ -80,7 +80,7 @@ public class MenuState : GameState
                 }
                 break;
             case States.FadeIn:
-                Statics.BackdropOpacity = Math.Clamp(1f - _timer / (float) FadeTime, 0f, 1f);
+                Statics.Backdrop.Opacity = Math.Clamp(1f - _timer / (float) FadeTime, 0f, 1f);
                 if (_timer >= FadeTime)
                 {
                     _state = States.Standby;
@@ -89,7 +89,7 @@ public class MenuState : GameState
                 }
                 break;
             case States.FadeOut:
-                Statics.BackdropOpacity = Math.Clamp(_timer / (float) FadeTime, 0f, 1f);
+                Statics.Backdrop.Opacity = Math.Clamp(_timer / (float) FadeTime, 0f, 1f);
                 if (_timer >= FadeTime)
                 {
                     _state = States.BlackOut;
@@ -109,7 +109,7 @@ public class MenuState : GameState
 
     private void HandleInput(object s, InputKeyEventArgs e)
     {
-        if (_menuManager.GameState is MainPanel && Statics.ShowCursor && e.Key is Keys.Escape)
+        if (_menuManager.GameState is MainPanel && Statics.Cursor.Visible /*Statics.ShowCursor*/ && e.Key is Keys.Escape)
             Game.Exit();
     }
 
@@ -140,6 +140,7 @@ public class MenuState : GameState
         MediaPlayer.Stop();
         _state = States.FadeOut;
         _menuManager.GameState!.Enabled = false;
+        Statics.Cursor.Enabled = false;
     }
 
     private void GraphicSet(object s, EventArgs e)

@@ -108,7 +108,7 @@ public class PreviewState : GameState
     #region Default Methods
     protected override void LoadContent()
     {
-        Statics.ShowCursor = false;
+        Statics.Cursor.Visible = false; //Statics.ShowCursor = false;
         Components.Add(new SimpleImage(
             Game,
             $"{Configs.GraphicSet}/UI/Preview",
@@ -196,7 +196,7 @@ public class PreviewState : GameState
                 }
                 break;
             case States.FadeIn:
-                Statics.BackdropOpacity = Math.Clamp(1f - _timer / (float) FadeTime, 0f, 1f);
+                Statics.Backdrop.Opacity = Math.Clamp(1f - _timer / (float) FadeTime, 0f, 1f);
                 if (_timer >= FadeTime)
                 {
                     _state = States.Standby;
@@ -204,7 +204,7 @@ public class PreviewState : GameState
                 }
                 break;
             case States.FadeOut:
-                Statics.BackdropOpacity = Math.Clamp(_timer / (float) FadeTime, 0f, 1f);
+                Statics.Backdrop.Opacity = Math.Clamp(_timer / (float) FadeTime, 0f, 1f);
                 if (_timer >= FadeTime)
                 {
                     _state = States.BlackOut;

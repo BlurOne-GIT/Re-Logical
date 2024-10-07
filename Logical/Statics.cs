@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MmgEngine;
 
 namespace Logical;
 
@@ -14,18 +15,17 @@ public static class Statics
     private static SpriteFont _topazPlus;
     private static readonly Color[] TopazColors =
     [
-        new Color(0xFF334466U), // packed ABGR for #643 (GS1)
-        new Color(0xFF335555U), // packed ABGR for #553 (GS2)
-        new Color(0xFF664466U), // packed ABGR for #646 (GS3)
-        new Color(0xFF114455U), // packed ABGR for #541 (GS4)
-        new Color(0xFF115588U)  // packed ABGR for #851 (GS4R)
+        new(0xFF334466U), // packed ABGR for #643 (GS1)
+        new(0xFF335555U), // packed ABGR for #553 (GS2)
+        new(0xFF664466U), // packed ABGR for #646 (GS3)
+        new(0xFF114455U), // packed ABGR for #541 (GS4)
+        new(0xFF115588U)  // packed ABGR for #851 (GS4R)
     ];
+    private static string _levelSetPath = StandardSet;
+    private static readonly SpriteFont[] TextureFonts = new SpriteFont[5]; // TODO: add texture font fidelity levels
     #endregion
 
     #region Properties
-    private static string _levelSetPath = StandardSet;
-    private static readonly SpriteFont[] TextureFonts = new SpriteFont[5]; // TODO: add texture font fidelity levels
-
     public static string LevelSetPath
     {
         get => _levelSetPath;
@@ -35,14 +35,13 @@ public static class Statics
             LevelSet = new LevelSet(value);
         }
     }
-
+    public static SimpleImage Backdrop { get; set; }
+    public static Cursor Cursor { get; set; }
     public static LevelSet LevelSet { get; private set; } = new(StandardSet);
     public static SpriteFont TextureFont => TextureFonts[Configs.GraphicSet-1];
     public static SpriteFont TopazFont => Configs.FidelityLevel is IFixable.FidelityLevel.Remastered ? _topazPlus : _topaz;
     public static Color TopazColor => TopazColors[Configs.GraphicSet-1];
     public static SpriteFont DisplayFont { get; private set; }
-    public static bool ShowCursor { get; set; }
-    public static float BackdropOpacity { get; set; }
     public static readonly Random Brandom = new();
     public static readonly Dictionary<Direction, Direction> ReverseDirection = new(4)
     {
