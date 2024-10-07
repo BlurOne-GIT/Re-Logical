@@ -148,7 +148,7 @@ public class PreviewState : GameState
     {
         if (_state != States.Standby) return;
         
-        _action = e.Key is not Keys.Escape ? Exit : () => SwitchState(new MenuState(Game));
+        _action = e.Key is not Keys.Escape || Configs.Lives is 0 ? Exit : () => SwitchState(new MenuState(Game));
         _state = States.FadeOut;
     }
 
@@ -171,10 +171,10 @@ public class PreviewState : GameState
         {
             case Mode.Start: SwitchState(new LevelState(Game)); break;
             case Mode.Failed:
-                if (Configs.Lives == 0)
+                if (Configs.Lives is 0)
                 {
-                    Configs.Score = 0;
                     SwitchState(new MenuState(Game));
+                    Configs.ResetGame();
                 }
                 else
                     SwitchState(new LevelState(Game));

@@ -20,9 +20,9 @@ public static class Configs
     public const int NativeWidth = 320;
     public const int NativeHeight = 256;
     private const string File = "./config.json";
-    private static byte _stage;
+    private static byte _stage = 1;
     private static uint _score;
-    private static byte _lives;
+    private static byte _lives = 3;
     private static readonly Vector2 NativeSize = new(NativeWidth, NativeHeight);
     #endregion
 
@@ -149,7 +149,6 @@ public static class Configs
             SaveGame();
         }
     }
-
     #endregion
 
     // "Constructor"
@@ -263,7 +262,10 @@ public static class Configs
     private static void LoadGame()
     {
         if (_jsonNode["game"] is null)
+        {
+            ResetGame();
             return;
+        }
 
         var buffer = _jsonNode["game"]!.GetValue<string>().ToCharArray();
         var availablePositions = new List<int>{0, 1, 2, 3, 4}; // 5 Left
@@ -276,7 +278,7 @@ public static class Configs
         _stage = (byte)((byte)buffer[position * 2] ^ masks[position]);
         if (_stage > 99)
         {
-            _stage = 0;
+            ResetGame();
             return;
         }
         availablePositions.Remove(position); // 4 Left
@@ -293,8 +295,7 @@ public static class Configs
         _score |= (uint)((byte)buffer[position * 2] ^ masks[position]) << 16;
         if (_score > 999999)
         {
-            _stage = 0;
-            _score = 0;
+            ResetGame();
             return;
         }
         availablePositions.Remove(position); // 1 Left
@@ -303,9 +304,15 @@ public static class Configs
         _lives = (byte)((byte)buffer[position * 2] ^ masks[position]);
         
         if (_lives <= 7) return;
-        _stage = 0;
+        ResetGame();
+    }
+
+    public static void ResetGame()
+    {
+        _stage = 1;
         _score = 0;
-        _lives = 0;
+        _lives = 3;
+        SaveGame();
     }
     #endregion
 }
