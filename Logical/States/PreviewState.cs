@@ -173,8 +173,8 @@ public class PreviewState : GameState
             case Mode.Failed:
                 if (Configs.Lives is 0)
                 {
-                    SwitchState(new MenuState(Game));
                     Configs.ResetGame();
+                    SwitchState(new MessageState(Game, "GAME OVER!"));
                 }
                 else
                     SwitchState(new LevelState(Game));
