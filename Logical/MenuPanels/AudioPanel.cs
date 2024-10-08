@@ -57,17 +57,41 @@ public class AudioPanel : MenuPanel
         _backButton.LeftButtonDown += Back;
     }
 
-    private void BgmVolUp(object s, EventArgs e) => _bgmVol.Text = $"{++Configs.MusicVolume:00}";
+    private void BgmVolUp(object s, EventArgs e)
+    {
+        ++Configs.MusicVolume;
+        _bgmVol.Text = $"{Configs.MusicVolume:00}";
+    }
 
-    private void BgmVolDown(object s, EventArgs e) => _bgmVol.Text = $"{--Configs.MusicVolume:00}";
+    private void BgmVolDown(object s, EventArgs e)
+    {
+        --Configs.MusicVolume;
+        _bgmVol.Text = $"{Configs.MusicVolume:00}";
+    }
 
-    private void SfxVolUp(object s, EventArgs e) => _sfxVol.Text = $"{++Configs.SfxVolume:00}";
+    private void SfxVolUp(object s, EventArgs e)
+    {
+        ++Configs.SfxVolume;
+        _sfxVol.Text = $"{Configs.SfxVolume:00}";
+    }
 
-    private void SfxVolDown(object s, EventArgs e) => _sfxVol.Text = $"{--Configs.SfxVolume:00}";
+    private void SfxVolDown(object s, EventArgs e)
+    {
+        --Configs.SfxVolume;
+        _sfxVol.Text = $"{Configs.SfxVolume:00}";
+    }
 
-    private void StereoSplitUp(object s, EventArgs e) => _stereoSplit.Text = $"{++Configs.StereoSeparation:00}0";
+    private void StereoSplitUp(object s, EventArgs e)
+    {
+        ++Configs.StereoSeparation;
+        _stereoSplit.Text = $"{Configs.StereoSeparation:00}0";
+    }
 
-    private void StereoSplitDown(object s, EventArgs e) => _stereoSplit.Text = $"{--Configs.StereoSeparation:00}0";
+    private void StereoSplitDown(object s, EventArgs e)
+    {
+        --Configs.StereoSeparation;
+        _stereoSplit.Text = $"{Configs.StereoSeparation:00}0";
+    }
 
     private void Back(object s, EventArgs e) => SwitchState(new SettingsPanel(Game));
     

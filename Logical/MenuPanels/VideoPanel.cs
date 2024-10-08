@@ -40,14 +40,24 @@ public class VideoPanel : MenuPanel
         _backButton.LeftButtonDown += Back;
     }
 
-    private void ScaleUp(object s, EventArgs e) => _scaleText.Text = $"{++Configs.Scale:00}";
-    
-    private void ScaleDown(object s, EventArgs e) => _scaleText.Text = $"{--Configs.Scale:00}";
+    private void ScaleUp(object s, EventArgs e)
+    {
+        ++Configs.Scale;
+        _scaleText.Text = $"{Configs.Scale:00}";
+    }
+
+    private void ScaleDown(object s, EventArgs e)
+    {
+        --Configs.Scale;
+        _scaleText.Text = $"{Configs.Scale:00}";
+    }
 
     private void Fullscreen(object s, EventArgs e)
     {
         Configs.Fullscreen ^= true;
         _windowModeImage.DefaultSource = WindowModeRectangle;
+        _scaleUpButton.Enabled = _scaleDownButton.Enabled = !Configs.Fullscreen;
+        _scaleText.Text = $"{Configs.Scale:00}";
     }
     
     private void Back(object s, EventArgs e) => SwitchState(new SettingsPanel(Game));
