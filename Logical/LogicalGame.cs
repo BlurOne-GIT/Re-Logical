@@ -36,7 +36,6 @@ public class LogicalGame : EngineGame
         IsMouseVisible = false;
         Window.AllowAltF4 = true;
         Window.AllowUserResizing = false;
-        Window.IsBorderless = false;
         TargetElapsedTime = TimeSpan.FromTicks(200000L);
     }
 
@@ -166,6 +165,7 @@ public class LogicalGame : EngineGame
         }
         EngineStatics.Scale = new Vector2(Configs.Scale);
         EngineStatics.Offset = Configs.ScreenOffset;
+        Window.IsBorderless = Configs.Fullscreen;
         Graphics.ApplyChanges();
     }
 

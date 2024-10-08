@@ -63,8 +63,8 @@ public static class Configs
         set
         {
             _jsonNode[nameof(Fullscreen)] = value;
-            FullscreenChanged?.Invoke(null, EventArgs.Empty);
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
+            FullscreenChanged?.Invoke(null, EventArgs.Empty);
         }
     }
     
