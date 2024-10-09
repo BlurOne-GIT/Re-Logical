@@ -107,19 +107,19 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     public IEnumerable<GameComponent> GetOverlayables()
         => new DrawableGameComponent[] { _holder, _arrow };
 
-    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
+    public IFixable.FidelityLevel Fidelity { get; } = IFixable.FidelityLevel.Intended;
     
     public void Fix(IFixable.FidelityLevel fidelity)
     {
         _holder.DefaultSource = null;
         _arrow.Position += Vector2.UnitY;
 
-        if (fidelity is not IFixable.FidelityLevel.Remastered) return;
+        /*if (fidelity is not IFixable.FidelityLevel.Remastered) return;
 
         var variation = Statics.Brandom.Next(3);
         DefaultSource = new Rectangle(72, variation * 36, 36, 36);
         _shadowSource.X = 18 * variation;
         if (!_completelyOpen)
-            _closingsSource.X += 36 * variation;
+            _closingsSource.X += 36 * variation;*/
     }
 }

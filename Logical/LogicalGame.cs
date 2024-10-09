@@ -66,7 +66,7 @@ public class LogicalGame : EngineGame
         base.LoadContent();
 
         MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2);
-        MediaPlayer.IsMuted = _m(Configs.MusicVolume);
+        MediaPlayer.IsMuted = Configs.MusicVolume is 0;
         
         _cursorTexture = Content.Load<Texture2D>("Cursor");
         _backdropTexture = new Texture2D(Graphics.GraphicsDevice, 1, 1);
@@ -169,8 +169,6 @@ public class LogicalGame : EngineGame
 
     private void Fullscreen(object s, EventArgs e) => Graphics.ToggleFullScreen();
 
-    private void UpdateVolume(object s, EventArgs e) {MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2); MediaPlayer.IsMuted = _m(Configs.MusicVolume);}
-    
-    private readonly Func<int, bool> _m = x => x == 0;
+    private void UpdateVolume(object s, EventArgs e) {MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2); MediaPlayer.IsMuted = Configs.MusicVolume is 0;}
 #endregion
 }

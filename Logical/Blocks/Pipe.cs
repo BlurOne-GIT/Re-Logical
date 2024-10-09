@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Logical.Blocks;
 
-public class Pipe : Block, IFixable
+public class Pipe : Block//, IFixable
 {
     protected int Variation { get; private set; }
     private Rectangle DefaultRectangleFormula => new(Variation * 36, FileValue * 36, 36, 36);
@@ -22,11 +22,11 @@ public class Pipe : Block, IFixable
         DefaultSource = DefaultRectangleFormula;
     }
 
-    public virtual IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Remastered;
+    /*public virtual IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Remastered;
     
     public virtual void Fix(IFixable.FidelityLevel _)
     {
         Variation = Statics.Brandom.Next(3);
         DefaultSource = DefaultRectangleFormula;
-    }
+    }*/
 }

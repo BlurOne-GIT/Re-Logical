@@ -47,7 +47,7 @@ public class ColourForecast : Block, IFixable
         base.UnloadContent();
     }
 
-    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
+    public IFixable.FidelityLevel Fidelity { get; } = IFixable.FidelityLevel.Intended;
     
     public void Fix(IFixable.FidelityLevel fidelity)
     {

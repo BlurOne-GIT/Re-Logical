@@ -6,7 +6,7 @@ using MmgEngine;
 
 namespace Logical.Blocks;
 
-public class ColourChanger : Pipe, IOverlayable
+public class ColourChanger : Pipe, IOverlayable, IFixable
 {
     #region Fields
 
@@ -47,9 +47,11 @@ public class ColourChanger : Pipe, IOverlayable
         DrawAnotherTexture(_shadow, _shadowOffset, 1, _shadowSource);
     }
 
-    public override void Fix(IFixable.FidelityLevel _)
+    public IFixable.FidelityLevel Fidelity { get; } = IFixable.FidelityLevel.Intended;
+
+    public void Fix(IFixable.FidelityLevel _)
     {
-        base.Fix(_);
+        //base.Fix(_);
         _shadowSource = new Rectangle(13 * Variation, FileValue * 12, 12, 12);
         _shadowOffset = new Vector2(15f, 16f);
     }

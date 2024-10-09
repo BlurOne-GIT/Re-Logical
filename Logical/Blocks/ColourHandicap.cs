@@ -81,7 +81,7 @@ public class ColourHandicap : Block, IFixable
         base.UnloadContent();
     }
 
-    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Refined;
+    public IFixable.FidelityLevel Fidelity { get; } = IFixable.FidelityLevel.Refined;
 
     public void Fix(IFixable.FidelityLevel fidelity)
     {
