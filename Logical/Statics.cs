@@ -55,7 +55,6 @@ public static class Statics
     #endregion
 
     #region Methods
-    // TODO: after exporting the complete font sprite, turn into an actual font to use along a local spritefont description
     public static void LoadFonts(ContentManager content)
     {
         var fontTexture = content.Load<Texture2D>("Fonts/DisplayFont");

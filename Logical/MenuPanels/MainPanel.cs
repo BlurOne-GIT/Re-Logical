@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
@@ -116,8 +117,15 @@ public class MainPanel : MenuPanel
     
     private void About(object s, EventArgs e)
     {
+        Process.Start( new ProcessStartInfo
+            {
+                FileName = "https://github.com/BlurOne-GIT/Re-Logical",
+                UseShellExecute = true
+            }
+        );
+        /* TODO: add About Panel
         throw new NotImplementedException("Missing about panel.");
-        SwitchState(new AboutPanel(Game));
+        SwitchState(new AboutPanel(Game));*/
     }
     
     private void Settings(object s, EventArgs e) => SwitchState(new SettingsPanel(Game));

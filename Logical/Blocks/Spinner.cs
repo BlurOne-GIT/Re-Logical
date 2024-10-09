@@ -276,18 +276,19 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
 
     public void Check()
     {
-        if (LevelState.ColorJobLayout.Count != 0 && _slotBalls.SequenceEqual(LevelState.ColorJobLayout.Cast<BallColors?>()))
+        if (LevelState.ColorJobLayout.Count != 0)
         {
+            if (!_slotBalls.SequenceEqual(LevelState.ColorJobLayout.Cast<BallColors?>())) return;
             Explode();
             LevelState.ColorJobLayout.Clear();
             ConditionClear?.Invoke(this, EventArgs.Empty);
             return;
         }
 
-        if (LevelState.ColorJobLayout.Count != 0 || LevelState.TrafficLights.Count != 0 && _slotBalls[0] != LevelState.TrafficLights[0])
+        if (LevelState.TrafficLights.Count != 0 && _slotBalls[0] != LevelState.TrafficLights[0])
             return;
 
-        if (_slotBalls.Any(a => a != _slotBalls[0]) || _slotBalls[0] is null) return;
+        if (_slotBalls[0] is null || _slotBalls.Any(a => a != _slotBalls[0])) return;
         
         Explode();
         if (LevelState.TrafficLights.Count == 0) return;

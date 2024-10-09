@@ -41,7 +41,6 @@ public class LogicalGame : EngineGame
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
         Configs.Initialize(Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Width, Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Height);
         ReloadScale(null, EventArgs.Empty);
         if (Configs.Fullscreen)
@@ -66,7 +65,6 @@ public class LogicalGame : EngineGame
     {
         base.LoadContent();
 
-        // TODO: use this.Content to load your game content here
         MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2);
         MediaPlayer.IsMuted = _m(Configs.MusicVolume);
         
