@@ -10,46 +10,54 @@ namespace Logical.States;
 
 public class PreviewState : GameState
 {
-    private Action _action;
-    private States _state = States.BlackIn;
-    private int _timer;
     private const int BlackTime = 660;
     private const int FadeTime = 280;
-    private enum States
+    
+    #region Fields
+    private readonly Mode _mode;
+    private readonly string _message;
+    private TextComponent _changingDisplay;
+    private readonly List<string> _displayMessages = [];
+    private TextComponent _bonusMessage;
+    private readonly List<int> _bonuses = [];
+    private int _bonusItr;
+    private LoopedAction _displayLoop;
+
+    private enum Mode
     {
-        BlackIn,
-        FadeIn,
-        Standby,
-        FadeOut,
-        BlackOut
+        Start,
+        Failed,
+        Complete
     }
+    #endregion
     
     #region Constructors
-    public PreviewState(Game game) : base(game) // MAKE IT!
+    // Common constructor
+    private PreviewState(Game game, Mode mode, string message) : base(game)
     {
-        if (Configs.Lives is 0 || Configs.Stage is 0)
-        {
-            Configs.Lives = 3;
-            Configs.Score = 0;
-            Configs.Stage = 1;
-        }
-        _message = "MAKE IT!";
-        _mode = Mode.Start;
+        _message = message;
+        _mode = mode;
     }
     
-    public PreviewState(Game game, string deathReason) : base(game) // YOU FAILED!
+    // MAKE IT!
+    public PreviewState(Game game) : this(game, Mode.Start, "MAKE IT!")
+    {
+        if (Configs.Lives is 0 || Configs.Stage is 0)
+            Configs.ResetGame();
+    }
+    
+    // YOU FAILED!
+    public PreviewState(Game game, string deathReason) : this(game, Mode.Failed, "YOU FAILED!")
     {
         if (Configs.Lives != 0)
             Configs.Lives--;
-        _message = "YOU FAILED!";
-        _mode = Mode.Failed;
         _displayMessages.Add(deathReason);
     }
     
-    public PreviewState(Game game, int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false) : base(game) // YOU MADE IT!
+    // YOU MADE IT!
+    public PreviewState(Game game, int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false)
+        : this(game, Mode.Complete, "YOU MADE IT!")
     {
-        _message = "YOU MADE IT!";
-        _mode = Mode.Complete;
         _displayMessages.Add($"TIME BONUS: 10*{timeLeft}%");
         _bonuses.Add(10 * timeLeft);
         switch (ballsLeft)
@@ -88,23 +96,7 @@ public class PreviewState : GameState
         Configs.Score += points;
     }
     #endregion
-
-    #region Fields
-    private readonly Mode _mode;
-    private readonly string _message;
-    private TextComponent _changingDisplay;
-    private readonly List<string> _displayMessages = [];
-    private TextComponent _bonusMessage;
-    private readonly List<int> _bonuses = [];
-
-    private enum Mode
-    {
-        Start,
-        Failed,
-        Complete
-    }
-    #endregion
-
+    
     #region Default Methods
     protected override void LoadContent()
     {
@@ -134,29 +126,30 @@ public class PreviewState : GameState
         }
         Components.Add( // Score
             new TextComponent(Game, Statics.TextureFont, $"{Configs.Score:000000}", new Vector2(208, 188), 1)
+                { Enabled = false }
         );
-    }
-
-    public override void Initialize()
-    {
-        Game.Window.KeyDown += HandleInput;
-        Game.Services.GetService<ClickableWindow>().ButtonDown += HandleInput;
-        base.Initialize();
-    }
-
-    private void HandleInput(object s, InputKeyEventArgs e)
-    {
-        if (_state != States.Standby) return;
         
-        _action = e.Key is not Keys.Escape || Configs.Lives is 0 ? Exit : () => SwitchState(new MenuState(Game));
-        _state = States.FadeOut;
+        Components.Add(new TimeDelayedAction(Game, TimeSpan.FromMilliseconds(BlackTime),
+            () => Components.Add(new LoopedAction(Game,
+                (_, time) => Statics.Backdrop.Opacity = (float)Math.Clamp(1f - time.TotalMilliseconds / (float) FadeTime, 0f, 1f),
+                TimeSpan.FromMilliseconds(FadeTime),
+                () =>
+                {
+                    Game.Window.KeyDown += HandleInput;
+                    Game.Services.GetService<ClickableWindow>().ButtonDown += HandleInput;
+                }
+            )) 
+        ));
     }
+
+    private void HandleInput(object s, InputKeyEventArgs e) =>
+        PrepareExit(e.Key is not Keys.Escape || Configs.Lives is 0 ? Exit : () => SwitchState(new MenuState(Game)));
+    
 
     private void HandleInput(object s, MouseButtons e)
     {
-        if ((e & (MouseButtons.LeftButton | MouseButtons.RightButton)) is MouseButtons.None || _state != States.Standby) return;
-        _action = Exit;
-        _state = States.FadeOut;
+        if ((e & (MouseButtons.LeftButton | MouseButtons.RightButton)) is not MouseButtons.None)
+            PrepareExit(Exit);
     }
 
     protected override void UnloadContent()
@@ -165,6 +158,17 @@ public class PreviewState : GameState
     #endregion
 
     #region Custom Methods
+    private void PrepareExit(Action action)
+    {
+        Game.Window.KeyDown -= HandleInput;
+        Game.Services.GetService<ClickableWindow>().ButtonDown -= HandleInput;
+        Components.Add(new LoopedAction(Game,
+            (_, time) => Statics.Backdrop.Opacity = (float)Math.Clamp(time.TotalMilliseconds / (float) FadeTime, 0f, 1f),
+            TimeSpan.FromMilliseconds(FadeTime),
+            () => Components.Add(new TimeDelayedAction(Game, TimeSpan.FromMilliseconds(BlackTime), action))
+        ));
+    } 
+    
     private void Exit()
     {
         switch (_mode)
@@ -182,49 +186,6 @@ public class PreviewState : GameState
             case Mode.Complete: SwitchState(new LevelState(Game)); break;
             default: throw new NotImplementedException();
         }
-    }
-    
-    public override void Update(GameTime gameTime)
-    {
-        switch (_state)
-        {
-            case States.BlackIn:
-                if (_timer >= BlackTime)
-                {
-                    _state = States.FadeIn;
-                    _timer = 0;
-                }
-                break;
-            case States.FadeIn:
-                Statics.Backdrop.Opacity = Math.Clamp(1f - _timer / (float) FadeTime, 0f, 1f);
-                if (_timer >= FadeTime)
-                {
-                    _state = States.Standby;
-                    _timer = 0;
-                }
-                break;
-            case States.FadeOut:
-                Statics.Backdrop.Opacity = Math.Clamp(_timer / (float) FadeTime, 0f, 1f);
-                if (_timer >= FadeTime)
-                {
-                    _state = States.BlackOut;
-                    _timer = 0;
-                }
-                break;
-            case States.BlackOut:
-                if (_timer >= BlackTime)
-                    _action();
-                break;
-        }
-        if (_state is not States.Standby)
-            _timer += gameTime.ElapsedGameTime.Milliseconds;
-        base.Update(gameTime);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        Game.Window.KeyDown -= HandleInput;
-        base.Dispose(disposing);
     }
 
     #endregion

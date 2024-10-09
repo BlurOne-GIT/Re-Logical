@@ -22,7 +22,7 @@ public class MessageState : GameState
         Components.Add(new TimeDelayedAction(Game, TimeSpan.FromMilliseconds(BlackTime), 
             () => Components.Add(new LoopedAction(Game, 
                 (_, time) => Statics.Backdrop.Opacity = (float)Math.Clamp(1.0 - time.TotalMilliseconds / FadeTime, 0f, 1f),
-                (_, time) => time.TotalMilliseconds <= FadeTime,//PauserTime,
+                TimeSpan.FromMilliseconds(FadeTime),//PauserTime,
                 () => Game.Services.GetService<ClickableWindow>().ButtonDown += OnButtonDown))
         ));
         base.Initialize();
@@ -36,7 +36,7 @@ public class MessageState : GameState
         Game.Services.GetService<ClickableWindow>().ButtonDown -= OnButtonDown;
         Components.Add(new LoopedAction(Game,
             (_, time) => Statics.Backdrop.Opacity = (float)Math.Clamp(time.TotalMilliseconds / FadeTime, 0f, 1f),
-            (_, time) => time.TotalMilliseconds <= FadeTime,//PauserTime,
+            TimeSpan.FromMilliseconds(FadeTime),//PauserTime,
             () => Components.Add(new TimeDelayedAction(Game, TimeSpan.FromMilliseconds(BlackTime),
                 () => SwitchState(new MenuState(Game))
             ))
