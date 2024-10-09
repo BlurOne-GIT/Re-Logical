@@ -12,6 +12,11 @@ public class PreviewState : GameState
 {
     private const int BlackTime = 660;
     private const int FadeTime = 280;
+    private const int TextFadeTime = 140;
+    private const int DelayTime = 100;
+    private const int TextTime = 3040;
+    private const int BlankTime = 1280;
+    private const int TotalTextTime = 2*TextFadeTime + TextTime + DelayTime;
     
     #region Fields
     private readonly Mode _mode;
@@ -112,17 +117,19 @@ public class PreviewState : GameState
         for (int i = 0; i < Configs.Lives; i++)
             Components.Add(new SimpleImage(Game, pinkBall, new Vector2(72 + 12 * i, 82), 1) { DefaultSource = new Rectangle(0, 0, 8, 8) });
         Components.Add(new TextComponent(Game, Statics.DisplayFont, $"{Configs.Stage:00} {Statics.LevelSet.GetLevelName(Configs.Stage)}", new Vector2(16, 123), 1));
-        if (_mode is not Mode.Start)
+        if (_mode is Mode.Complete) //if (_mode is not Mode.Start)
         {
-            // TODO: Implement changingDisplay with displayMessages
-            _changingDisplay = new TextComponent(Game, Statics.DisplayFont, _displayMessages[0], new Vector2(24, 163), 1);
-            Components.Add(_changingDisplay);
-            if (_mode is Mode.Complete)
-            {
-                // TODO: Implement bonusMessage with bonuses
-                _bonusMessage = new TextComponent(Game, Statics.DisplayFont, $"= {_bonuses[0]:000000}", new Vector2(232, 163), 1);
-                Components.Add(_bonusMessage);
-            }
+            Components.Add(
+                _changingDisplay = new TextComponent(Game, Statics.DisplayFont, _displayMessages[0], new Vector2(24, 163), 1)
+                    { Opacity = 0f, Enabled = false }
+            );
+            //if (_mode is Mode.Complete)
+            //{
+            Components.Add(
+                _bonusMessage = new TextComponent(Game, Statics.DisplayFont, $"= {_bonuses[0]:000000}", new Vector2(232, 163), 1)
+                    { Opacity = 0f, Enabled = false }
+            );
+            //}
         }
         Components.Add( // Score
             new TextComponent(Game, Statics.TextureFont, $"{Configs.Score:000000}", new Vector2(208, 188), 1)
@@ -137,6 +144,29 @@ public class PreviewState : GameState
                 {
                     Game.Window.KeyDown += HandleInput;
                     Game.Services.GetService<ClickableWindow>().ButtonDown += HandleInput;
+                    if (_mode is Mode.Complete)
+                        Components.Add(new TimeDelayedAction(Game, TimeSpan.FromMilliseconds(BlankTime),
+                            () => Components.Add(
+                                _displayLoop = new LoopedAction(Game,
+                                    (_, time) => _changingDisplay.Opacity = _bonusMessage.Opacity = (float)Math.Min(
+                                        Math.Clamp(time.TotalMilliseconds / TextFadeTime, 0f, 1f),
+                                        Math.Clamp(
+                                            1f - (time.TotalMilliseconds - TextTime - TextFadeTime) / TextFadeTime,
+                                            0f, 1f
+                                        )
+                                    ),
+                                    TimeSpan.FromMilliseconds(TotalTextTime),
+                                    () =>
+                                    {
+                                        if (++_bonusItr >= _bonuses.Count)
+                                            _bonusItr = 0;
+                                        _changingDisplay.Text = _displayMessages[_bonusItr];
+                                        _bonusMessage.Text = $"= {_bonuses[_bonusItr]:000000}";
+                                        Components.Add(_displayLoop);
+                                    }
+                                )
+                            )
+                        ));
                 }
             )) 
         ));
