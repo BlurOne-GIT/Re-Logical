@@ -241,6 +241,9 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         if (index is -1)
             throw new ArgumentException("External button is subscribed to the spinner event.");
         
+        if (!_slotButtons[index].Enabled)
+            return;
+        
         _slotButtons[index].Enabled = false;
         _ = new Ball(Game, _registers[index] + Position, (Direction)index, (BallColors)_slotBalls[index]!, true);
         _slotBalls[index] = null;
@@ -314,8 +317,9 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
 
     public int FinalBoom()
     {
+        var ballsLeft = _slotBalls.Count(a => a is not null);
         Explode(true);
-        return _slotBalls.Count(a => a is not null);
+        return ballsLeft;
     }
 
     public static void ClearList()
