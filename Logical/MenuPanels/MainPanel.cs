@@ -250,7 +250,8 @@ public class MainPanel : MenuPanel
             return;
         }
         
-        _passwordInput.Text = $"NEW LEVEL: {Configs.Stage = newLevel}";
+        Configs.ResetGame(newLevel);
+        _passwordInput.Text = $"NEW LEVEL: {Configs.Stage}";
         Components.Add(new TimeDelayedAction(Game, TimeSpan.FromSeconds(1.4), () => PasswordEscaped()));
     }
 

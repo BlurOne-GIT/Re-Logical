@@ -307,9 +307,9 @@ public static class Configs
         ResetGame();
     }
 
-    public static void ResetGame()
+    public static void ResetGame(byte withStage = 1)
     {
-        _stage = 1;
+        _stage = withStage;
         _score = 0;
         _lives = 3;
         SaveGame();
