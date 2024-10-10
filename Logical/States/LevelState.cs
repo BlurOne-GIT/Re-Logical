@@ -47,6 +47,7 @@ public class LevelState : GameState
     private double _leavingDuration;
     private Action _blackOutAction;
     private readonly TextComponent _pausedText;
+    private readonly List<SimpleImage> _mainPipeOpenings;
     
     private enum States
     {
@@ -100,9 +101,16 @@ public class LevelState : GameState
         Components.Add(
             _oTimeBar = new SimpleImage(Game, "MainPipeTime", new Vector2(304f, 35f), 1)
         );
+        var intendedPipes = Configs.FidelityLevel >= IFixable.FidelityLevel.Intended;
         for (int x = 0; x < 8; x++)
             if (_level.Blocks[x, 0].FileValue is 0x01 or 0x16)
-                Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipeOpen", new Vector2(25 + 36 * x, 41), 1));
+            {
+                var simpleImage = new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipeOpen",
+                    new Vector2(25 + 36 * x, intendedPipes ? 40 : 41), 1)
+                        { DefaultSource = new Rectangle(0, intendedPipes ? 0 : 1, 18, intendedPipes ? 6 : 5) };
+                Components.Add(simpleImage);
+                _mainPipeOpenings.Add(simpleImage);
+            }
 
         Spinner.AllDone += Win;
         _oTimeLoopCounter = _oTime;
