@@ -396,8 +396,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     public void Fix(IFixable.FidelityLevel fidelity)
     {
         DefaultSource = new Rectangle(36, 0, 36, 36);
-        for (int i = 0; i < _explodeAnimation.Length; ++i)
-            _explodeAnimation.Frames[i].Y = 29;
+        _explodingTexture = Game.Content.Load<Texture2D>("ExplosionCommon");
         if (fidelity is IFixable.FidelityLevel.Remastered)
             _explodeAnimation.Frames[1] = _explodeAnimation.Frames[4] = new Rectangle(116, 0, 30, 30);
         // TODO: Implement fixes for the other problems
