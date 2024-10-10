@@ -215,7 +215,12 @@ public class PreviewState : GameState
                 else
                     SwitchState(new LevelState(Game));
                 break;
-            case Mode.Complete: SwitchState(new LevelState(Game)); break;
+            case Mode.Complete: 
+                if (_showEditor)
+                    SwitchState(new MessageState(Game, "CONGRATULATIONS\n  YOU MADE IT  "));
+                else
+                    SwitchState(new LevelState(Game));
+                break;
             default: throw new NotImplementedException();
         }
     }
