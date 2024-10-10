@@ -24,6 +24,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     private readonly ClickableArea[] _slotButtons = new ClickableArea[4];
     private bool[] _closedPipes = new bool[4];
     private readonly List<BallColors?> _slotBalls = [null, null, null, null];
+    private bool _antifixRotated;
     
     #region Coordinates
     private readonly Animation<Vector2>[] _ballOffsetAnimations =
@@ -213,6 +214,13 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         _spinSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         if (LevelState.ColorJobLayout.Count != 0)
             Check();
+        
+        // Intentional break for Faithful parity
+        if (_antifixRotated) return;
+        _antifixRotated = true;
+        var source = DefaultSource!.Value;
+        source.Y += 36;
+        DefaultSource = source;
     }
 
     protected override void OnEnabledChanged(object sender, EventArgs args)
@@ -302,9 +310,6 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         foreach (var button in _slotButtons)
             if (button is not null)
                 button.Enabled = false;
-        // Intentional break for Faithful parity
-        if (Configs.GraphicSet is 1)
-            DefaultSource = new Rectangle(DefaultSource!.Value.X, 36, 36, 36);
         _explodeAnimation.Start();
         _hasExploded = true;
         for (int i = 0; i < 4; i++)
@@ -314,6 +319,10 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         _explodeSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         if (!fb && ExplodedSpinners.Count == ExplodedSpinners.Capacity)
             AllDone?.Invoke(ExplodedSpinners, EventArgs.Empty);
+
+        // Intentional break for Faithful parity
+        _antifixRotated = false;
+        DefaultSource = DefaultSource!.Value with { Y = 72};
     }
 
     public int FinalBoom()
@@ -345,16 +354,18 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
+
+        var shallSpin = !_spinAnimation.IsAtEnd;
         
         // Spinning Animation
-        if (!_spinAnimation.IsAtEnd)
+        if (shallSpin)
             DrawAnotherTexture(_spinningTexture, SpinTextureOffset, 1, _spinAnimation.NextFrame());
 
         // Slots
         for (int i = 0; i < 4; i++)
             if (_slotBalls[i] is not null)
                 DrawAnotherTexture(_ballsTexture, _ballOffsetAnimations[i].NextFrame(), 2, BallRectangles[(int)_slotBalls[i]]);
-            else if (_hasExploded)
+            else if (shallSpin && _hasExploded)
                 DrawAnotherTexture(_ballsTexture, _ballOffsetAnimations[i].NextFrame(), 2, BallRectangles[4]);
 
         // Closed Pipes
@@ -384,8 +395,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     
     public void Fix(IFixable.FidelityLevel fidelity)
     {
-        if (Configs.GraphicSet is 1)
-            DefaultSource = new Rectangle(36, 0, 36, 36);
+        DefaultSource = new Rectangle(36, 0, 36, 36);
         for (int i = 0; i < _explodeAnimation.Length; ++i)
             _explodeAnimation.Frames[i].Y = 29;
         if (fidelity is IFixable.FidelityLevel.Remastered)
