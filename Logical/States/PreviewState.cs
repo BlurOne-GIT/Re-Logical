@@ -27,6 +27,7 @@ public class PreviewState : GameState
     private readonly List<int> _bonuses = [];
     private int _bonusItr;
     private LoopedAction _displayLoop;
+    static private bool _showEditor;
 
     private enum Mode
     {
@@ -61,7 +62,7 @@ public class PreviewState : GameState
     
     // YOU MADE IT!
     public PreviewState(Game game, int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false)
-        : this(game, Mode.Complete, "YOU MADE IT!")
+        : this(game, Mode.Complete, (_showEditor = ++Configs.Stage is 100) ? "THE EDITOR!" : "YOU MADE IT!")
     {
         _displayMessages.Add($"TIME BONUS: 10*{timeLeft}%");
         _bonuses.Add(10 * timeLeft);
@@ -99,6 +100,7 @@ public class PreviewState : GameState
         _displayMessages.Add("POINTS:");
         _bonuses.Add((int)points);
         Configs.Score += points;
+        ++Configs.Stage;
     }
     #endregion
     
@@ -116,7 +118,7 @@ public class PreviewState : GameState
         var pinkBall = Game.Content.Load<Texture2D>("SpinnerBalls");
         for (int i = 0; i < Configs.Lives; i++)
             Components.Add(new SimpleImage(Game, pinkBall, new Vector2(72 + 12 * i, 82), 1) { DefaultSource = new Rectangle(0, 0, 8, 8) });
-        Components.Add(new TextComponent(Game, Statics.DisplayFont, $"{Configs.Stage:00} {Statics.LevelSet.GetLevelName(Configs.Stage)}", new Vector2(16, 123), 1));
+        Components.Add(new TextComponent(Game, Statics.DisplayFont, _showEditor ? " THE FINAL CUT" : $"{Configs.Stage:00} {Statics.LevelSet.GetLevelName(Configs.Stage)}", new Vector2(16, 123), 1));
         if (_mode is Mode.Complete) //if (_mode is not Mode.Start)
         {
             Components.Add(

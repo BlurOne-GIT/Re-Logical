@@ -177,7 +177,7 @@ public class LevelState : GameState
             else
                 ball.Enabled = false;
 
-        Configs.Stage++;
+        //Configs.Stage++;
 
         _timeLeft = _level.IsTimed ? Hourglass.BruceCook.TimeLeftPoints : 100;
     }
