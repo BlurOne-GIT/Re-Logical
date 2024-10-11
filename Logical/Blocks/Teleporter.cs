@@ -92,7 +92,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         };
         
         _shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);
-        _shadowSource = new Rectangle(_shadowNum * 22 + Variation * 42, FileValue * 14, 22, 14);
+        _shadowSource = new Rectangle(_shadowNum * 22 + Variation * 88, (int)Orientation * 14, 22, 14);
 
         if (_completelyOpen = closedPipes.All(x => !x))
         {
@@ -176,7 +176,6 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         _closingsSource.Width += 2*(26 - _closingsSource.Width);
         _closingsSource.Height += 2*(26 - _closingsSource.Height);
         _closingsOffset = new Vector2(10) - _closingsOffset;
-        
-        // TODO: add shadow change
+        _shadowSource.Y += 42;
     }
 }
