@@ -51,12 +51,13 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         _pipeClosings = Texture;
         Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/EmptyBlocks");
         _closingsSource = DefaultSource!.Value;
-        DefaultSource = new Rectangle(Configs.GraphicSet switch
-        {
-            1 or 3 => 0,
-            2 or 4 or 5 => 36,
-            _ => throw new ArgumentException("Invalid GraphicsSet")
-        }, 0, 36, 36);
+        if (Configs.GraphicSet < 4)
+            DefaultSource = new Rectangle(Configs.GraphicSet switch
+            {
+                1 or 3 => 0,
+                2 => 36,
+                _ => throw new ArgumentException("Invalid GraphicsSet")
+            }, 0, 36, 36);
         base.LoadContent();
     }
 
@@ -100,15 +101,12 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
             return;
         }
         
-        /*_closingsSource = new Rectangle(
-            closedPipes[(int)Direction.Left] ? 10 : 0,
-            closedPipes[(int)Direction.Up] ? 10 : 0,
-            16 + (closedPipes[(int)Direction.Left] ? 0 : 10) + (closedPipes[(int)Direction.Right] ? 0 : 10),
-            16 + (closedPipes[(int)Direction.Up] ? 0 : 10) + (closedPipes[(int)Direction.Down] ? 0 : 10)
-        );
-        _closingsOffset = _closingsSource.Location.ToVector2();
-        _closingsSource.X += Variation * 36;
-        */
+        if (Configs.GraphicSet >= 4)
+            DefaultSource = new Rectangle(
+                36 - (closedPipes[(int)Direction.Left] ? 36 : 0) + (closedPipes[(int)Direction.Right] ? 36 : 0),
+                closedPipes[(int)Direction.Left] || closedPipes[(int)Direction.Right] ? 36 : 0,
+                36, 36
+            );
 
         if (closedPipes[(int)Direction.Left]) _closingsSource.X += (int)(_closingsOffset.X = 10);
         else _closingsSource.Width -= 10;

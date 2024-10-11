@@ -35,12 +35,13 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             0x11 => Direction.Down,
             _ => throw new ArgumentException("Invalid Bumper direction")
         };
-        DefaultSource = new Rectangle(Configs.GraphicSet switch
-        {
-            1 or 3 => 0,
-            2 or 4 or 5 => 36,
-            _ => throw new ArgumentException("Invalid GraphicsSet")
-        }, 0, 36, 36);
+        if (Configs.GraphicSet < 4)
+            DefaultSource = new Rectangle(Configs.GraphicSet switch
+            {
+                1 or 3 => 0,
+                2 => 36,
+                _ => throw new ArgumentException("Invalid GraphicsSet")
+            }, 0, 36, 36);
     }
 
     protected override void LoadContent()
@@ -79,6 +80,13 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             DefaultSource = new Rectangle(0, 36, 36, 36);
             return;
         }
+
+        if (Configs.GraphicSet >= 4)
+            DefaultSource = new Rectangle(
+                36 - (closedPipes[(int)Direction.Left] ? 36 : 0) + (closedPipes[(int)Direction.Right] ? 36 : 0),
+                closedPipes[(int)Direction.Left] || closedPipes[(int)Direction.Right] ? 36 : 0,
+                36, 36
+            );
         
         _closingsSource = new Rectangle(
             closedPipes[(int)Direction.Left] ? 10 : 0,
@@ -134,5 +142,8 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         _closingsSource.Y = 82 - _closingsSource.Y;
         _closingsSource.Width += 2*(26 - _closingsSource.Width);
         _closingsSource.Height += 2*(26 - _closingsSource.Height);
+
+        if (Configs.GraphicSet >= 4)
+            _shadowSource.X += 18;
     }
 }
