@@ -18,16 +18,9 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
     private static Texture2D _shadow;
     private static readonly Vector2 ShadowOffset = new(10, 19);
     private Rectangle _shadowSource;
-    private static readonly Vector2[] ClosedPipeOffsets =
-    [
-        new Vector2(0, 10),  // Left
-        new Vector2(10, 0),  // Up
-        new Vector2(26, 10), // Right
-        new Vector2(10, 26)  // Down
-    ];
     private int _shadowNum;
     private bool _completelyOpen;
-    private static Texture2D _pipeClosings;
+    private Texture2D _pipeClosings;
     private Vector2 _closingsOffset;
     private Rectangle _closingsSource;
     
@@ -37,6 +30,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
     {
         _overlay = new SimpleImage(game, "Teleporters", Position + new Vector2(7, 7), 9)
             { DefaultSource = new Rectangle((xx - 0x08) * 22, 0, 22, 22)};
+
         
         if (xx is not 0x09)
             if (FirstHorizontalTp is null)
@@ -54,7 +48,15 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
     protected override void LoadContent()
     {
         _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/TeleporterShadows");
-        _pipeClosings ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosings");
+        _pipeClosings = Texture;
+        Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/EmptyBlocks");
+        _closingsSource = DefaultSource!.Value;
+        DefaultSource = new Rectangle(Configs.GraphicSet switch
+        {
+            1 or 3 => 0,
+            2 or 4 or 5 => 36,
+            _ => throw new ArgumentException("Invalid GraphicsSet")
+        }, 0, 36, 36);
         base.LoadContent();
     }
 
@@ -94,18 +96,30 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         
         _shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);
         _shadowSource = new Rectangle(_shadowNum * 22 + Variation * 42, FileValue * 14, 22, 14);
-         
-        _completelyOpen = closedPipes.All(x => !x);
-        if (_completelyOpen) return;
+
+        if (_completelyOpen = closedPipes.All(x => !x))
+        {
+            Texture = _pipeClosings;
+            DefaultSource = _closingsSource;
+            return;
+        }
         
-        _closingsSource = new Rectangle(
-            closedPipes[(int)Direction.Left] ? 0 : 10,
-            closedPipes[(int)Direction.Up] ? 0 : 10,
-            36 - (closedPipes[(int)Direction.Left] ? 0 : 10) - (closedPipes[(int)Direction.Right] ? 0 : 10),
-            36 - (closedPipes[(int)Direction.Up] ? 0 : 10) - (closedPipes[(int)Direction.Down] ? 0 : 10)
+        /*_closingsSource = new Rectangle(
+            closedPipes[(int)Direction.Left] ? 10 : 0,
+            closedPipes[(int)Direction.Up] ? 10 : 0,
+            16 + (closedPipes[(int)Direction.Left] ? 0 : 10) + (closedPipes[(int)Direction.Right] ? 0 : 10),
+            16 + (closedPipes[(int)Direction.Up] ? 0 : 10) + (closedPipes[(int)Direction.Down] ? 0 : 10)
         );
         _closingsOffset = _closingsSource.Location.ToVector2();
         _closingsSource.X += Variation * 36;
+        */
+
+        if (closedPipes[(int)Direction.Left]) _closingsSource.X += (int)(_closingsOffset.X = 10);
+        else _closingsSource.Width -= 10;
+        if (closedPipes[(int)Direction.Up]) _closingsSource.Y += (int)(_closingsOffset.Y = 10);
+        else _closingsSource.Height -= 10;
+        if (!closedPipes[(int)Direction.Right]) _closingsSource.Width -= 10;
+        if (!closedPipes[(int)Direction.Down]) _closingsSource.Height -= 10;
     }
 
     protected override void Dispose(bool disposing)
@@ -148,18 +162,27 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
     public IEnumerable<GameComponent> GetOverlayables()
         => new DrawableGameComponent[] { _overlay };
 
-    public IFixable.FidelityLevel Fidelity { get; } = IFixable.FidelityLevel.Intended;
-    
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
+
     public void Fix(IFixable.FidelityLevel fidelity)
     {
         if (FileValue is 0x0A)
             _overlay.DefaultSource = new Rectangle(66, 0, 22, 22);
         
-        /*if (fidelity >= base.Fidelity)
-            base.Fix(fidelity);
+        if (Configs.GraphicSet is 1 || _completelyOpen) return;
         
-        _shadowSource.X = _shadowNum * 22 + Variation * 42;
-        if (!_completelyOpen)
-            _closingsSource.X = (int)_closingsOffset.X + Variation * 36;*/
+        Texture = _pipeClosings;
+        DefaultSource = new Rectangle(
+            _closingsSource.X - (int)_closingsOffset.X,
+            _closingsSource.Y - (int)_closingsOffset.Y,
+            36, 36
+        );
+        _pipeClosings = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosings");
+        _closingsSource.Offset(-_closingsOffset);
+        _closingsSource.Width += 2*(26 - _closingsSource.Width);
+        _closingsSource.Height += 2*(26 - _closingsSource.Height);
+        _closingsOffset = new Vector2(10) - _closingsOffset;
+        
+        // TODO: add shadow change
     }
 }

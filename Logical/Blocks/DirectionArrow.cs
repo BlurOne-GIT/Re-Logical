@@ -15,7 +15,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     private static readonly Vector2 ShadowOffset = new(12f, 13f);
     private Rectangle _shadowSource;
 
-    private static Texture2D _pipeClosings;
+    private Texture2D _pipeClosings;
     private Vector2 _closingsOffset;
     private Rectangle _closingsSource;
     private bool _completelyOpen;
@@ -25,7 +25,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     #endregion
 
     public DirectionArrow(Game game, Point arrayPosition, byte xx, byte yy)
-        : base(game, "Pipes", arrayPosition, xx, yy)
+        : base(game, "EmptyBlock", arrayPosition, xx, yy)
     {
         _direction = xx switch
         {
@@ -35,12 +35,17 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
             0x11 => Direction.Down,
             _ => throw new ArgumentException("Invalid Bumper direction")
         };
-        DefaultSource = new Rectangle(0, 36, 36, 36);
+        DefaultSource = new Rectangle(Configs.GraphicSet switch
+        {
+            1 or 3 => 0,
+            2 or 4 or 5 => 36,
+            _ => throw new ArgumentException("Invalid GraphicsSet")
+        }, 0, 36, 36);
     }
 
     protected override void LoadContent()
     {
-        _pipeClosings ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosings");
+        _pipeClosings = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/Pipes");
         base.LoadContent();
         _holder = new SimpleImage(Game, "Holder", Position + new Vector2(9f), 8)
             { DefaultSource = new Rectangle(0, 1, 18, 17)};
@@ -67,17 +72,20 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
 
         var shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);
         _shadowSource = new Rectangle(0, shadowNum * 18, 18, 18);
-
-        _completelyOpen = closedPipes.All(x => !x);
-        if (_completelyOpen) return;
+        
+        if (_completelyOpen = closedPipes.All(x => !x))
+        {
+            Texture = _pipeClosings;
+            return;
+        }
         
         _closingsSource = new Rectangle(
-            closedPipes[(int)Direction.Left] ? 0 : 10,
-            closedPipes[(int)Direction.Up] ? 0 : 10,
-            36 - (closedPipes[(int)Direction.Left] ? 0 : 10) - (closedPipes[(int)Direction.Right] ? 0 : 10),
-            36 - (closedPipes[(int)Direction.Up] ? 0 : 10) - (closedPipes[(int)Direction.Down] ? 0 : 10)
+            closedPipes[(int)Direction.Left] ? 10 : 0,
+            closedPipes[(int)Direction.Up] ? 46 : 36,
+            16 + (closedPipes[(int)Direction.Left] ? 0 : 10) + (closedPipes[(int)Direction.Right] ? 0 : 10),
+            16 + (closedPipes[(int)Direction.Up] ? 0 : 10) + (closedPipes[(int)Direction.Down] ? 0 : 10)
         );
-        _closingsOffset = _closingsSource.Location.ToVector2();
+        _closingsOffset = new Vector2(_closingsSource.X, _closingsSource.Y - 36);
     }
 
     public override void Draw(GameTime gameTime)
@@ -94,7 +102,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
 
     protected override void UnloadContent()
     {
-        _pipeClosings = _shadow = null;
+        _shadow = null;
         Game.Content.UnloadAssets([
             $"{Configs.GraphicSet}/PipeClosings",
             "Holder",
@@ -107,19 +115,23 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
     public IEnumerable<GameComponent> GetOverlayables()
         => new DrawableGameComponent[] { _holder, _arrow };
 
-    public IFixable.FidelityLevel Fidelity { get; } = IFixable.FidelityLevel.Intended;
-    
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
+
     public void Fix(IFixable.FidelityLevel fidelity)
     {
         _holder.DefaultSource = null;
         _arrow.Position += Vector2.UnitY;
 
-        /*if (fidelity is not IFixable.FidelityLevel.Remastered) return;
+        if (fidelity < IFixable.FidelityLevel.Intended || Configs.GraphicSet is 1 || _completelyOpen)
+            return;
 
-        var variation = Statics.Brandom.Next(3);
-        DefaultSource = new Rectangle(72, variation * 36, 36, 36);
-        _shadowSource.X = 18 * variation;
-        if (!_completelyOpen)
-            _closingsSource.X += 36 * variation;*/
+        Texture = _pipeClosings;
+        DefaultSource = new Rectangle(0, 36, 36, 36);
+        _pipeClosings = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosings");
+        _closingsOffset.X = _closingsSource.X = 10 - _closingsSource.X;
+        _closingsOffset.Y = 10 - _closingsOffset.Y;
+        _closingsSource.Y = 82 - _closingsSource.Y;
+        _closingsSource.Width += 2*(26 - _closingsSource.Width);
+        _closingsSource.Height += 2*(26 - _closingsSource.Height);
     }
 }
