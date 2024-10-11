@@ -12,6 +12,7 @@
     <PackageLicenseUrl>https://github.com/BlurOne-GIT/Re-Logical/blob/main/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/BlurOne-GIT/Re-Logical</RepositoryUrl>
     <PackageTags>remake amiga puzzle-game monogame videogame logical built-with-monogame commodore-amiga</PackageTags>
+    <PackageIcon>Icon.png</PackageIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
