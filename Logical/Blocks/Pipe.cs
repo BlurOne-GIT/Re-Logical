@@ -1,13 +1,13 @@
-using System;
 using Microsoft.Xna.Framework;
 
 namespace Logical.Blocks;
 
 public class Pipe : Block//, IFixable
 {
-    protected int Variation { get; private set; }
+    protected int Variation { get; }
+    protected Orientations Orientation { get; }
     private Rectangle DefaultRectangleFormula => new(Variation * 36, FileValue * 36, 36, 36);
-    public enum Orientation
+    public enum Orientations
     {
         Vertical,
         Cross,
@@ -16,7 +16,7 @@ public class Pipe : Block//, IFixable
     
     public Pipe(Game game, Point arrayPosition, byte xx, byte yy) : base(game, "Pipes", arrayPosition, xx, yy)
     {
-        if (xx % 3 is not (int)Orientation.Cross)
+        if ((Orientation = (Orientations)(xx % 3)) is not Orientations.Cross)
             Variation = Statics.Brandom.Next(2);
 
         DefaultSource = DefaultRectangleFormula;

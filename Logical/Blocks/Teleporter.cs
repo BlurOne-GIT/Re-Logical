@@ -80,18 +80,14 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
     {
          var closedPipes = new[]
         {
-            FileValue is not 0x09 &&
-            (Point.X is 0 || (!IBlock.HorizontalAttachables.Contains(blocks[Point.X - 1, Point.Y].FileValue) &&
-                            FileValue is 0x08 or 0x0A)), // Left
-            FileValue is not 0x08 &&
-            Point.Y is 0 || (!IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y - 1].FileValue) &&
-                           FileValue is 0x09 or 0x0A), // Up
-            FileValue is not 0x09 &&
-            Point.X is 7 || (!IBlock.HorizontalAttachables.Contains(blocks[Point.X + 1, Point.Y].FileValue) &&
-                           FileValue is 0x08 or 0x0A), // Right
-            FileValue is not 0x08 &&
-            Point.Y is 4 || (!IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y + 1].FileValue) &&
-                           FileValue is 0x09 or 0x0A)  // Down
+            Orientation is not Orientations.Vertical &&
+            (Point.X is 0 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X - 1, Point.Y].FileValue)), // Left
+            Orientation is not Orientations.Horizontal &&
+            (Point.Y is 0 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y - 1].FileValue)), // Up
+            Orientation is not Orientations.Vertical &&
+            (Point.X is 7 || !IBlock.HorizontalAttachables.Contains(blocks[Point.X + 1, Point.Y].FileValue)), // Right
+            Orientation is not Orientations.Horizontal &&
+            (Point.Y is 4 || !IBlock.VerticalAttachables.Contains(blocks[Point.X, Point.Y + 1].FileValue)) // Down
         };
         
         _shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);
