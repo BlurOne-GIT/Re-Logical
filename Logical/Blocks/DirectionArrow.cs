@@ -76,6 +76,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         if (_completelyOpen = closedPipes.All(x => !x))
         {
             Texture = _pipeClosings;
+            DefaultSource = new Rectangle(0, 36, 36, 36);
             return;
         }
         
