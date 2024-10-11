@@ -29,25 +29,25 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     #region Coordinates
     private readonly Animation<Vector2>[] _ballOffsetAnimations =
     [
-        new Animation<Vector2>([
+        new([
             new Vector2(11f,  6f),
-            new Vector2(8f),
+            new Vector2( 8f),
             new Vector2( 6f, 11f),
             new Vector2( 5f, 14f)
         ], false), // Left
-        new Animation<Vector2>([
+        new([
             new Vector2(22f, 11f),
             new Vector2(20f,  8f),
             new Vector2(17f,  6f),
             new Vector2(14f,  5f)
         ], false), // Up
-        new Animation<Vector2>([
+        new([
             new Vector2(17f, 22f),
             new Vector2(20f),
             new Vector2(22f, 17f),
             new Vector2(23f, 14f)
         ], false), // Right
-        new Animation<Vector2>([
+        new([
             new Vector2( 6f, 17f),
             new Vector2( 8f, 20f),
             new Vector2(11f, 22f),
@@ -63,19 +63,19 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     };*/
     private readonly Vector2[] _registers =
     [
-        new Vector2( 0f, 13f), // Left
-        new Vector2(13f,  0f), // Up
-        new Vector2(26f, 13f), // Right
-        new Vector2(13f, 26f)  // Down
+        new( 0f, 13f), // Left
+        new(13f,  0f), // Up
+        new(26f, 13f), // Right
+        new(13f, 26f)  // Down
     ];
 
     private static readonly Rectangle[] BallRectangles =
     [
-        new Rectangle(0, 0, 8, 8),
-        new Rectangle(8, 0, 8, 8),
-        new Rectangle(16, 0, 8, 8),
-        new Rectangle(24, 0, 8, 8),
-        new Rectangle(32, 0, 8, 8)
+        new(0, 0, 8, 8),
+        new(8, 0, 8, 8),
+        new(16, 0, 8, 8),
+        new(24, 0, 8, 8),
+        new(32, 0, 8, 8)
     ];
     private static readonly Vector2 SpinTextureOffset = new(5f);
     private static readonly Vector2 ExplodeTextureOffset = new(3f);
@@ -397,9 +397,10 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
     {
         DefaultSource = new Rectangle(36, 0, 36, 36);
         _explodingTexture = Game.Content.Load<Texture2D>("ExplosionCommon");
+        for (int i = 0; i < _spinAnimation.Length; ++i)
+            _spinAnimation.Frames[i].Y = 26;
         if (fidelity is IFixable.FidelityLevel.Remastered)
             _explodeAnimation.Frames[1] = _explodeAnimation.Frames[4] = new Rectangle(116, 0, 30, 30);
-        // TODO: Implement fixes for the other problems
     }
 
     public IEnumerable<GameComponent> GetOverlayables()
