@@ -100,7 +100,6 @@ public class PreviewState : GameState
         _displayMessages.Add("POINTS:");
         _bonuses.Add((int)points);
         Configs.Score += points;
-        ++Configs.Stage;
     }
     #endregion
     
