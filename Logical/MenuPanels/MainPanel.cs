@@ -124,20 +124,18 @@ public class MainPanel : MenuPanel
 
     private void GraphicSet(object s, MouseButtons e)
     {
-        throw new NotImplementedException("Missing graphic sets.");
-        /*if ((e & (MouseButtons.MiddleButton | MouseButtons.XButton1 | MouseButtons.XButton2)) != 0) return;
-        Game.Content.UnloadAssets(new []
-        {
+        if ((e & (MouseButtons.LeftButton | MouseButtons.RightButton)) is MouseButtons.None) return;
+        Game.Content.UnloadAssets([
             $"{Configs.GraphicSet}/UI/{nameof(MainPanel)}",
             $"{Configs.GraphicSet}/UI/Levelset"
-        });
+        ]);
         if (e.HasFlag(MouseButtons.LeftButton))
             ++Configs.GraphicSet;
         else
             --Configs.GraphicSet;
         PanelBackground.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/{nameof(MainPanel)}");
         _levelsetImage.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/Levelset");
-        _leveldiskErrorText.Color = Statics.TopazColor;*/
+        _leveldiskErrorText.Color = Statics.TopazColor;
     }
     #endregion
     
