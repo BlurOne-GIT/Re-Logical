@@ -20,9 +20,9 @@ public abstract class MenuPanel : GameState
     protected override void LoadContent()
     {
         _clickSfx = Game.Content.Load<SoundEffect>("Sfx/Button");
-        Components.Add(
-            PanelBackground = new SimpleImage(Game, $"{Configs.GraphicSet}/UI/{GetType().Name}", BackgroundOffset, 1)
-            );
+        Components.Add(PanelBackground =
+            new SimpleImage(Game, $"{Configs.GraphicSet}/UI/{GetType().Name}", BackgroundOffset, 1)
+        );
         base.LoadContent();
     }
 

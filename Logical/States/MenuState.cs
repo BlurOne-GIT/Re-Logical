@@ -66,6 +66,10 @@ public class MenuState : GameState
             newMainPanel.GraphicsSetButton.LeftButtonDown += GraphicSet;
             newMainPanel.GraphicsSetButton.RightButtonDown += GraphicSet;
         }
+        else if (e.OldGameState is CreditsPanel oldCreditsPanel)
+            oldCreditsPanel.OriginalButton.LeftButtonDown -= ShowCredits;
+        else if (e.NewGameState is CreditsPanel newCreditsPanel)
+            newCreditsPanel.OriginalButton.LeftButtonDown += ShowCredits;
     }
 
     public override void Update(GameTime gameTime)
@@ -141,6 +145,14 @@ public class MenuState : GameState
         _state = States.FadeOut;
         _menuManager.GameState!.Enabled = false;
         Statics.Cursor.Enabled = false;
+    }
+
+    private void ShowCredits(object s, EventArgs e)
+    {
+        MediaPlayer.Stop();
+        _menuManager.GameState!.Enabled = false;
+        Statics.Cursor.Enabled = Statics.Cursor.Visible = false;
+        SwitchState(new TitleState(Game));
     }
 
     private void GraphicSet(object s, EventArgs e)

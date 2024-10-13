@@ -74,9 +74,9 @@ public class InfoPanel : MenuPanel
     
     protected override void Dispose(bool disposing)
     {
-        _repoButton.LeftButtonDown -= OpenRepo;
-        _wikiButton.LeftButtonDown -= OpenWiki;
         _manualButton.LeftButtonDown -= OpenManual;
+        _wikiButton.LeftButtonDown -= OpenWiki;
+        _repoButton.LeftButtonDown -= OpenRepo;
         _reviewsButton.LeftButtonDown -= OpenReviews;
         _creditsButton.LeftButtonDown -= Credits;
         _backButton.LeftButtonDown -= Back;

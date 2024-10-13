@@ -68,7 +68,7 @@ public static class Statics
             fontRectangles.Add(new Rectangle(0, 0, 8, 7));
             kernings.Add(new Vector3(0, 8, 0));
         }
-        DisplayFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
+        DisplayFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 9, 0, kernings, ' ');
         
         _topaz = content.Load<SpriteFont>("Fonts/Topaz");
         for (int i = 0; i < _topaz.Glyphs.Length; i++)
