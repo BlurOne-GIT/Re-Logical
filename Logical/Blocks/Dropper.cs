@@ -2,7 +2,6 @@ using System;
 using Logical.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
@@ -15,7 +14,11 @@ public class Dropper : Block
     private static SoundEffect _popInSfx;
     #endregion
 
-    public Dropper(Game game, Point arrayPosition, byte xx, byte yy):base(game, game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeVertical"), arrayPosition, xx, yy) { }
+    public Dropper(Game game, Point arrayPosition, byte xx, byte yy)
+        : base(game, "Pipes", arrayPosition, xx, yy)
+    {
+        DefaultSource = new Rectangle(0, 0, 36, 36);
+    }
 
     protected override void LoadContent()
     {
@@ -25,10 +28,10 @@ public class Dropper : Block
 
     public override void Update(GameTime gameTime)
     {
-        if (Pos.Y != 0)
+        if (Point.Y != 0)
             return;
 
-        foreach (var ball in Ball.AllBalls) // This had .ToArray()
+        foreach (var ball in Ball.AllBalls.ToArray())
         {
             if (LevelState.MovesLeft > 1 && ball.Position == _inRegister + Position)
             {

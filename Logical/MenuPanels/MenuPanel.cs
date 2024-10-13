@@ -1,20 +1,53 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using MmgEngine;
 
 namespace Logical.MenuPanels;
 
-public abstract class MenuPanel : DrawableGameComponent
+public abstract class MenuPanel : GameState
 {
-    private readonly SoundEffect _clickSfx;
+    private SoundEffect _clickSfx;
+    protected SimpleImage PanelBackground;
+    private static readonly Vector2 BackgroundOffset = new(108, 84);
 
     protected MenuPanel(Game game) : base(game)
     {
+        Components.ComponentAdded += OnButtonAdded;
+        Components.ComponentRemoved += OnButtonRemoved;
+    }
+    
+    protected override void LoadContent()
+    {
         _clickSfx = Game.Content.Load<SoundEffect>("Sfx/Button");
-        EnabledChanged += OnEnableChanged;
+        Components.Add(PanelBackground =
+            new SimpleImage(Game, $"{Configs.GraphicSet}/UI/{GetType().Name}", BackgroundOffset, 1)
+        );
+        base.LoadContent();
+    }
+
+    protected override void UnloadContent()
+    {
+        Game.Content.UnloadAsset($"{Configs.GraphicSet}/UI/{GetType().Name}");
+        base.UnloadContent();
     }
 
     protected void PlaySfx(object s, EventArgs e) => _clickSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
 
-    protected abstract void OnEnableChanged(object s, EventArgs e);
+    private void OnButtonAdded(object s, GameComponentCollectionEventArgs e)
+    {
+        if (e.GameComponent is ClickableArea button) button.LeftButtonDown += PlaySfx;
+    }
+    
+    private void OnButtonRemoved(object s, GameComponentCollectionEventArgs e)
+    {
+        if (e.GameComponent is ClickableArea button) button.LeftButtonDown -= PlaySfx;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        Components.ComponentAdded -= OnButtonAdded;
+        base.Dispose(disposing);
+        Components.ComponentRemoved -= OnButtonRemoved;
+    }
 }

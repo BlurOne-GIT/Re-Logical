@@ -32,7 +32,7 @@ public class Ball : SimpleImage
             _ballColor = value;
             if (_shallSound)
                 _colorChangeSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
-            DefaultRectangle = new Rectangle(10 * (int)_ballColor, 0, 10, 10);
+            DefaultSource = new Rectangle(10 * (int)_ballColor, 0, 10, 10);
         }
     }
     public Direction MovementDirection

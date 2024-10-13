@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Xna.Framework;
-using MmgEngine;
 
 namespace Logical;
 
@@ -17,16 +14,17 @@ public static class Configs
     public static event EventHandler FullscreenChanged;
     public static event EventHandler MusicVolumeChanged;
     public static event EventHandler SfxVolumeChaged;
+    public static event EventHandler GraphicSetChanged;
     #endregion
 
     #region Fields
     public const int NativeWidth = 320;
     public const int NativeHeight = 256;
     private const string File = "./config.json";
-    private static byte _stage;
+    private static byte _stage = 1;
     private static uint _score;
-    private static byte _lives;
-    private static Vector2 _nativeSize = new(NativeWidth, NativeHeight);
+    private static byte _lives = 3;
+    private static readonly Vector2 NativeSize = new(NativeWidth, NativeHeight);
     #endregion
 
     // Instances
@@ -45,7 +43,7 @@ public static class Configs
             if (!Fullscreen)
                 return Vector2.Zero;
             
-            return (ScreenSize - _nativeSize * MaxScale) / 2;
+            return (ScreenSize - NativeSize * MaxScale) / 2;
         }
     }
     
@@ -55,7 +53,7 @@ public static class Configs
         set
         {
             if (Fullscreen) return;
-            _jsonNode[nameof(Scale)] = value;
+            _jsonNode[nameof(Scale)] = Math.Clamp(value, 1, MaxScale);
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
         }
     }
@@ -66,8 +64,8 @@ public static class Configs
         set
         {
             _jsonNode[nameof(Fullscreen)] = value;
-            FullscreenChanged?.Invoke(null, EventArgs.Empty);
             ResolutionChanged?.Invoke(null, EventArgs.Empty);
+            FullscreenChanged?.Invoke(null, EventArgs.Empty);
         }
     }
     
@@ -76,7 +74,7 @@ public static class Configs
         get => _jsonNode[nameof(MusicVolume)]!.GetValue<int>();
         set
         {
-            _jsonNode[nameof(MusicVolume)] = value;
+            _jsonNode[nameof(MusicVolume)] = Math.Clamp(value, 0, 10);
             MusicVolumeChanged?.Invoke(null, EventArgs.Empty);
         }
     }
@@ -86,23 +84,52 @@ public static class Configs
         get => _jsonNode[nameof(SfxVolume)]!.GetValue<int>();
         set
         {
-            _jsonNode[nameof(SfxVolume)] = value;
+            _jsonNode[nameof(SfxVolume)] = Math.Clamp(value, 0, 10);
             SfxVolumeChaged?.Invoke(null, EventArgs.Empty);
         }
     }
     
     public static int GraphicSet
     {
-        get => _jsonNode[nameof(GraphicSet)]!.GetValue<int>();
-        set => _jsonNode[nameof(GraphicSet)] = value;
+        get
+        {
+            var value = _jsonNode[nameof(GraphicSet)]!.GetValue<int>();
+            if (value is 4 && GraphicSet4Remastered)
+                return 5;
+            return value;
+        }
+        set
+        {
+            _jsonNode[nameof(GraphicSet)] = value > 4 ? 1 : value < 1 ? 4 : value;
+            GraphicSetChanged?.Invoke(null, EventArgs.Empty);
+        }
     }
-    
+
     public static int StereoSeparation
     {
         get => _jsonNode[nameof(StereoSeparation)]!.GetValue<int>();
-        set => _jsonNode[nameof(StereoSeparation)] = value;
+        set => _jsonNode[nameof(StereoSeparation)] = Math.Clamp(value, 0, 10);
     }
     
+    public static IFixable.FidelityLevel FidelityLevel
+    {
+        get => (IFixable.FidelityLevel)_jsonNode[nameof(FidelityLevel)]!.GetValue<int>();
+        set => _jsonNode[nameof(FidelityLevel)] =
+            (int)(value > IFixable.FidelityLevel.Remastered ? IFixable.FidelityLevel.Faithful :
+                value < IFixable.FidelityLevel.Faithful ? IFixable.FidelityLevel.Remastered : value);
+    }
+    
+    public static bool GraphicSet4Remastered
+    {
+        get => _jsonNode[nameof(GraphicSet4Remastered)]!.GetValue<bool>();
+        set
+        {
+            _jsonNode[nameof(GraphicSet4Remastered)] = value;
+            if (GraphicSet >= 4)
+                GraphicSetChanged?.Invoke(null, EventArgs.Empty);
+        }
+    }
+
     public static byte Stage
     {
         get => _stage;
@@ -132,10 +159,9 @@ public static class Configs
             SaveGame();
         }
     }
-
     #endregion
 
-    // Constructor
+    // "Constructor"
     public static void Initialize(int width, int height)
     {
         ScreenSize = new Vector2(width, height);
@@ -148,7 +174,7 @@ public static class Configs
         {
             _fileStream?.Close();
             _fileStream = System.IO.File.Create(File);
-            _fileStream.Write(new[] {(byte)'{', (byte)'}'});
+            _fileStream.Write("{}"u8);
             _fileStream.Flush();
             _fileStream.Close();
             _fileStream = System.IO.File.Open(File, FileMode.Open);
@@ -159,7 +185,7 @@ public static class Configs
             Fullscreen = false;
         
         if (_jsonNode[nameof(Scale)] is null)
-            Scale = 2;
+            Scale = MaxScale / 2;
         _jsonNode[nameof(Scale)] = Math.Clamp(Scale, 1, MaxScale);
         
         if (_jsonNode[nameof(MusicVolume)] is null)
@@ -171,12 +197,19 @@ public static class Configs
         _jsonNode[nameof(SfxVolume)] = Math.Clamp(SfxVolume, 0, 10);
         
         if (_jsonNode[nameof(GraphicSet)] is null)
-            GraphicSet = 0;
-        _jsonNode[nameof(GraphicSet)] = Math.Clamp(GraphicSet, 0, 4);
+            GraphicSet = 1;
+        _jsonNode[nameof(GraphicSet)] = Math.Clamp(GraphicSet, 1, 5);
         
         if (_jsonNode[nameof(StereoSeparation)] is null)
             StereoSeparation = 3;
         _jsonNode[nameof(StereoSeparation)] = Math.Clamp(StereoSeparation, 0, 10);
+        
+        if (_jsonNode[nameof(FidelityLevel)] is null)
+            FidelityLevel = IFixable.FidelityLevel.Faithful;
+        _jsonNode[nameof(FidelityLevel)] = Math.Clamp((int)FidelityLevel, 0, 3);
+        
+        if (_jsonNode[nameof(GraphicSet4Remastered)] is null)
+            GraphicSet4Remastered = false;
         
         LoadGame();
     }
@@ -239,7 +272,10 @@ public static class Configs
     private static void LoadGame()
     {
         if (_jsonNode["game"] is null)
+        {
+            ResetGame();
             return;
+        }
 
         var buffer = _jsonNode["game"]!.GetValue<string>().ToCharArray();
         var availablePositions = new List<int>{0, 1, 2, 3, 4}; // 5 Left
@@ -252,7 +288,7 @@ public static class Configs
         _stage = (byte)((byte)buffer[position * 2] ^ masks[position]);
         if (_stage > 99)
         {
-            _stage = 0;
+            ResetGame();
             return;
         }
         availablePositions.Remove(position); // 4 Left
@@ -269,8 +305,7 @@ public static class Configs
         _score |= (uint)((byte)buffer[position * 2] ^ masks[position]) << 16;
         if (_score > 999999)
         {
-            _stage = 0;
-            _score = 0;
+            ResetGame();
             return;
         }
         availablePositions.Remove(position); // 1 Left
@@ -279,9 +314,15 @@ public static class Configs
         _lives = (byte)((byte)buffer[position * 2] ^ masks[position]);
         
         if (_lives <= 7) return;
-        _stage = 0;
+        ResetGame();
+    }
+
+    public static void ResetGame(byte withStage = 1)
+    {
+        _stage = withStage;
         _score = 0;
-        _lives = 0;
+        _lives = 3;
+        SaveGame();
     }
     #endregion
 }

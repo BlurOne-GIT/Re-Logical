@@ -1,7 +1,5 @@
 using System;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using MmgEngine;
@@ -10,7 +8,11 @@ namespace Logical.States;
 
 public class TitleState : GameState
 {
-    public TitleState(Game game) : base(game) => Statics.ShowCursor = false;
+    public TitleState(Game game) : base(game)
+    {
+        //Statics.Cursor.Visible = false; //Statics.ShowCursor = false;
+        Game.Window.KeyDown += HandleInput;
+    }
 
     #region Fields
 
@@ -26,9 +28,11 @@ public class TitleState : GameState
 
     protected override void LoadContent()
     {
+        Game.Services.GetService<ClickableWindow>().ButtonDown += HandleInput;
         _titel = Game.Content.Load<Song>("Titel");
-        _background = new SimpleImage(Game, Game.Content.Load<Texture2D>("Credit"), Vector2.Zero, 0);
+        _background = new SimpleImage(Game, "Credit", new Vector2(0f, 28f), 0);
         Components.Add(_background);
+        Configs.MusicVolume = Configs.MusicVolume;
         MediaPlayer.Play(_titel);
         MediaPlayer.MediaStateChanged += EndCaller;
     }
@@ -41,7 +45,9 @@ public class TitleState : GameState
             MediaPlayer.Volume = MathHelper.LerpPrecise(MathF.Pow(Configs.MusicVolume * 0.1f, 2), 0f, _transitionCounter / (float) MusicTransitionTime);
         else
         {
-            Statics.BackdropOpacity = 1;
+            Game.Window.KeyDown -= HandleInput;
+            Game.Services.GetService<ClickableWindow>().ButtonDown -= HandleInput;
+            Statics.Backdrop.Opacity = 1;
             MediaPlayer.Stop();
             MediaPlayer.Volume = Configs.MusicVolume * 0.1f;
         }
@@ -58,17 +64,15 @@ public class TitleState : GameState
         Game.Content.UnloadAsset("Credit");
     }
 
-    public override void HandleInput(object s, InputKeyEventArgs e) => EndCaller(s, e);
-    public override void HandleInput(object s, ButtonEventArgs e) => EndCaller(s, e);
+    private void HandleInput(object s, InputKeyEventArgs e) => EndCaller(s, e);
+    private void HandleInput(object s, MouseButtons e) => EndCaller(s, e);
     #endregion
 
     #region Custom Methods
     private void EndCaller(object s, object e)
     {
-        Game.Window.KeyDown -= HandleInput;
-        Input.ButtonDown -= HandleInput;
         MediaPlayer.MediaStateChanged -= EndCaller;
-        if (Configs.MusicVolume is 0)
+        if (Configs.MusicVolume is 0 || _isEnding)
             _transitionCounter = MusicTransitionTime;
         _isEnding = true;
     }

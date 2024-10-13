@@ -3,23 +3,46 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MmgEngine;
 
 namespace Logical;
 
 public static class Statics
 {
     #region Fields
-    public const string StandardSet = "./alf.dat";
+    public const string StandardSet = "./Content/alf.dat";
+    private static SpriteFont _topaz;
+    private static SpriteFont _topazPlus;
+    private static readonly Color[] TopazColors =
+    [
+        new(0xFF334466U), // packed ABGR for #643 (GS1)
+        new(0xFF335555U), // packed ABGR for #553 (GS2)
+        new(0xFF664466U), // packed ABGR for #646 (GS3)
+        new(0xFF114455U), // packed ABGR for #541 (GS4)
+        new(0xFF114477U)  // packed ABGR for #741 (GS4R)
+    ];
+    private static string _levelSetPath = StandardSet;
+    private static readonly SpriteFont[] TextureFonts = new SpriteFont[5]; // TODO: add texture font fidelity levels
     #endregion
 
     #region Properties
-    public static string Set { get; set; } = StandardSet;
-    public static SpriteFont TextureFont { get; private set; }
-    public static SpriteFont BoldFont { get; private set; }
-    public static SpriteFont LightFont { get; private set; }
-    public static bool ShowCursor { get; set; }
-    public static float BackdropOpacity { get; set; }
-    public static Random Brandom = new();
+    public static string LevelSetPath
+    {
+        get => _levelSetPath;
+        set
+        {
+            _levelSetPath = value;
+            LevelSet = new LevelSet(value);
+        }
+    }
+    public static SimpleImage Backdrop { get; set; }
+    public static Cursor Cursor { get; set; }
+    public static LevelSet LevelSet { get; private set; } = new(StandardSet);
+    public static SpriteFont TextureFont => TextureFonts[Configs.GraphicSet-1];
+    public static SpriteFont TopazFont => Configs.FidelityLevel is IFixable.FidelityLevel.Remastered ? _topazPlus : _topaz;
+    public static Color TopazColor => TopazColors[Configs.GraphicSet-1];
+    public static SpriteFont DisplayFont { get; private set; }
+    public static readonly Random Brandom = new();
     public static readonly Dictionary<Direction, Direction> ReverseDirection = new(4)
     {
         {Direction.Left, Direction.Right},
@@ -27,36 +50,48 @@ public static class Statics
         {Direction.Right, Direction.Left},
         {Direction.Down, Direction.Up}
     };
+
+    public static readonly Vector2 CursorTextureOffset = new(7f, 7f);
     #endregion
 
     #region Methods
-    // TODO: after exporting the complete font sprite, turn into an actual font to use along a local spritefont description
     public static void LoadFonts(ContentManager content)
     {
-        var fontTexture = content.Load<Texture2D>("Fonts");
+        var fontTexture = content.Load<Texture2D>("Fonts/DisplayFont");
         var kernings = new List<Vector3>();
         var glyphRectangles = new List<Rectangle>();
         var fontRectangles = new List<Rectangle>();
-        var characters = content.Load<List<char>>("LightFontCharacters");
+        var characters = content.Load<List<char>>("Fonts/DisplayFontCharset");
         for (int i = 0; i < characters.Count; i++)
         {
             glyphRectangles.Add(new Rectangle(i*8, 0, 8, 7));
             fontRectangles.Add(new Rectangle(0, 0, 8, 7));
             kernings.Add(new Vector3(0, 8, 0));
         }
-        LightFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
+        DisplayFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 9, 0, kernings, ' ');
         
-        characters = content.Load<List<char>>("BoldFontCharacters");
-        glyphRectangles = new List<Rectangle>();
-        fontRectangles = new List<Rectangle>();
-        kernings = new List<Vector3>();
-        for (int i = 0; i < characters.Count; i++)
+        _topaz = content.Load<SpriteFont>("Fonts/Topaz");
+        for (int i = 0; i < _topaz.Glyphs.Length; i++)
+            ++_topaz.Glyphs[i].Cropping.X;
+        _topazPlus = content.Load<SpriteFont>("Fonts/TopazPlus");
+        for (int i = 0; i < _topazPlus.Glyphs.Length; i++)
+            ++_topazPlus.Glyphs[i].Cropping.X;
+        
+        characters = content.Load<List<char>>("Fonts/TextureFontCharset");
+        kernings = [];
+        glyphRectangles = [];
+        fontRectangles = [];
+        for (int i = 0; i < characters.Count; ++i)
         {
-            glyphRectangles.Add(new Rectangle(i*8, 7, 8, 8));
-            fontRectangles.Add(new Rectangle(0, 0, 8, 7));
-            kernings.Add(new Vector3(0, 8, 0));
+            glyphRectangles.Add(new Rectangle(i*16, 0, 16, 16));
+            fontRectangles.Add(new Rectangle(0, 0, 16, 16));
+            kernings.Add(new Vector3(0, 16, 0));
         }
-        BoldFont = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
+        for (int gs = 0; gs < 5; ++gs)
+        {
+            fontTexture = content.Load<Texture2D>($"{gs+1}/UI/Font");
+            TextureFonts[gs] = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
+        }
     }
     #endregion
 }
@@ -76,130 +111,3 @@ public enum Direction
     Right,
     Down
 }
-
-/*
-public static class LevelResources
-{
-    #region Textures
-    public static Texture2D TpShadowEmpty; // TODO DISABLED
-    public static Texture2D TpShadowHorizontal; // TODO DISABLED
-    public static Texture2D TpShadowVertical; // TODO DISABLED
-    public static Texture2D TpShadowCross; // TODO DISABLED
-    public static Texture2D[] UsedSand = new Texture2D[10]; // TODO DISABLED
-    public static Texture2D[] SandLeft = new Texture2D[10]; // TODO DISABLED
-    public static Texture2D FallingSand; // PLACEHOLDER TODO DISABLED
-    #endregion
-
-    // Don't worry, I'll get rid of this after I'm done with the conversion
-    public static void LoadTextures()
-    {
-         DISABLED
-        TpShadowEmpty = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowEmpty");
-        TpShadowHorizontal = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowHorizontal");
-        TpShadowVertical = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowVertical");
-        TpShadowCross = Statics.Content.Load<Texture2D>(@$"{Configs.GraphicSet}\TpShadowCross");
-        
-        DISABLED
-        for (int i = 0; i < 10; i++)
-        {
-            UsedSand[i] = Statics.Content.Load<Texture2D>($"UsedSand{i}");
-            SandLeft[i] = Statics.Content.Load<Texture2D>($"SandLeft{i}");
-        }
-        FallingSand = Statics.Content.Load<Texture2D>("FallingSand");
-        
-    }
-
-    public static void UnloadTextures()
-    {
-        Statics.Content.UnloadAsset("PopIn");
-        Statics.Content.UnloadAsset("PopOut");
-        Statics.Content.UnloadAsset("Spin");
-        Statics.Content.UnloadAsset("Bounce");
-        Statics.Content.UnloadAsset("ColorChange");
-        Statics.Content.UnloadAsset("Tp");
-        Statics.Content.UnloadAsset("Explode");
-        Statics.Content.UnloadAsset("BallPink");
-        Statics.Content.UnloadAsset("BallYellow");
-        Statics.Content.UnloadAsset("BallBlue");
-        Statics.Content.UnloadAsset("BallGreen");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\MainPipe");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\MainPipeOpen");
-        Statics.Content.UnloadAsset("MainPipeBar");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\EmptyBlock");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\EmptyBlockAlt");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\Spinner");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerSpin0");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerSpin1");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerSpin2");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerExplode0");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerExplode1");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerExplode2");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerExplode3");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerClosedLeft");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerClosedRight");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerClosedDown");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\SpinnerClosedUp");
-        Statics.Content.UnloadAsset("SpinnerBallPink");
-        Statics.Content.UnloadAsset("SpinnerBallYellow");
-        Statics.Content.UnloadAsset("SpinnerBallBlue");
-        Statics.Content.UnloadAsset("SpinnerBallGreen");
-        Statics.Content.UnloadAsset("SpinnerBallExploded");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeHorizontal");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeVertical");
-        if (Configs.GraphicSet is not 1)
-            Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeHorizontalAlt");
-        if (Configs.GraphicSet is not 1 and 3)
-            Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeVerticalAlt");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\PipeCross");
-        Statics.Content.UnloadAsset("FilterPink");
-        Statics.Content.UnloadAsset("FilterYellow");
-        Statics.Content.UnloadAsset("FilterBlue");
-        Statics.Content.UnloadAsset("FilterGreen");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\FilterShadowHorizontal");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\FilterShadowVertical");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\FilterShadowCross");
-        Statics.Content.UnloadAsset("TpHorizontal");
-        Statics.Content.UnloadAsset("TpVertical");
-        Statics.Content.UnloadAsset("TpCross");
-         DISABLED
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TpShadowEmpty");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TpShadowHorizontal");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TpShadowVertical");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TpShadowCross");
-        
-        Statics.Content.UnloadAsset("ChangerPink");
-        Statics.Content.UnloadAsset("ChangerYellow");
-        Statics.Content.UnloadAsset("ChangerBlue");
-        Statics.Content.UnloadAsset("ChangerGreen");
-        Statics.Content.UnloadAsset("IndicatorPink");
-        Statics.Content.UnloadAsset("IndicatorYellow");
-        Statics.Content.UnloadAsset("IndicatorBlue");
-        Statics.Content.UnloadAsset("IndicatorGreen");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\ChangerShadowHorizontal");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\ChangerShadowVertical");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\ChangerShadowCross");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\Holder");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\HolderShadowEmpty");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\HolderShadowHorizontal");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\HolderShadowVertical");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\HolderShadowCross");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\BumperLeft");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\BumperRight");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\BumperDown");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\BumperUp");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\Moves");
-        Statics.Content.UnloadAsset("MovesBlue");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\Sandclock");
-         DISABLED
-        for (int i = 0; i < 10; i++)
-        {
-            Statics.Content.UnloadAsset($"UsedSand{i}");
-            Statics.Content.UnloadAsset($"SandLeft{i}");
-        }
-        Statics.Content.UnloadAsset("FallingSand");
-        
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\ColorJob");
-        Statics.Content.UnloadAsset(@$"{Configs.GraphicSet}\TrafficLight");
-    }
-}
-*/
