@@ -14,6 +14,7 @@ public static class Configs
     public static event EventHandler FullscreenChanged;
     public static event EventHandler MusicVolumeChanged;
     public static event EventHandler SfxVolumeChaged;
+    public static event EventHandler GraphicSetChanged;
     #endregion
 
     #region Fields
@@ -97,7 +98,11 @@ public static class Configs
                 return 5;
             return value;
         }
-        set => _jsonNode[nameof(GraphicSet)] = value > 4 ? 1 : value < 1 ? 4 : value;
+        set
+        {
+            _jsonNode[nameof(GraphicSet)] = value > 4 ? 1 : value < 1 ? 4 : value;
+            GraphicSetChanged?.Invoke(null, EventArgs.Empty);
+        }
     }
 
     public static int StereoSeparation
@@ -117,9 +122,14 @@ public static class Configs
     public static bool GraphicSet4Remastered
     {
         get => _jsonNode[nameof(GraphicSet4Remastered)]!.GetValue<bool>();
-        set => _jsonNode[nameof(GraphicSet4Remastered)] = value;
+        set
+        {
+            _jsonNode[nameof(GraphicSet4Remastered)] = value;
+            if (GraphicSet >= 4)
+                GraphicSetChanged?.Invoke(null, EventArgs.Empty);
+        }
     }
-    
+
     public static byte Stage
     {
         get => _stage;

@@ -17,6 +17,7 @@ public class MenuState : GameState
         _menuManager = new GameStateManager<MenuPanel>(Components);
         _menuManager.Switched += MenuManagerOnSwitched;
         Game.Window.KeyDown += HandleInput;
+        Configs.GraphicSetChanged += OnGraphicSetChanged;
     }
 
     #region Fields
@@ -46,8 +47,9 @@ public class MenuState : GameState
         MediaPlayer.Play(_choose);
         MediaPlayer.IsRepeating = true;
         
-        _background = new SimpleImage(Game, $"{Configs.GraphicSet}/UI/MainMenu", new Vector2(39, 28), 0);
-        Components.Add(_background);
+        Components.Add(_background =
+            new SimpleImage(Game, $"{Configs.GraphicSet}/UI/MainMenu", new Vector2(39, 28), 0)
+        );
         
         _menuManager.GameState = new MainPanel(Game) { Enabled = false };
     }
@@ -55,17 +57,9 @@ public class MenuState : GameState
     private void MenuManagerOnSwitched(object sender, SwitchingGameStateEventArgs<MenuPanel> e)
     {
         if (e.OldGameState is MainPanel oldMainPanel)
-        {
             oldMainPanel.StartButton.LeftButtonDown -= StartGame;
-            oldMainPanel.GraphicsSetButton.LeftButtonDown -= GraphicSet;
-            oldMainPanel.GraphicsSetButton.RightButtonDown -= GraphicSet;
-        }
         else if (e.NewGameState is MainPanel newMainPanel)
-        {
             newMainPanel.StartButton.LeftButtonDown += StartGame;
-            newMainPanel.GraphicsSetButton.LeftButtonDown += GraphicSet;
-            newMainPanel.GraphicsSetButton.RightButtonDown += GraphicSet;
-        }
         else if (e.OldGameState is CreditsPanel oldCreditsPanel)
             oldCreditsPanel.OriginalButton.LeftButtonDown -= ShowCredits;
         else if (e.NewGameState is CreditsPanel newCreditsPanel)
@@ -155,7 +149,7 @@ public class MenuState : GameState
         SwitchState(new TitleState(Game));
     }
 
-    private void GraphicSet(object s, EventArgs e)
+    private void OnGraphicSetChanged(object sender, EventArgs e)
     {
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/UI/MainMenu");
         _background.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/MainMenu");
