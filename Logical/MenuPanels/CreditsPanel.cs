@@ -6,6 +6,7 @@ namespace Logical.MenuPanels;
 
 public class CreditsPanel : MenuPanel
 {
+    private readonly ClickableArea _originalButton;
     private readonly ClickableArea _backButton;
     
     public CreditsPanel(Game game) : base(game)
@@ -14,7 +15,7 @@ public class CreditsPanel : MenuPanel
         _backButton.LeftButtonDown += Back;
     }
 
-    private void Back(object s, EventArgs e) => SwitchState(new AboutPanel(Game));
+    private void Back(object s, EventArgs e) => SwitchState(new InfoPanel(Game));
     
     protected override void Dispose(bool disposing)
     {

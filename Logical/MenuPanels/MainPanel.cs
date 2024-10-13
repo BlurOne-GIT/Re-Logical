@@ -13,7 +13,7 @@ public class MainPanel : MenuPanel
 {
     private readonly ClickableArea _ownSetButton;
     private readonly ClickableArea _passwordButton;
-    private readonly ClickableArea _aboutButton;
+    private readonly ClickableArea _infoButton;
     private readonly ClickableArea _settingsButton;
     public  readonly ClickableArea GraphicsSetButton;
     public  readonly ClickableArea StartButton;
@@ -33,7 +33,7 @@ public class MainPanel : MenuPanel
     {
         Components.Add(_ownSetButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(_passwordButton = new ClickableArea(Game, new Rectangle(108, 109, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
-        Components.Add(_aboutButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_infoButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(_settingsButton = new ClickableArea(Game, new Rectangle(108, 155, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(GraphicsSetButton = new ClickableArea(Game, new Rectangle(108, 179, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(StartButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
@@ -78,7 +78,7 @@ public class MainPanel : MenuPanel
         
         _ownSetButton.LeftButtonDown += OwnSet;
         _passwordButton.LeftButtonDown += Password;
-        _aboutButton.LeftButtonDown += About;
+        _infoButton.LeftButtonDown += Info;
         _settingsButton.LeftButtonDown += Settings;
         GraphicsSetButton.ButtonDown += GraphicSet;
 
@@ -93,7 +93,7 @@ public class MainPanel : MenuPanel
     #region PanelButtons
     private bool BunkEnabled
     {
-        set => _ownSetButton.Enabled = _passwordButton.Enabled = _aboutButton.Enabled = _settingsButton.Enabled = GraphicsSetButton.Enabled = StartButton.Enabled = value;
+        set => _ownSetButton.Enabled = _passwordButton.Enabled = _infoButton.Enabled = _settingsButton.Enabled = GraphicsSetButton.Enabled = StartButton.Enabled = value;
     }
     
     private void OwnSet(object s, EventArgs e)
@@ -115,17 +115,9 @@ public class MainPanel : MenuPanel
         _passwordInput.Returned += PasswordReturned;
     }
     
-    private void About(object s, EventArgs e)
+    private void Info(object s, EventArgs e)
     {
-        Process.Start( new ProcessStartInfo
-            {
-                FileName = "https://github.com/BlurOne-GIT/Re-Logical",
-                UseShellExecute = true
-            }
-        );
-        /* TODO: add About Panel
-        throw new NotImplementedException("Missing about panel.");
-        SwitchState(new AboutPanel(Game));*/
+        SwitchState(new InfoPanel(Game));
     }
     
     private void Settings(object s, EventArgs e) => SwitchState(new SettingsPanel(Game));
@@ -133,7 +125,7 @@ public class MainPanel : MenuPanel
     private void GraphicSet(object s, MouseButtons e)
     {
         throw new NotImplementedException("Missing graphic sets.");
-        if ((e & (MouseButtons.MiddleButton | MouseButtons.XButton1 | MouseButtons.XButton2)) != 0) return;
+        /*if ((e & (MouseButtons.MiddleButton | MouseButtons.XButton1 | MouseButtons.XButton2)) != 0) return;
         Game.Content.UnloadAssets(new []
         {
             $"{Configs.GraphicSet}/UI/{nameof(MainPanel)}",
@@ -145,7 +137,7 @@ public class MainPanel : MenuPanel
             --Configs.GraphicSet;
         PanelBackground.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/{nameof(MainPanel)}");
         _levelsetImage.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/Levelset");
-        _leveldiskErrorText.Color = Statics.TopazColor;
+        _leveldiskErrorText.Color = Statics.TopazColor;*/
     }
     #endregion
     
@@ -279,7 +271,7 @@ public class MainPanel : MenuPanel
     {
         _ownSetButton.LeftButtonDown -= OwnSet;
         _passwordButton.LeftButtonDown -= Password;
-        _aboutButton.LeftButtonDown -= About;
+        _infoButton.LeftButtonDown -= Info;
         _settingsButton.LeftButtonDown -= Settings;
         GraphicsSetButton.ButtonDown -= GraphicSet;
         
