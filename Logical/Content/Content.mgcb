@@ -325,6 +325,18 @@
 /processorParam:TextureFormat=Color
 /build:1/UI/MainPanel.png
 
+#begin 1/UI/nff.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:1/UI/nff.png
+
 #begin 1/UI/Password.png
 /importer:TextureImporter
 /processor:TextureProcessor
