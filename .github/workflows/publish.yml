@@ -44,25 +44,26 @@ jobs:
       id: get_latest_tag
       run: |
         git fetch --tags
-        echo "::set-output name=tag::$(git describe --tags --abbrev=0)"
+        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
     - name: Get last commit SHA
       id: get_last_commit
-      run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+      run: | 
+        echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
     - name: Set artifact name
-      id: set_artifact_name
+      id: set_artifact_suffix
       run: |
         if [ -n "${{ steps.get_latest_tag.outputs.tag }}" ]; then
-          echo "::set-output name=artifact_name::Re-Logical_linux-x64_${{ steps.get_latest_tag.outputs.tag }}"
+          echo "suffix=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=artifact_name::Re-Logical_linux-x64_${{ steps.get_last_commit.outputs.sha }}"
+          echo "suffix=${{ steps.get_last_commit.outputs.sha }}" >> $GITHUB_OUTPUT
         fi
     
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ steps.set_artifact_name.outputs.artifact_name }}
+        name: Re-Logical_linux-x64_${{ steps.set_artifact_suffix.outputs.suffix }}
         path: Logical/bin/Release/net8.0/linux-x64/publish
 
   build-windows:
@@ -97,23 +98,24 @@ jobs:
       id: get_latest_tag
       run: |
         git fetch --tags
-        echo "::set-output name=tag::$(git describe --tags --abbrev=0)"
+        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
     - name: Get last commit SHA
       id: get_last_commit
-      run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+      run: | 
+        echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
     - name: Set artifact name
-      id: set_artifact_name
+      id: set_artifact_suffix
       run: |
         if [ -n "${{ steps.get_latest_tag.outputs.tag }}" ]; then
-          echo "::set-output name=artifact_name::Re-Logical_linux-x64_${{ steps.get_latest_tag.outputs.tag }}"
+          echo "suffix=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=artifact_name::Re-Logical_linux-x64_${{ steps.get_last_commit.outputs.sha }}"
+          echo "suffix=${{ steps.get_last_commit.outputs.sha }}" >> $GITHUB_OUTPUT
         fi
     
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ steps.set_artifact_name.outputs.artifact_name }}
+        name: Re-Logical_win-x64_${{ steps.set_artifact_name.outputs.artifact_name }}
         path: Logical/bin/Release/net8.0/win-x64/publish
