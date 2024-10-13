@@ -5,6 +5,8 @@ name: Publish Game
 
 on:
   push:
+    branches:
+      - feature/workflows
     tags:
       - '*'
   workflow_dispatch:
