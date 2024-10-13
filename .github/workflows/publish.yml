@@ -1,0 +1,113 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Publish Game
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+          
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Publish
+      run: dotnet publish -c Release -r linux-x64 -p:PublishReadyToRun=false -p:TieredCompilation=false -p:PublishAot=true --self-contained --no-restore
+
+    - name: Get latest tag
+      id: get_latest_tag
+      run: |
+        git fetch --tags
+        echo "::set-output name=tag::$(git describe --tags --abbrev=0)"
+
+    - name: Get last commit SHA
+      id: get_last_commit
+      run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+
+    - name: Set artifact name
+      id: set_artifact_name
+      run: |
+        if [ -n "${{ steps.get_latest_tag.outputs.tag }}" ]; then
+          echo "::set-output name=artifact_name::Re-Logical_linux-x64_${{ steps.get_latest_tag.outputs.tag }}"
+        else
+          echo "::set-output name=artifact_name::Re-Logical_linux-x64_${{ steps.get_last_commit.outputs.sha }}"
+        fi
+    
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.set_artifact_name.outputs.artifact_name }}
+        path: Logical/bin/Release/net8.0/linux-x64/publish
+
+  build-windows:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+          
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Publish
+      run: dotnet publish -c Release -r win-x64 -p:PublishReadyToRun=false -p:TieredCompilation=false -p:PublishAot=true --self-contained --no-restore
+
+    - name: Get latest tag
+      id: get_latest_tag
+      run: |
+        git fetch --tags
+        echo "::set-output name=tag::$(git describe --tags --abbrev=0)"
+
+    - name: Get last commit SHA
+      id: get_last_commit
+      run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+
+    - name: Set artifact name
+      id: set_artifact_name
+      run: |
+        if [ -n "${{ steps.get_latest_tag.outputs.tag }}" ]; then
+          echo "::set-output name=artifact_name::Re-Logical_linux-x64_${{ steps.get_latest_tag.outputs.tag }}"
+        else
+          echo "::set-output name=artifact_name::Re-Logical_linux-x64_${{ steps.get_last_commit.outputs.sha }}"
+        fi
+    
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.set_artifact_name.outputs.artifact_name }}
+        path: Logical/bin/Release/net8.0/win-x64/publish
