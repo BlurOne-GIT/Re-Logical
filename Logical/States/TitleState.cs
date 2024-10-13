@@ -45,6 +45,8 @@ public class TitleState : GameState
             MediaPlayer.Volume = MathHelper.LerpPrecise(MathF.Pow(Configs.MusicVolume * 0.1f, 2), 0f, _transitionCounter / (float) MusicTransitionTime);
         else
         {
+            Game.Window.KeyDown -= HandleInput;
+            Game.Services.GetService<ClickableWindow>().ButtonDown -= HandleInput;
             Statics.Backdrop.Opacity = 1;
             MediaPlayer.Stop();
             MediaPlayer.Volume = Configs.MusicVolume * 0.1f;
@@ -69,10 +71,8 @@ public class TitleState : GameState
     #region Custom Methods
     private void EndCaller(object s, object e)
     {
-        Game.Window.KeyDown -= HandleInput;
-        Game.Services.GetService<ClickableWindow>().ButtonDown -= HandleInput;
         MediaPlayer.MediaStateChanged -= EndCaller;
-        if (Configs.MusicVolume is 0)
+        if (Configs.MusicVolume is 0 || _isEnding)
             _transitionCounter = MusicTransitionTime;
         _isEnding = true;
     }

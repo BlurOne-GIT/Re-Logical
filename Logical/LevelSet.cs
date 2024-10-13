@@ -22,8 +22,8 @@ public class LevelSet
             _stream.Position += _stream.Read(buffer, 0, 2) + 81;
             if (buffer[0] is not 0x00)
                 throw new Exception("Not Logical Set File.");
-            if (buffer[1] is not 0x00)
-                Console.WriteLine($"{i+1:00} {buffer[1]:00}");
+            //if (buffer[1] is not 0x00)
+            //    Console.WriteLine($"{i+1:00} {buffer[1]:00}");
             _stream.Position += _stream.Read(buffer, 0, 15);
             _levelNames[i] = DecodeName(buffer);
             _stream.Position += _stream.Read(buffer, 0, 2);
