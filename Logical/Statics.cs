@@ -19,7 +19,7 @@ public static class Statics
         new(0xFF335555U), // packed ABGR for #553 (GS2)
         new(0xFF664466U), // packed ABGR for #646 (GS3)
         new(0xFF114455U), // packed ABGR for #541 (GS4)
-        new(0xFF115588U)  // packed ABGR for #851 (GS4R)
+        new(0xFF114477U)  // packed ABGR for #741 (GS4R)
     ];
     private static string _levelSetPath = StandardSet;
     private static readonly SpriteFont[] TextureFonts = new SpriteFont[5]; // TODO: add texture font fidelity levels
@@ -87,8 +87,7 @@ public static class Statics
             fontRectangles.Add(new Rectangle(0, 0, 16, 16));
             kernings.Add(new Vector3(0, 16, 0));
         }
-        // TODO: add all texture fonts
-        for (int gs = 0; gs < 1/*5*/; ++gs)
+        for (int gs = 0; gs < 5; ++gs)
         {
             fontTexture = content.Load<Texture2D>($"{gs+1}/UI/Font");
             TextureFonts[gs] = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
