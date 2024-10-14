@@ -98,7 +98,7 @@ jobs:
       id: get_latest_tag
       run: |
         git fetch --tags
-        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+        echo "tag=$(git describe --tags --abbrev=0 || echo 'no-tag')" >> $GITHUB_OUTPUT
 
     - name: Get last commit SHA
       id: get_last_commit
