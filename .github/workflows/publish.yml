@@ -26,6 +26,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
         cache: true
+        cache-dependency-path: "Logical/packages.lock.json, MmgEngine/packages.lock.json"
         
     - name: Cache Content directory
       uses: actions/cache@v4
@@ -81,6 +82,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
         cache: true
+        cache-dependency-path: "Logical/packages.lock.json, MmgEngine/packages.lock.json"
         
     - name: Cache Content directory
       uses: actions/cache@v4
