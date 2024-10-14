@@ -49,7 +49,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
     {
         _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/TeleporterShadows");
         _pipeClosings = Texture;
-        Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/EmptyBlocks");
+        Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/EmptyBlock");
         _closingsSource = DefaultSource!.Value;
         if (Configs.GraphicSet < 4)
             DefaultSource = new Rectangle(Configs.GraphicSet switch

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -51,12 +50,11 @@ public class ColourStopper : Pipe, IOverlayable
     {
         _balls = null;
         _shadow = null;
-        Game.Content.UnloadAssets(new []
-        {
+        Game.Content.UnloadAssets([
             "SpinnerBalls",
             "ColourStoppers",
             $"{Configs.GraphicSet}/StopperShadows"
-        });
+        ]);
         base.UnloadContent();
     }
 

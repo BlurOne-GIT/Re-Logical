@@ -47,7 +47,7 @@ public class ColourChanger : Pipe, IOverlayable, IFixable
         DrawAnotherTexture(_shadow, _shadowOffset, 1, _shadowSource);
     }
 
-    public IFixable.FidelityLevel Fidelity { get; } = IFixable.FidelityLevel.Intended;
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
 
     public void Fix(IFixable.FidelityLevel _)
     {
