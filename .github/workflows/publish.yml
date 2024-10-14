@@ -121,13 +121,12 @@ jobs:
           echo "suffix=${{ steps.get_last_commit.outputs.sha }}" >> $GITHUB_OUTPUT
         fi
 
-
-    - name: Debug artifact suffix
-      shell: bash
-      run: |
-        echo "Artifact suffix is: ${{ steps.set_artifact_suffix.outputs.suffix }}"
-        echo "Latest tag is: ${{ steps.get_latest_tag.outputs.tag }}"
-        echo "Latest sha is: ${{ steps.get_last_commit.outputs.sha }}"
+    #- name: Debug artifact suffix
+    #  shell: bash
+    #  run: |
+    #    echo "Artifact suffix is: ${{ steps.set_artifact_suffix.outputs.suffix }}"
+    #    echo "Latest tag is: ${{ steps.get_latest_tag.outputs.tag }}"
+    #    echo "Latest sha is: ${{ steps.get_last_commit.outputs.sha }}"
     
     - name: Upload
       uses: actions/upload-artifact@v4
