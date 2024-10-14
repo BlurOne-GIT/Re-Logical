@@ -31,10 +31,10 @@ jobs:
     - name: Cache Content directory
       uses: actions/cache@v4
       with:
-        path: Logical/bin/Release/net8.0/linux-x64/publish/Content
-        key: content-${{ hashFiles('Logical/Content/**') }}
+        path: Logical/Content/obj
+        key: content-obj-${{ hashFiles('Logical/Content/**') }}
         restore-keys: |
-          content-
+          content-obj-
           
     #- name: Restore dependencies
     #  run: dotnet restore
@@ -87,10 +87,10 @@ jobs:
     - name: Cache Content directory
       uses: actions/cache@v4
       with:
-        path: Logical/bin/Release/net8.0/win-x64/publish/Content
-        key: content-${{ hashFiles('Logical/Content/**') }}
+        path: Logical/Content/obj
+        key: content-obj-${{ hashFiles('Logical/Content/**') }}
         restore-keys: |
-          content-
+          content-obj-
           
     #- name: Restore dependencies
     #  run: dotnet restore
