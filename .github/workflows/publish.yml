@@ -119,6 +119,10 @@ jobs:
         else {
           "suffix=$($env:steps_get_last_commit_outputs_sha)" | Out-File -FilePath $env:GITHUB_ENV -Append
         }
+
+    - name: Debug artifact suffix
+      run: |
+        echo "Artifact suffix is: ${{ steps.set_artifact_suffix.outputs.suffix }}"
     
     - name: Upload
       uses: actions/upload-artifact@v4
