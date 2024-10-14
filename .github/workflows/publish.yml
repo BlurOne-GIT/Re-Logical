@@ -1,0 +1,135 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Publish Game
+
+on:
+  push:
+    branches:
+      - feature/workflows
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        cache: true
+        cache-dependency-path: "**/packages.lock.json"
+        
+    - name: Cache Content directory
+      uses: actions/cache@v4
+      with:
+        path: Logical/Content/obj
+        key: content-obj-${{ hashFiles('Logical/Content/**') }}
+        restore-keys: |
+          content-obj-
+          
+    #- name: Restore dependencies
+    #  run: dotnet restore
+      
+    - name: Publish
+      run: dotnet publish -c Release -r linux-x64 -p:PublishReadyToRun=false -p:TieredCompilation=false -p:PublishAot=true --self-contained
+
+    - name: Get latest tag
+      id: get_latest_tag
+      run: |
+        git fetch --tags
+        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+
+    - name: Get last commit SHA
+      id: get_last_commit
+      run: | 
+        echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+    - name: Set artifact name
+      id: set_artifact_suffix
+      run: |
+        if [ -n "${{ steps.get_latest_tag.outputs.tag }}" ]; then
+          echo "suffix=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "suffix=${{ steps.get_last_commit.outputs.sha }}" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: Re-Logical_linux-x64_${{ steps.set_artifact_suffix.outputs.suffix }}
+        path: Logical/bin/Release/net8.0/linux-x64/publish
+
+  build-windows:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+          submodules: true
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        cache: true
+        cache-dependency-path: "**/packages.lock.json"
+        
+    - name: Cache Content directory
+      uses: actions/cache@v4
+      with:
+        path: Logical/Content/obj
+        key: content-obj-${{ hashFiles('Logical/Content/**') }}
+        restore-keys: |
+          content-obj-
+          
+    #- name: Restore dependencies
+    #  run: dotnet restore
+      
+    - name: Publish
+      run: dotnet publish -c Release -r win-x64 -p:PublishReadyToRun=false -p:TieredCompilation=false -p:PublishAot=true --self-contained
+
+    - name: Get latest tag
+      id: get_latest_tag
+      shell: bash
+      run: |
+        git fetch --tags
+        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+
+    - name: Get last commit SHA
+      id: get_last_commit
+      shell: bash
+      run: | 
+        echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+    - name: Set artifact name
+      id: set_artifact_suffix
+      shell: bash
+      run: |
+        if [ -n "${{ steps.get_latest_tag.outputs.tag }}" ]; then
+          echo "suffix=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "suffix=${{ steps.get_last_commit.outputs.sha }}" >> $GITHUB_OUTPUT
+        fi
+
+    #- name: Debug artifact suffix
+    #  shell: bash
+    #  run: |
+    #    echo "Artifact suffix is: ${{ steps.set_artifact_suffix.outputs.suffix }}"
+    #    echo "Latest tag is: ${{ steps.get_latest_tag.outputs.tag }}"
+    #    echo "Latest sha is: ${{ steps.get_last_commit.outputs.sha }}"
+    
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: Re-Logical_win-x64_${{ steps.set_artifact_suffix.outputs.suffix }}
+        path: Logical/bin/Release/net8.0/win-x64/publish
