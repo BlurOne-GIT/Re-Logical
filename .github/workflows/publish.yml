@@ -112,18 +112,15 @@ jobs:
     - name: Set artifact name
       id: set_artifact_suffix
       run: |
-        |
-        if ($env:steps_get_latest_tag_outputs_tag) {
-          "suffix=$env:steps_get_latest_tag_outputs_tag" | Out-File -FilePath $env:GITHUB_ENV -Append
-        }
-        else {
-          "suffix=$env:steps_get_last_commit_outputs_sha" | Out-File -FilePath $env:GITHUB_ENV -Append
-        }
+        $suffix = $env:steps_get_latest_tag_outputs_tag ?? $env:steps_get_last_commit_outputs_sha
+        "suffix=$suffix" | Out-File -FilePath $env:GITHUB_ENV -Append
 
 
     - name: Debug artifact suffix
       run: |
         echo "Artifact suffix is: ${{ steps.set_artifact_suffix.outputs.suffix }}"
+        echo "Latest tag is: ${{ steps.get_latest_tag.outputs.tag }}"
+        echo "Latest sha is: ${{ steps.get_last_commit.outputs.sha }}"
     
     - name: Upload
       uses: actions/upload-artifact@v4
