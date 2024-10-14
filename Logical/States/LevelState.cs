@@ -220,14 +220,15 @@ public class LevelState : GameState
 
                 if (_oTimeLoopCounter is 0)
                 {
-                    _oTimeLeft--;
-                    _oTimeBar.Position = new Vector2(14f + _oTimeLeft * 2, 35f);
+                    _oTimeBar.Position = new Vector2(14f + --_oTimeLeft * 2, 35f);
+                    _oTimeLoopCounter = _oTime;
                 }
+                else
+                    --_oTimeLoopCounter;
         
                 if (_oTimeLeft is 0)
                     Lose("BALLTIMEOUT");
-
-                _oTimeLoopCounter = _oTimeLoopCounter == 0 ? _oTime : _oTimeLoopCounter-1;
+                
                 break;
             case States.Paused:
                 Statics.Backdrop.Opacity = Math.Clamp(_stateTimer / (float)FadeTime, 0f, 1f);

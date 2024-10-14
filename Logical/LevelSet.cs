@@ -1,11 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Logical;
 
-public class LevelSet
+public class LevelSet : IDisposable, IAsyncDisposable
 {
     private readonly FileStream _stream;
     private readonly string[] _levelNames = new string[99];
@@ -58,6 +59,18 @@ public class LevelSet
         => name.PadRight(15, ' ').Select(c => (byte)unchecked((byte)c + 0xC4)).ToArray();
 
     public byte GetLevelNumber(string name) => (byte)(Array.IndexOf(_levelNames, name) + 1);
+
+    public void Dispose()
+    {
+        _stream?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_stream != null) await _stream.DisposeAsync();
+        GC.SuppressFinalize(this);
+    }
 }
 
 /*
