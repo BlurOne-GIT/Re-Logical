@@ -19,6 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
+        ref: main
         submodules: true
     
     - name: Setup .NET
@@ -45,7 +46,7 @@ jobs:
     - name: Get latest tag
       id: get_latest_tag
       run: |
-        git fetch --tags
+        git fetch --tags --force
         echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
     - name: Get last commit SHA
@@ -75,7 +76,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-          submodules: true
+        ref: main
+        submodules: true
     
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -102,7 +104,7 @@ jobs:
       id: get_latest_tag
       shell: bash
       run: |
-        git fetch --tags
+        git fetch --tags --force
         echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
     - name: Get last commit SHA
