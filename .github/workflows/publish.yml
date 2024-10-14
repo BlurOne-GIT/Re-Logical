@@ -114,11 +114,12 @@ jobs:
       run: |
         |
         if ($env:steps_get_latest_tag_outputs_tag) {
-          "suffix=$($env:steps_get_latest_tag_outputs_tag)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "suffix=$env:steps_get_latest_tag_outputs_tag" | Out-File -FilePath $env:GITHUB_ENV -Append
         }
         else {
-          "suffix=$($env:steps_get_last_commit_outputs_sha)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "suffix=$env:steps_get_last_commit_outputs_sha" | Out-File -FilePath $env:GITHUB_ENV -Append
         }
+
 
     - name: Debug artifact suffix
       run: |
