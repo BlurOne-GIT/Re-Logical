@@ -100,29 +100,34 @@ jobs:
 
     - name: Get latest tag
       id: get_latest_tag
+      shell: bash
       run: |
         git fetch --tags
-        $tag = git describe --tags --abbrev=0 --always
-        echo "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
     - name: Get last commit SHA
       id: get_last_commit
+      shell: bash
       run: | 
-        $sha = git rev-parse --short HEAD
-        echo "sha=$sha" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
     - name: Set artifact name
       id: set_artifact_suffix
+      shell: bash
       run: |
-        $suffix = $env:steps_get_latest_tag_outputs_tag ?? $env:steps_get_last_commit_outputs_sha
-        "suffix=$suffix" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        if [ -n "${{ steps.get_latest_tag.outputs.tag }}" ]; then
+          echo "suffix=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "suffix=${{ steps.get_last_commit.outputs.sha }}" >> $GITHUB_OUTPUT
+        fi
 
 
     - name: Debug artifact suffix
+      shell: bash
       run: |
-        echo "Artifact suffix is: $env:suffix / $env:steps_set_artifact_suffix_output_suffix"
-        echo "Latest tag is: $env:steps_get_latest_tag_outputs_tag"
-        echo "Latest sha is: $env:steps_get_last_commit_outputs_sha"
+        echo "Artifact suffix is: ${{ steps.set_artifact_suffix.outputs.suffix }}"
+        echo "Latest tag is: ${{ steps.get_latest_tag.outputs.tag }}"
+        echo "Latest sha is: ${{ steps.get_last_commit.outputs.sha }}"
     
     - name: Upload
       uses: actions/upload-artifact@v4
