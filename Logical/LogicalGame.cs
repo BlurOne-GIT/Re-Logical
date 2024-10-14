@@ -75,8 +75,9 @@ public class LogicalGame : EngineGame
             Statics.Cursor = new Cursor(this) { Enabled = false, Visible = false, DrawOrder = 10, UpdateOrder = 0}
         );
         Components.Add(
-            Statics.Backdrop = new SimpleImage(this, _backdropTexture, Vector2.Zero, 10)
-                { Enabled = false, Opacity = 0f, Scale = new Vector2(Configs.NativeWidth, Configs.NativeHeight) }
+            Statics.Backdrop = new SimpleImage(this, _backdropTexture,
+                    (Configs.NativeSize - Configs.ScreenSize / Configs.MaxScale) / 2, 10)
+                { Enabled = false, Opacity = 0f, Scale = Configs.ScreenSize / Configs.MaxScale }
         );
         Statics.LoadFonts(Content);
         #if DEBUG
