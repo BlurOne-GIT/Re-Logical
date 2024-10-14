@@ -54,11 +54,11 @@ public class LogicalGame : EngineGame
         base.Initialize();
     }
 
-    private void OnWindowOnScreenDeviceNameChanged(object s, EventArgs e)
-        => Configs.ScreenSize = new Vector2(
+    private void OnWindowOnScreenDeviceNameChanged(object s, EventArgs e) =>
+        Configs.ScreenSize = new Vector2(
             Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Width,
             Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Height
-            );
+        );
 
     protected override void LoadContent()
     {
@@ -102,33 +102,8 @@ public class LogicalGame : EngineGame
     {
         GraphicsDevice.Clear(Color.Black);
 
-        // TODO: Add your drawing code here
         SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: ViewportMatrix);
         base.Draw(gameTime);
-        /*if (Statics.ShowCursor)
-            SpriteBatch.Draw(
-                _cursorTexture,
-                HoverableArea.MouseVector,
-                null,
-                Color.White,
-                0,
-                Statics.CursorTextureOffset,
-                1f,
-                SpriteEffects.None,
-                1f
-            );
-        /*if (Statics.BackdropOpacity > 0)
-            SpriteBatch.Draw(
-                _backdropTexture,
-                Vector2.Zero,
-                null,
-                Color.White * Statics.BackdropOpacity,
-                0f,
-                Vector2.Zero,
-                _backdropSize,
-                SpriteEffects.None,
-                0f
-                );*/
         SpriteBatch.End();
     }
 

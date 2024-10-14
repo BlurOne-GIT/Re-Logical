@@ -322,7 +322,7 @@ public class LevelState : GameState
     private void Leave(SoundEffect sfx, Action action)
     {
         Statics.Cursor.Visible = false; //Statics.Cursor.Enabled = false; //Components.Remove(_fakeCursor);
-        _mainPipeBall.Dispose();
+        //_mainPipeBall.Dispose();
         sfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         _leavingDuration = sfx.Duration.TotalMilliseconds - FadeTime;
         _blackOutAction = action;
