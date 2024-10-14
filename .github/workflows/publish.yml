@@ -32,7 +32,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: Logical/bin/Release/net8.0/linux-x64/Content
-        key: content-${{ hashFiles('Logical/bin/Release/net8.0/linux-x64/Content/**') }}
+        key: content-${{ hashFiles('Logical/bin/Release/net8.0/linux-x64/publish/Content/**') }}
         restore-keys: |
           content-
           
@@ -88,7 +88,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: Logical/bin/Release/net8.0/win-x64/Content
-        key: content-${{ hashFiles('Logical/bin/Release/net8.0/win-x64/Content/**') }}
+        key: content-${{ hashFiles('Logical/bin/Release/net8.0/win-x64/publish/Content/**') }}
         restore-keys: |
           content-
           
