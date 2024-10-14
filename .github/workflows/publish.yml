@@ -25,14 +25,15 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+        cache: true
         
-    - name: Cache NuGet packages
+    - name: Cache Content directory
       uses: actions/cache@v4
       with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        path: Logical/bin/Release/net8.0/linux-x64/Content
+        key: content-${{ hashFiles('Logical/bin/Release/net8.0/linux-x64/Content/**') }}
         restore-keys: |
-          ${{ runner.os }}-nuget-
+          content-
           
     - name: Restore dependencies
       run: dotnet restore
@@ -79,14 +80,15 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+        cache: true
         
-    - name: Cache NuGet packages
+    - name: Cache Content directory
       uses: actions/cache@v4
       with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        path: Logical/bin/Release/net8.0/win-x64/Content
+        key: content-${{ hashFiles('Logical/bin/Release/net8.0/win-x64/Content/**') }}
         restore-keys: |
-          ${{ runner.os }}-nuget-
+          content-
           
     - name: Restore dependencies
       run: dotnet restore
@@ -97,8 +99,8 @@ jobs:
     - name: Get latest tag
       id: get_latest_tag
       run: |
-        git fetch --tags
-        echo "tag=$(git describe --tags --abbrev=0 || echo 'no-tag')" >> $GITHUB_OUTPUT
+        git fetch --tags || echo 'no-tag'
+        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
     - name: Get last commit SHA
       id: get_last_commit
