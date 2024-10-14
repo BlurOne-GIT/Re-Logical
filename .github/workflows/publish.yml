@@ -31,7 +31,7 @@ jobs:
     - name: Cache Content directory
       uses: actions/cache@v4
       with:
-        path: Logical/bin/Release/net8.0/linux-x64/Content
+        path: Logical/bin/Release/net8.0/linux-x64/publish/Content
         key: content-${{ hashFiles('Logical/bin/Release/net8.0/linux-x64/publish/Content/**') }}
         restore-keys: |
           content-
@@ -87,7 +87,7 @@ jobs:
     - name: Cache Content directory
       uses: actions/cache@v4
       with:
-        path: Logical/bin/Release/net8.0/win-x64/Content
+        path: Logical/bin/Release/net8.0/win-x64/publish/Content
         key: content-${{ hashFiles('Logical/bin/Release/net8.0/win-x64/publish/Content/**') }}
         restore-keys: |
           content-
@@ -122,5 +122,5 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
-        name: Re-Logical_win-x64_${{ steps.set_artifact_name.outputs.artifact_name }}
+        name: Re-Logical_win-x64_${{ steps.set_artifact_suffix.outputs.suffix }}
         path: Logical/bin/Release/net8.0/win-x64/publish
