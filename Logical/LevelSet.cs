@@ -60,6 +60,19 @@ public class LevelSet : IDisposable, IAsyncDisposable
 
     public byte GetLevelNumber(string name) => (byte)(Array.IndexOf(_levelNames, name) + 1);
 
+    public bool CheckValidStage(int stage)
+    {
+        if (stage is < 0 or > 99)
+            return false;
+        
+        _stream.Position = (stage - 1) * 100 + 2;
+        for (int i = 0; i < 100; ++i)
+            if (_stream.ReadByte() is not 0x00)
+                return true;
+        
+        return false;
+    }
+    
     public void Dispose()
     {
         _stream?.Dispose();
