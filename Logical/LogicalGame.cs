@@ -3,7 +3,6 @@ using Logical.States;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using MmgEngine;
 
@@ -44,7 +43,7 @@ public class LogicalGame : EngineGame
         Configs.Initialize(Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Width, Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Height);
         ReloadScale(null, EventArgs.Empty);
         if (Configs.Fullscreen)
-            Graphics.ToggleFullScreen();
+            Fullscreen(this, EventArgs.Empty);
         
         Window.ScreenDeviceNameChanged += OnWindowOnScreenDeviceNameChanged;
         Configs.ResolutionChanged += ReloadScale;
@@ -55,11 +54,11 @@ public class LogicalGame : EngineGame
         base.Initialize();
     }
 
-    private void OnWindowOnScreenDeviceNameChanged(object s, EventArgs e)
-        => Configs.ScreenSize = new Vector2(
+    private void OnWindowOnScreenDeviceNameChanged(object s, EventArgs e) =>
+        Configs.ScreenSize = new Vector2(
             Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Width,
             Graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Height
-            );
+        );
 
     protected override void LoadContent()
     {
@@ -76,8 +75,9 @@ public class LogicalGame : EngineGame
             Statics.Cursor = new Cursor(this) { Enabled = false, Visible = false, DrawOrder = 10, UpdateOrder = 0}
         );
         Components.Add(
-            Statics.Backdrop = new SimpleImage(this, _backdropTexture, Vector2.Zero, 10)
-                { Enabled = false, Opacity = 0f, Scale = new Vector2(Configs.NativeWidth, Configs.NativeHeight) }
+            Statics.Backdrop = new SimpleImage(this, _backdropTexture,
+                    (Configs.NativeSize - Configs.ScreenSize / Configs.MaxScale) / 2, 10)
+                { Enabled = false, Opacity = 0f, Scale = Configs.ScreenSize / Configs.MaxScale }
         );
         Statics.LoadFonts(Content);
         #if DEBUG
@@ -102,33 +102,8 @@ public class LogicalGame : EngineGame
     {
         GraphicsDevice.Clear(Color.Black);
 
-        // TODO: Add your drawing code here
         SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: ViewportMatrix);
         base.Draw(gameTime);
-        /*if (Statics.ShowCursor)
-            SpriteBatch.Draw(
-                _cursorTexture,
-                HoverableArea.MouseVector,
-                null,
-                Color.White,
-                0,
-                Statics.CursorTextureOffset,
-                1f,
-                SpriteEffects.None,
-                1f
-            );
-        /*if (Statics.BackdropOpacity > 0)
-            SpriteBatch.Draw(
-                _backdropTexture,
-                Vector2.Zero,
-                null,
-                Color.White * Statics.BackdropOpacity,
-                0f,
-                Vector2.Zero,
-                _backdropSize,
-                SpriteEffects.None,
-                0f
-                );*/
         SpriteBatch.End();
     }
 
@@ -163,12 +138,19 @@ public class LogicalGame : EngineGame
         }
         EngineStatics.Scale = new Vector2(Configs.Scale);
         EngineStatics.Offset = Configs.ScreenOffset;
-        Window.IsBorderless = Configs.Fullscreen;
         Graphics.ApplyChanges();
     }
 
-    private void Fullscreen(object s, EventArgs e) => Graphics.ToggleFullScreen();
+    private void Fullscreen(object s, EventArgs e)
+    {
+        Graphics.ToggleFullScreen();
+        Window.IsBorderless = Configs.Fullscreen;
+    }
 
-    private void UpdateVolume(object s, EventArgs e) {MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2); MediaPlayer.IsMuted = Configs.MusicVolume is 0;}
+    private static void UpdateVolume(object s, EventArgs e)
+    {
+        MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2);
+        MediaPlayer.IsMuted = Configs.MusicVolume is 0;
+    }
 #endregion
 }

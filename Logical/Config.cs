@@ -24,7 +24,7 @@ public static class Configs
     private static byte _stage = 1;
     private static uint _score;
     private static byte _lives = 3;
-    private static readonly Vector2 NativeSize = new(NativeWidth, NativeHeight);
+    public static readonly Vector2 NativeSize = new(NativeWidth, NativeHeight);
     #endregion
 
     // Instances

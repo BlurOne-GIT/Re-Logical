@@ -12,17 +12,17 @@ public class ColourHandicap : Block, IFixable
     private static Texture2D _balls;
     private static readonly Vector2[] BallOffsets =
     [
-        new Vector2( 5f, 15f), // Left
-        new Vector2(14f,  5f), // Up
-        new Vector2(23f, 15f), // Right
-        new Vector2(14f, 23f)  // Down
+        new( 5f, 15f), // Left
+        new(14f,  5f), // Up
+        new(23f, 15f), // Right
+        new(14f, 23f)  // Down
     ];
     private static readonly Vector2[] FixedBallOffsets =
     [
-        new Vector2( 5f, 14f), // Left
-        new Vector2(14f,  5f), // Up
-        new Vector2(23f, 14f), // Right
-        new Vector2(14f, 23f)  // Down
+        new( 5f, 14f), // Left
+        new(14f,  5f), // Up
+        new(23f, 14f), // Right
+        new(14f, 23f)  // Down
     ];
 
     private Vector2[] _ballOffsets = BallOffsets;
@@ -81,7 +81,7 @@ public class ColourHandicap : Block, IFixable
         base.UnloadContent();
     }
 
-    public IFixable.FidelityLevel Fidelity { get; } = IFixable.FidelityLevel.Refined;
+    public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Refined;
 
     public void Fix(IFixable.FidelityLevel fidelity)
     {

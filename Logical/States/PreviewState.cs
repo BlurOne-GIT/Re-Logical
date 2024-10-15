@@ -62,7 +62,7 @@ public class PreviewState : GameState
     
     // YOU MADE IT!
     public PreviewState(Game game, int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false)
-        : this(game, Mode.Complete, (_showEditor = ++Configs.Stage is 100) ? "THE EDITOR!" : "YOU MADE IT!")
+        : this(game, Mode.Complete, (_showEditor = !Statics.LevelSet.CheckValidStage(++Configs.Stage)) ? "THE EDITOR!" : "YOU MADE IT!")
     {
         _displayMessages.Add($"TIME BONUS: 10*{timeLeft}%");
         _bonuses.Add(10 * timeLeft);
@@ -106,6 +106,14 @@ public class PreviewState : GameState
     #region Default Methods
     protected override void LoadContent()
     {
+        if (_showEditor && !Statics.LevelSet.CheckValidStage(Configs.Stage - 1))
+        {
+            // TODO: call GuruState
+            Configs.ResetGame();
+            Components.Add(new FrameDelayedAction(Game, 1, () => SwitchState(new MenuState(Game))));
+            return;
+        }
+        
         Statics.Cursor.Visible = false; //Statics.ShowCursor = false;
         Components.Add(new SimpleImage(
             Game,

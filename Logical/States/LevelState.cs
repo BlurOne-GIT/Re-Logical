@@ -47,6 +47,7 @@ public class LevelState : GameState
     private double _leavingDuration;
     private Action _blackOutAction;
     private readonly TextComponent _pausedText;
+    private readonly bool _autoWin = true;
     
     private enum States
     {
@@ -75,6 +76,8 @@ public class LevelState : GameState
             var x = i % 8;
             var y = i / 8;
             _tileset[x, y] = ((FileBlock)_level.Blocks[x, y]).ToGameBlock(game);
+            if (_autoWin && _level.Blocks[x, y].FileValue is 0x01)
+                _autoWin = false;
         }
         if (_level.IsTimed)
         {
@@ -126,7 +129,7 @@ public class LevelState : GameState
             }
         );
 
-        Statics.Cursor.Enabled = true; // TODO: refactor this Cursor Visible/Enabled logic 
+        Statics.Cursor.Enabled = true; // TODO: refactor this Cursor Visible/Enabled logic
     }
 
     protected override void LoadContent()
@@ -199,7 +202,10 @@ public class LevelState : GameState
                 InteractionEnabler(true);
                 foreach (var ball in Ball.AllBalls)
                     ball.Visible = true;
-                State = States.Playing;
+                if (_autoWin)
+                    Win(this, EventArgs.Empty);
+                else
+                    State = States.Playing;
                 break;
             case States.Unpausing:
                 _pausedText.Opacity = Math.Clamp(1f - _stateTimer / (float)FadeTime, 0f, 1f);
@@ -220,14 +226,15 @@ public class LevelState : GameState
 
                 if (_oTimeLoopCounter is 0)
                 {
-                    _oTimeLeft--;
-                    _oTimeBar.Position = new Vector2(14f + _oTimeLeft * 2, 35f);
+                    _oTimeBar.Position = new Vector2(14f + --_oTimeLeft * 2, 35f);
+                    _oTimeLoopCounter = _oTime;
                 }
+                else
+                    --_oTimeLoopCounter;
         
                 if (_oTimeLeft is 0)
                     Lose("BALLTIMEOUT");
-
-                _oTimeLoopCounter = _oTimeLoopCounter == 0 ? _oTime : _oTimeLoopCounter-1;
+                
                 break;
             case States.Paused:
                 Statics.Backdrop.Opacity = Math.Clamp(_stateTimer / (float)FadeTime, 0f, 1f);
@@ -236,13 +243,17 @@ public class LevelState : GameState
             case States.Won:
                 if (_stateTimer < 9)
                     break;
+
+                if (Spinner.ExplodedSpinners.Count is 0)
+                {
+                    Leave(_successSfx,
+                        () => SwitchState(new PreviewState(Game, _timeLeft, _ballsLeft, ColorJobsFinished)));
+                    break;
+                }
                 
                 _ballsLeft += Spinner.ExplodedSpinners.First().FinalBoom();
                 Spinner.ExplodedSpinners.RemoveAt(0);
                 _stateTimer = 0;
-                if (Spinner.ExplodedSpinners.Count is 0)
-                    Leave(_successSfx,
-                        () => SwitchState(new PreviewState(Game, _timeLeft, _ballsLeft, ColorJobsFinished)));
                 break;
             case States.Leaving:
                 if (_stateTimer >= _leavingDuration)
@@ -322,7 +333,7 @@ public class LevelState : GameState
     private void Leave(SoundEffect sfx, Action action)
     {
         Statics.Cursor.Visible = false; //Statics.Cursor.Enabled = false; //Components.Remove(_fakeCursor);
-        _mainPipeBall.Dispose();
+        //_mainPipeBall.Dispose();
         sfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
         _leavingDuration = sfx.Duration.TotalMilliseconds - FadeTime;
         _blackOutAction = action;
