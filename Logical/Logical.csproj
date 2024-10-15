@@ -5,7 +5,7 @@
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
-    <Version>0.6.1-dev</Version>
+    <Version>0.6.1</Version>
     <Title>Logical</Title>
     <Authors>BlurOne!</Authors>
     <Description>A truthful remake of the 1991 game "Logical" by Rainbow Arts for the Commodore Amiga, #BuiltWithMonoGame.</Description>
