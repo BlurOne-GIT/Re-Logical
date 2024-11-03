@@ -107,13 +107,23 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
                 closedPipes[(int)Direction.Left] || closedPipes[(int)Direction.Right] ? 36 : 0,
                 36, 36
             );
-
-        if (closedPipes[(int)Direction.Left]) _closingsSource.X += (int)(_closingsOffset.X = 10);
-        else _closingsSource.Width -= 10;
-        if (closedPipes[(int)Direction.Up]) _closingsSource.Y += (int)(_closingsOffset.Y = 10);
-        else _closingsSource.Height -= 10;
-        if (!closedPipes[(int)Direction.Right]) _closingsSource.Width -= 10;
-        if (!closedPipes[(int)Direction.Down]) _closingsSource.Height -= 10;
+        
+        if (closedPipes[(int)Direction.Left])
+        {
+            _closingsOffset.X = 10f;
+            _closingsSource.X += 10;
+            _closingsSource.Width -= 10;
+        }
+        
+        if (closedPipes[(int)Direction.Up])
+        {
+            _closingsOffset.Y = 10f;
+            _closingsSource.Y += 10;
+            _closingsSource.Height -= 10;
+        }
+        
+        if (closedPipes[(int)Direction.Right]) _closingsSource.Width -= 10;
+        if (closedPipes[(int)Direction.Down]) _closingsSource.Height -= 10;
     }
 
     protected override void Dispose(bool disposing)
@@ -144,7 +154,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
     
     protected override void UnloadContent()
     {
-        _pipeClosings = _shadow = null;
+        _shadow = null;
         Game.Content.UnloadAssets([
             "Teleporters",
             $"{Configs.GraphicSet}/TeleporterShadows", 
@@ -166,16 +176,17 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         if (Configs.GraphicSet is 1 || _completelyOpen) return;
         
         Texture = _pipeClosings;
+        _pipeClosings = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosings");
         DefaultSource = new Rectangle(
             _closingsSource.X - (int)_closingsOffset.X,
             _closingsSource.Y - (int)_closingsOffset.Y,
             36, 36
         );
-        _pipeClosings = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/PipeClosings");
         _closingsSource.Offset(-_closingsOffset);
+        _closingsOffset = new Vector2(10) - _closingsOffset;
+        _closingsSource.Offset(_closingsOffset);
         _closingsSource.Width += 2*(26 - _closingsSource.Width);
         _closingsSource.Height += 2*(26 - _closingsSource.Height);
-        _closingsOffset = new Vector2(10) - _closingsOffset;
         _shadowSource.Y += 42;
     }
 }
