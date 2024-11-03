@@ -108,9 +108,9 @@ public class PreviewState : GameState
     {
         if (_showEditor && !Statics.LevelSet.CheckValidStage(Configs.Stage - 1))
         {
-            // TODO: call GuruState
+            // TODO: reset to default levelset maybe
             Configs.ResetGame();
-            Components.Add(new FrameDelayedAction(Game, 1, () => SwitchState(new MenuState(Game))));
+            Components.Add(new FrameDelayedAction(Game, 1, () => SwitchState(new GuruState(Game))));
             return;
         }
         

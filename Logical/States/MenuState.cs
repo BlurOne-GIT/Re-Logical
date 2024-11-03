@@ -145,8 +145,10 @@ public class MenuState : GameState
     {
         MediaPlayer.Stop();
         _menuManager.GameState!.Enabled = false;
-        Statics.Cursor.Enabled = Statics.Cursor.Visible = false;
-        SwitchState(new TitleState(Game));
+        Statics.Cursor.Enabled = false;
+        Components.Add(
+            new TimeDelayedAction(Game, TimeSpan.FromMilliseconds(3400/*7400*/), () => SwitchState(new GuruState(Game)))
+        );
     }
 
     private void OnGraphicSetChanged(object sender, EventArgs e)
