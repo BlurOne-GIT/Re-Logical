@@ -32,13 +32,13 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
             { DefaultSource = new Rectangle((xx - 0x08) * 22, 0, 22, 22)};
 
         
-        if (xx is not 0x09)
+        if (xx is not (byte)IBlock.BlockTypes.VerticalTeleporter)
             if (FirstHorizontalTp is null)
                 FirstHorizontalTp = this;
             else if (SecondHorizontalTp is null)
                 SecondHorizontalTp = this;
             
-        if (xx is not 0x08)
+        if (xx is not (byte)IBlock.BlockTypes.HorizontalTeleporter)
             if (FirstVerticalTp is null)
                 FirstVerticalTp = this;
             else if (SecondVerticalTp is null)

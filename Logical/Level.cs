@@ -42,38 +42,66 @@ public interface IBlock
     
     protected static readonly ImmutableHashSet<byte> VerticalAttachables =
     [
-        0x01,
-        0x03,
-        0x04,
-        0x06,
-        0x07,
-        0x09,
-        0x0A,
-        0x0C,
-        0x0D,
-        0x0E,
-        0x0F,
-        0x10,
-        0x11,
-        0x16
+        (byte)BlockTypes.Spinner,
+        (byte)BlockTypes.VerticalPipe,
+        (byte)BlockTypes.CrossPipe,
+        (byte)BlockTypes.VerticalColourStopper,
+        (byte)BlockTypes.CrossColourStopper,
+        (byte)BlockTypes.VerticalTeleporter,
+        (byte)BlockTypes.CrossTeleporter,
+        (byte)BlockTypes.VerticalColourChanger,
+        (byte)BlockTypes.CrossColourChanger,
+        (byte)BlockTypes.RightDirectionArrow,
+        (byte)BlockTypes.LeftDirectionArrow,
+        (byte)BlockTypes.UpDirectionArrow,
+        (byte)BlockTypes.DownDirectionArrow,
+        (byte)BlockTypes.Dropper
     ];
     
     protected static readonly ImmutableHashSet<byte> HorizontalAttachables =
     [
-        0x01,
-        0x02,
-        0x04,
-        0x05,
-        0x07,
-        0x08,
-        0x0A,
-        0x0B,
-        0x0D,
-        0x0E,
-        0x0F,
-        0x10,
-        0x11
+        (byte)BlockTypes.Spinner,
+        (byte)BlockTypes.HorizontalPipe,
+        (byte)BlockTypes.CrossPipe,
+        (byte)BlockTypes.HorizontalColourStopper,
+        (byte)BlockTypes.CrossColourStopper,
+        (byte)BlockTypes.HorizontalTeleporter,
+        (byte)BlockTypes.CrossTeleporter,
+        (byte)BlockTypes.HorizontalColourChanger,
+        (byte)BlockTypes.CrossColourChanger,
+        (byte)BlockTypes.RightDirectionArrow,
+        (byte)BlockTypes.LeftDirectionArrow,
+        (byte)BlockTypes.UpDirectionArrow,
+        (byte)BlockTypes.DownDirectionArrow
     ];
+    
+    public enum BlockTypes : byte
+    {
+        EmptyBlock = 0x00,
+        Spinner = 0x01,
+        HorizontalPipe = 0x02,
+        VerticalPipe = 0x03,
+        CrossPipe = 0x04,
+        HorizontalColourStopper = 0x05,
+        VerticalColourStopper = 0x06,
+        CrossColourStopper = 0x07,
+        HorizontalTeleporter = 0x08,
+        VerticalTeleporter = 0x09,
+        CrossTeleporter = 0x0A,
+        HorizontalColourChanger = 0x0B,
+        VerticalColourChanger = 0x0C,
+        CrossColourChanger = 0x0D,
+        RightDirectionArrow = 0x0E,
+        LeftDirectionArrow = 0x0F,
+        UpDirectionArrow = 0x10,
+        DownDirectionArrow = 0x11,
+        MarbleDisplay = 0x12,
+        Hourglass = 0x13,
+        ColourHandicap = 0x14,
+        TrafficLights = 0x15,
+        Dropper = 0x16,
+        ColourForecast = 0x17
+    }
 }
 
 public readonly record struct FileBlock(byte FileValue, byte Argument, Point Point) : IBlock
