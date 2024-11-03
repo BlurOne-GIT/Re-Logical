@@ -149,7 +149,7 @@ public class MainPanel : MenuPanel
 
     private void StandardLevelset(object sender, EventArgs e)
     {
-        Statics.LevelSetPath = Statics.StandardSet;
+        Configs.LevelSetPath = null;
         LevelsetComplete();
     }
     
@@ -164,7 +164,7 @@ public class MainPanel : MenuPanel
         Statics.Cursor.Visible /*Statics.ShowCursor*/ = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = true;
         
         if (result.IsOk)
-            Statics.LevelSetPath = result.Path;
+            Configs.LevelSetPath = result.Path;
         if (!result.IsError)
         {
             LevelsetComplete();

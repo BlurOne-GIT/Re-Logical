@@ -130,6 +130,16 @@ public static class Configs
         }
     }
 
+    public static string LevelSetPath
+    {
+        get => _jsonNode[nameof(LevelSetPath)]!.GetValue<string>() ?? Statics.StandardSet;
+        set
+        {
+            _jsonNode[nameof(LevelSetPath)] = value;
+            Statics.LevelSet = new LevelSet(value ?? Statics.StandardSet);
+        }
+    }
+
     public static byte Stage
     {
         get => _stage;
@@ -149,7 +159,7 @@ public static class Configs
             SaveGame();
         }
     }
-    /* A */
+    
     public static byte Lives
     {
         get => _lives;
@@ -210,6 +220,11 @@ public static class Configs
         
         if (_jsonNode[nameof(GraphicSet4Remastered)] is null)
             GraphicSet4Remastered = false;
+
+        if (!System.IO.File.Exists(LevelSetPath))
+            LevelSetPath = null;
+        else
+            Statics.LevelSet = new LevelSet(LevelSetPath);
         
         LoadGame();
     }

@@ -21,23 +21,13 @@ public static class Statics
         new(0xFF114455U), // packed ABGR for #541 (GS4)
         new(0xFF114477U)  // packed ABGR for #741 (GS4R)
     ];
-    private static string _levelSetPath = StandardSet;
     private static readonly SpriteFont[] TextureFonts = new SpriteFont[5]; // TODO: add texture font fidelity levels
     #endregion
 
     #region Properties
-    public static string LevelSetPath
-    {
-        get => _levelSetPath;
-        set
-        {
-            _levelSetPath = value;
-            LevelSet = new LevelSet(value);
-        }
-    }
     public static SimpleImage Backdrop { get; set; }
     public static Cursor Cursor { get; set; }
-    public static LevelSet LevelSet { get; private set; } = new(StandardSet);
+    public static LevelSet LevelSet { get; set; } = new(StandardSet);
     public static SpriteFont TextureFont => TextureFonts[Configs.GraphicSet-1];
     public static SpriteFont TopazFont => Configs.FidelityLevel is IFixable.FidelityLevel.Remastered ? _topazPlus : _topaz;
     public static Color TopazColor => TopazColors[Configs.GraphicSet-1];
