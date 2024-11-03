@@ -69,7 +69,7 @@ public class LogicalGame : EngineGame
         
         _cursorTexture = Content.Load<Texture2D>("Cursor");
         _backdropTexture = new Texture2D(Graphics.GraphicsDevice, 1, 1);
-        _backdropTexture.SetData([Color.Black]);
+        _backdropTexture.SetData([Color.White]);
         
         Components.Add(
             Statics.Cursor = new Cursor(this) { Enabled = false, Visible = false, DrawOrder = 10, UpdateOrder = 0}
@@ -77,7 +77,7 @@ public class LogicalGame : EngineGame
         Components.Add(
             Statics.Backdrop = new SimpleImage(this, _backdropTexture,
                     (Configs.NativeSize - Configs.ScreenSize / Configs.MaxScale) / 2, 10)
-                { Enabled = false, Opacity = 0f, Scale = Configs.ScreenSize / Configs.MaxScale }
+                { Enabled = false, Opacity = 0f, Scale = Configs.ScreenSize / Configs.MaxScale, Color = Color.Black }
         );
         Statics.LoadFonts(Content);
         #if DEBUG
