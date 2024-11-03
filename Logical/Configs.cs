@@ -132,7 +132,7 @@ public static class Configs
 
     public static string LevelSetPath
     {
-        get => _jsonNode[nameof(LevelSetPath)]!.GetValue<string>() ?? Statics.StandardSet;
+        get => _jsonNode[nameof(LevelSetPath)]?.GetValue<string>() ?? Statics.StandardSet;
         set
         {
             _jsonNode[nameof(LevelSetPath)] = value;
