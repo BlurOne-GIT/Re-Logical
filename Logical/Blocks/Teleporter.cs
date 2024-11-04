@@ -58,6 +58,7 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
                 2 => 36,
                 _ => throw new ArgumentException("Invalid GraphicsSet")
             }, 0, 36, 36);
+        Overlays = new DrawableGameComponent[] { _overlay };
         base.LoadContent();
     }
 
@@ -163,9 +164,6 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         base.UnloadContent();
     }
 
-    public IEnumerable<GameComponent> GetOverlayables()
-        => new DrawableGameComponent[] { _overlay };
-
     public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
 
     public void Fix(IFixable.FidelityLevel fidelity)
@@ -189,4 +187,6 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         _closingsSource.Height += 2*(26 - _closingsSource.Height);
         _shadowSource.Y += 42;
     }
+
+    public IEnumerable<GameComponent> Overlays { get; private set; }
 }

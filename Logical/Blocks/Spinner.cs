@@ -194,6 +194,10 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
             _closingsOffset.X = _closingsSource.X = 32;
             _closingsSource.Width = 4;
         }
+        
+        var list = new List<GameComponent> { _spinButton };
+        list.AddRange(_slotButtons.Where(button => button is not null));
+        Overlays = list;
     }
 
     private void Spin(object s, EventArgs e)
@@ -403,10 +407,5 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
             _explodeAnimation.Frames[1] = _explodeAnimation.Frames[4] = new Rectangle(116, 0, 30, 30);
     }
 
-    public IEnumerable<GameComponent> GetOverlayables()
-    {
-        var list = new List<GameComponent> { _spinButton };
-        list.AddRange(_slotButtons.Where(button => button is not null));
-        return list;
-    }
+    public IEnumerable<GameComponent> Overlays { get; private set; }
 }

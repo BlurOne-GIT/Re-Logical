@@ -29,5 +29,5 @@ public interface IReloadable
 
 public interface IOverlayable
 {
-    public IEnumerable<GameComponent> GetOverlayables();
+    public IEnumerable<GameComponent> Overlays { get; }
 }

@@ -30,6 +30,12 @@ public class ColourChanger : Pipe, IOverlayable, IFixable
     {
         _shadow ??= Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/ChangerShadows");
         _indicator ??= Game.Content.Load<Texture2D>("Indicators");
+        Overlays = new DrawableGameComponent[] 
+        {
+            new SimpleImage(Game, "ColourChangers", Position + _indicatorOffset, 9)
+                { DefaultSource = _indicatorSource }
+        };
+        base.LoadContent();
     }
 
     public override void Update(GameTime gameTime)
@@ -63,9 +69,5 @@ public class ColourChanger : Pipe, IOverlayable, IFixable
         base.UnloadContent();
     }
 
-    public IEnumerable<GameComponent> GetOverlayables() => new DrawableGameComponent[] 
-    {
-        new SimpleImage(Game, "ColourChangers", Position + _indicatorOffset, 9)
-        { DefaultSource = _indicatorSource }
-    };
+    public IEnumerable<GameComponent> Overlays { get; private set; }
 }

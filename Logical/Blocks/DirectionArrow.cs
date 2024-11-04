@@ -53,6 +53,7 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         _arrow = new SimpleImage(Game, $"{Configs.GraphicSet}/DirectionArrows", Position + new Vector2(13f, 12f), 9)
             { DefaultSource = new Rectangle(9 * (int)_direction, 0, 10, 10) };
         _shadow = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/HolderShadows");
+        Overlays = new DrawableGameComponent[] { _holder, _arrow };
     }
 
     public override void Update(GameTime gameTime)
@@ -121,9 +122,6 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         base.UnloadContent();
     }
 
-    public IEnumerable<GameComponent> GetOverlayables()
-        => new DrawableGameComponent[] { _holder, _arrow };
-
     public IFixable.FidelityLevel Fidelity => IFixable.FidelityLevel.Intended;
 
     public void Fix(IFixable.FidelityLevel fidelity)
@@ -146,4 +144,6 @@ public class DirectionArrow : Block, IReloadable, IOverlayable, IFixable
         if (Configs.GraphicSet >= 4)
             _shadowSource.X += 18;
     }
+
+    public IEnumerable<GameComponent> Overlays { get; private set; }
 }

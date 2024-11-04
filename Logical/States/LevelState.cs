@@ -89,11 +89,11 @@ public class LevelState : GameState
             Components.Add(gameObject);
             
             if (gameObject is IReloadable reloadable)
-                reloadable.Reload(_tileset);
+                reloadable.Reload(_tileset as IBlock[,]);
             
             if (gameObject is IOverlayable overlayable)
-                foreach (var component in overlayable.GetOverlayables())
                     Components.Add(component);
+                foreach (var component in overlayable.Overlays)
             
             if (gameObject is IFixable fixable && fixable.ShallFix(Configs.FidelityLevel))
                 fixable.Fix(Configs.FidelityLevel);
