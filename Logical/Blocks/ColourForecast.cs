@@ -15,6 +15,7 @@ public class ColourForecast : Block, IFixable
     private static Texture2D _shadow;
     private Rectangle? _holderSource = new(0, 1, 18, 17);
     private Vector2 _indicatorOffset = new(12f, 11f);
+    private bool _firstDraw = true; //TODO: remove this and reimplement it properly
     #endregion
 
     public ColourForecast(Game game, Point arrayPosition, byte xx, byte yy)
@@ -38,6 +39,10 @@ public class ColourForecast : Block, IFixable
         DrawAnotherTexture(_shadow, ShadowOffset, 1, ShadowSource);
         DrawAnotherTexture(_holder, HolderOffset, 2, _holderSource);
         DrawAnotherTexture(_indicators, _indicatorOffset, 3, new Rectangle(12 * (int)LevelState.NextBall, 0, 12, 12));
+        
+        if (!_firstDraw) return;
+        _firstDraw = false;
+        DrawAnotherTexture(_holder, HolderOffset, 2, _holderSource);
     }
 
     protected override void UnloadContent()

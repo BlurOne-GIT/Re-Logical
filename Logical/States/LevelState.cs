@@ -16,6 +16,8 @@ public class LevelState : GameState
     public static int MovesLeft => 5 - Ball.AllBalls.Count;
     public static readonly List<BallColors> TrafficLights = new(3);
     private readonly SimpleImage _oTimeBar;
+    private readonly SimpleImage _mainPipe;
+    private readonly SimpleImage[] _mainPipeOpenings = new SimpleImage[8];
     private int _oTimeLeft = 145;
     private readonly int _oTime;
     private int _oTimeLoopCounter;
@@ -91,22 +93,24 @@ public class LevelState : GameState
             if (gameObject is IReloadable reloadable)
                 reloadable.Reload(_tileset as IBlock[,]);
             
-            if (gameObject is IOverlayable overlayable)
-                    Components.Add(component);
+            /*if (gameObject is IOverlayable overlayable)
                 foreach (var component in overlayable.Overlays)
+                    Components.Add(component);*/
             
             if (gameObject is IFixable fixable && fixable.ShallFix(Configs.FidelityLevel))
                 fixable.Fix(Configs.FidelityLevel);
         }
 
-        Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipe", new Vector2(16, 30), 0));
-        Components.Add(
-            _oTimeBar = new SimpleImage(Game, "MainPipeTime", new Vector2(304f, 35f), 1)
+        Components.Add(_mainPipe =
+            new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipe", new Vector2(16, 30), 0)
+        );
+        Components.Add(_oTimeBar =
+            new SimpleImage(Game, "MainPipeTime", new Vector2(304f, 35f), 1)
         );
         var intendedPipes = Configs.FidelityLevel >= IFixable.FidelityLevel.Intended;
         for (int x = 0; x < 8; x++)
             if (_level.Blocks[x, 0].FileValue is 0x01 or 0x16)
-                Components.Add(
+                Components.Add(_mainPipeOpenings[x] =
                     new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipeOpen",
                         new Vector2(25 + 36 * x, intendedPipes ? 40 : 41), 1)
                     { DefaultSource = new Rectangle(0, intendedPipes ? 0 : 1, 18, intendedPipes ? 6 : 5) }
@@ -128,14 +132,18 @@ public class LevelState : GameState
                 Visible = false // makes the whole state not render, who knows...
             }
         );
-
-        Statics.Cursor.Enabled = true; // TODO: refactor this Cursor Visible/Enabled logic
     }
 
     protected override void LoadContent()
     {
+        Visible = true;
+        Statics.Cursor.Enabled = true; // TODO: refactor this Cursor Visible/Enabled logic
         _successSfx = Game.Content.Load<SoundEffect>("Sfx/1/Success"); // DEBUG //
         _failSfx = Game.Content.Load<SoundEffect>("Sfx/1/Fail"); // DEBUG //
+        foreach (var block in _tileset)
+            if (block is IOverlayable overlayable)
+                foreach (var component in overlayable.Overlays)
+                    Components.Add(component);
         base.LoadContent();
     }
 
@@ -363,5 +371,22 @@ public class LevelState : GameState
         Ball.BallDestroyed -= RemoveBall;
         Hourglass.TimeOut -= OnTimeOut;
         base.Dispose(disposing);
+    }
+
+    public void DrawPreview()
+    {
+        var gameTime = new GameTime();
+        //Draw(gameTime);
+        _mainPipe.Draw(gameTime);
+        foreach (var opening in _mainPipeOpenings)
+            opening?.Draw(gameTime);
+        foreach (var block in _tileset)
+        {
+            block.Draw(gameTime);
+            if (block is not IOverlayable overlayable) continue;
+            foreach (var overlay in overlayable.Overlays ?? [])
+                if (overlay is IDrawable drawable)
+                    drawable.Draw(gameTime);
+        }
     }
 }

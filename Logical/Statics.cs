@@ -41,7 +41,8 @@ public static class Statics
         {Direction.Down, Direction.Up}
     };
 
-    public static readonly Vector2 CursorTextureOffset = new(7f, 7f);
+    //public static readonly Vector2 CursorTextureOffset = new(7f, 7f);
+    public static RenderTarget2D LastLevelPreview;
     #endregion
 
     #region Methods

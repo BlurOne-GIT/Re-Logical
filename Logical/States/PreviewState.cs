@@ -27,7 +27,8 @@ public class PreviewState : GameState
     private readonly List<int> _bonuses = [];
     private int _bonusItr;
     private LoopedAction _displayLoop;
-    static private bool _showEditor;
+    private readonly LevelState _preloadedLevelState;
+    private static bool _showEditor;
 
     private enum Mode
     {
@@ -43,6 +44,18 @@ public class PreviewState : GameState
     {
         _message = message;
         _mode = mode;
+        
+        if (Statics.LastLevelPreview is not null) return;
+        
+        _preloadedLevelState = new LevelState(game);
+        Statics.LastLevelPreview = new RenderTarget2D(Game.GraphicsDevice, Configs.NativeWidth/2, Configs.NativeHeight/2);
+        Game.GraphicsDevice.SetRenderTarget(Statics.LastLevelPreview);
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
+        spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: Matrix.CreateScale(.5001f, .4999f, 1f));
+        _preloadedLevelState.DrawPreview();
+        spriteBatch.End();
+        Game.GraphicsDevice.SetRenderTarget(null);
+        _preloadedLevelState.Visible = false;
     }
     
     // MAKE IT!
@@ -115,12 +128,13 @@ public class PreviewState : GameState
         }
         
         Statics.Cursor.Visible = false; //Statics.ShowCursor = false;
+        Components.Add(new SimpleImage(Game, Statics.LastLevelPreview, new Vector2(159, 23), 0));
         Components.Add(new SimpleImage(
             Game,
             $"{Configs.GraphicSet}/UI/Preview",
             new Vector2(0, 28),
             0
-            ));
+        ));
         Components.Add(new TextComponent(Game, Statics.DisplayFont, _message, new Vector2(84, 43), 1, anchor: Alignment.TopCenter));
         var pinkBall = Game.Content.Load<Texture2D>("SpinnerBalls");
         for (int i = 0; i < Configs.Lives; i++)
@@ -212,7 +226,7 @@ public class PreviewState : GameState
     {
         switch (_mode)
         {
-            case Mode.Start: SwitchState(new LevelState(Game)); break;
+            case Mode.Start: SwitchState(_preloadedLevelState ?? new LevelState(Game)); break;
             case Mode.Failed:
                 if (Configs.Lives is 0)
                 {
@@ -226,7 +240,7 @@ public class PreviewState : GameState
                 if (_showEditor)
                     SwitchState(new MessageState(Game, "CONGRATULATIONS\n  YOU MADE IT  "));
                 else
-                    SwitchState(new LevelState(Game));
+                    SwitchState(_preloadedLevelState);
                 break;
             default: throw new NotImplementedException();
         }

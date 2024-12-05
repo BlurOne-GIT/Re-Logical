@@ -92,7 +92,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         new Rectangle( 0, 0, 29, 29), // 0
         new Rectangle(58, 0, 29, 29), // 2
         new Rectangle(87, 0, 29, 29)  // 3
-    ], false);
+    ], false) { Position = 7 };
 
     #region Textures
     private static Texture2D _spinningTexture;
@@ -117,6 +117,8 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         ExplodedSpinners.Capacity++;
         if (Configs.GraphicSet is 1)
             DefaultSource = new Rectangle(0, 0, 36, 36);
+
+        _spinAnimation.Position = 4;
     }
 
     protected override void LoadContent()
@@ -152,7 +154,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         
         if (!_closedPipes[(int)Direction.Up])
         {
-            if (Point.Y != 0 && blocks[Point.X, Point.Y - 1].FileValue is not 0x16)
+            if (Point.Y != 0 && blocks[Point.X, Point.Y - 1].FileValue is not (byte)IBlock.BlockTypes.Dropper)
             {
                 _slotButtons[1] = new ClickableArea(Game, new Rectangle((Position + new Vector2(13f, 4f)).ToPoint(), new Point(9, 10)), outsideBehaviour: ClickableArea.OutsideBehaviour.None) {Enabled = false};
                 _slotButtons[1].LeftButtonDown += PopOut;
@@ -175,24 +177,23 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
             }
         }
         
-        if (!_closedPipes[(int)Direction.Down])
+        if (!_closedPipes[(int)Direction.Down] && blocks[Point.X, Point.Y + 1].FileValue is not (byte)IBlock.BlockTypes.Dropper)
         {
-            if (blocks[Point.X, Point.Y + 1].FileValue is 0x16) return;
             _slotButtons[3] = new ClickableArea(Game, new Rectangle((Position + new Vector2(13f, 23f)).ToPoint(), new Point(9, 10)), outsideBehaviour: ClickableArea.OutsideBehaviour.None)
             { Enabled = false };
             _slotButtons[3].LeftButtonDown += PopOut;
             
             if (_closingsSource.Height is 4)
-            {
                 _closingsSource = default;
-                return;
+            else
+            {
+                _closingsSource.Height -= 10;
+                if (_closingsSource.Height is 16 && _closingsSource.X is 10)
+                {
+                    _closingsOffset.X = _closingsSource.X = 32;
+                    _closingsSource.Width = 4;
+                }
             }
-            
-            _closingsSource.Height -= 10;
-            if (_closingsSource.Height is not 16 || _closingsSource.X is not 10) return;
-            
-            _closingsOffset.X = _closingsSource.X = 32;
-            _closingsSource.Width = 4;
         }
         
         var list = new List<GameComponent> { _spinButton };

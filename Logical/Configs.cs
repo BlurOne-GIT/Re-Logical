@@ -100,6 +100,7 @@ public static class Configs
         }
         set
         {
+            Statics.LastLevelPreview = null;
             _jsonNode[nameof(GraphicSet)] = value > 4 ? 1 : value < 1 ? 4 : value;
             GraphicSetChanged?.Invoke(null, EventArgs.Empty);
         }
@@ -124,6 +125,7 @@ public static class Configs
         get => _jsonNode[nameof(GraphicSet4Remastered)]!.GetValue<bool>();
         set
         {
+            Statics.LastLevelPreview = null;
             _jsonNode[nameof(GraphicSet4Remastered)] = value;
             if (GraphicSet >= 4)
                 GraphicSetChanged?.Invoke(null, EventArgs.Empty);
@@ -146,6 +148,7 @@ public static class Configs
         set
         {
             _stage = value;
+            Statics.LastLevelPreview = null;
             SaveGame();
         }
     }
@@ -338,6 +341,7 @@ public static class Configs
         _score = 0;
         _lives = 3;
         SaveGame();
+        Statics.LastLevelPreview = null;
     }
     #endregion
 }

@@ -44,6 +44,7 @@ public class Hourglass : Block, IFixable
     private int _cyclesLeft;
     private TimeSpan _currentCycle = TimeSpan.Zero;
     private static readonly TimeSpan ClockCycleReference = new(0, 1, 30);
+    private bool _firstDraw = true; //TODO: remove this and reimplement it properly
     #endregion
 
     public Hourglass(Game game, Point arrayPosition, byte xx, byte yy)
@@ -122,13 +123,16 @@ public class Hourglass : Block, IFixable
         );
         
         // Sand Stream
-        DrawAnotherTexture(
-            _sandStream,
-            _sandStreamOffset,
-            1,
-            _sandStreamSource,
-            spriteEffectsOverride: SpriteEffects.FlipVertically
-        );
+        if (!_firstDraw)
+            DrawAnotherTexture(
+                _sandStream,
+                _sandStreamOffset,
+                1,
+                _sandStreamSource,
+                spriteEffectsOverride: SpriteEffects.FlipVertically
+            );
+        else
+            _firstDraw = false;
         
         // Sand Used
         DrawAnotherTexture(
