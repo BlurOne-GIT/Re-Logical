@@ -67,12 +67,12 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         // TODO: add case where there is no second teleporter and the ball explodes
         foreach (var ball in Ball.AllBalls.Where(ball => ball.Position == DetectionPoint + Position))
             if (ball.MovementDirection is Direction.Left or Direction.Right)
-                if (FirstHorizontalTp.Equals(this))
+                if (FirstHorizontalTp == this)
                     ball.Position = DetectionPoint + SecondHorizontalTp.Position;
                 else
                     ball.Position = DetectionPoint + FirstHorizontalTp.Position;
             else
-                if (FirstVerticalTp.Equals(this))
+                if (FirstVerticalTp == this)
                     ball.Position = DetectionPoint + SecondVerticalTp.Position;
                 else
                     ball.Position = DetectionPoint + FirstVerticalTp.Position;
@@ -94,8 +94,9 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         
         _shadowNum = (closedPipes[(int)Direction.Right] ? 1 : 0) | (closedPipes[(int)Direction.Down] ? 2 : 0);
         _shadowSource = new Rectangle(_shadowNum * 22 + Variation * 88, (int)Orientation * 14, 22, 14);
-
-        if (_completelyOpen = closedPipes.All(x => !x))
+        _completelyOpen = closedPipes.All(x => !x);
+        
+        if (_completelyOpen)
         {
             Texture = _pipeClosings;
             DefaultSource = _closingsSource;
@@ -137,7 +138,8 @@ public class Teleporter : Pipe, IReloadable, IOverlayable, IFixable
         if (FirstVerticalTp == this)
             FirstVerticalTp = null;
         else if (SecondVerticalTp == this)
-            SecondHorizontalTp = null;
+            SecondVerticalTp = null;
+        
         base.Dispose(disposing);
     }
 

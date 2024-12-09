@@ -158,10 +158,10 @@ public class MainPanel : MenuPanel
     {
         var mouseHelper = Game.Services.GetService<ClickableWindow>();
         mouseHelper.ButtonDown += BeepOnFileSelect;
-        Statics.Cursor.Visible /*Statics.ShowCursor*/ = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = false;
+        Statics.Cursor.Visible = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = false;
         var result = await Task.Run(() => Dialog.FileOpen("dat"));
         mouseHelper.ButtonDown -= BeepOnFileSelect;
-        Statics.Cursor.Visible /*Statics.ShowCursor*/ = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = true;
+        Statics.Cursor.Visible = _cancelLeveldiskButton.Enabled = _selectLeveldiskButton.Enabled = true;
         
         if (result.IsOk)
             Configs.LevelSetPath = result.Path;
