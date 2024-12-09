@@ -180,7 +180,7 @@ public class MainPanel : MenuPanel
 
     private void LevelsetComplete(object sender = null, EventArgs e = null)
     {
-        _levelsetImage.Visible               =
+        _levelsetImage.Visible          =
         _standardLevelsetButton.Enabled =
         _customLevelsetButton.Enabled   =
         _cancelLeveldiskButton.Enabled  =

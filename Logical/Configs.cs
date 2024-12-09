@@ -137,6 +137,9 @@ public static class Configs
         get => _jsonNode[nameof(LevelSetPath)]?.GetValue<string>() ?? Statics.StandardSet;
         set
         {
+            if (_jsonNode[nameof(LevelSetPath)]?.GetValue<string>() != value)
+                ResetGame();
+            
             _jsonNode[nameof(LevelSetPath)] = value;
             Statics.LevelSet = new LevelSet(value ?? Statics.StandardSet);
         }
