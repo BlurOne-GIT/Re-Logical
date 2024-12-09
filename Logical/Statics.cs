@@ -28,6 +28,7 @@ public static class Statics
     public static SimpleImage Backdrop { get; set; }
     public static Cursor Cursor { get; set; }
     public static LevelSet LevelSet { get; set; } = new(StandardSet);
+    public static Level CurrentLevel => LevelSet.GetLevel(Configs.Stage);
     public static SpriteFont TextureFont => TextureFonts[Configs.GraphicSet-1];
     public static SpriteFont TopazFont => Configs.FidelityLevel is IFixable.FidelityLevel.Remastered ? _topazPlus : _topaz;
     public static Color TopazColor => TopazColors[Configs.GraphicSet-1];

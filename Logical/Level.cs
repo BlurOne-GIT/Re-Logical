@@ -15,7 +15,9 @@ public readonly struct Level
         Time = time;
         Name = name;
         EncodedName = encodedName;
-        IsTimed = Blocks.OfType<IBlock>().Any(x => x.FileValue is 0x13); // Hourglass
+        var list = Blocks.OfType<IBlock>().ToImmutableList();
+        IsTimed = list.Any(x => x.BlockType is IBlock.BlockTypes.Hourglass);
+        AutoWin = !list.Any(x => x.BlockType is IBlock.BlockTypes.Spinner);
     }
     
     public Level(IBlock[,] blocks, byte number, byte ballTime, byte time, string name)
@@ -29,6 +31,7 @@ public readonly struct Level
     public byte BallTime { get; init; }
     public byte Time { get; init; }
     public bool IsTimed { get; init; }
+    public bool AutoWin { get; init; }
     public string Name { get; init; }
     public byte[] EncodedName { get; init; }
 }
@@ -36,6 +39,7 @@ public readonly struct Level
 public interface IBlock
 {
     public byte FileValue { get; }
+    public BlockTypes BlockType => (BlockTypes)FileValue;
     public byte Argument { get; }
     public Point Point { get; }
     public sealed bool HasArgument => Argument is not 0;

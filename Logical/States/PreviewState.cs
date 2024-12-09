@@ -18,7 +18,7 @@ public class PreviewState : GameState
     private const int BlankTime = 1280;
     private const int TotalTextTime = 2*TextFadeTime + TextTime + DelayTime;
     
-    #region Fields
+#region Fields
     private readonly Mode _mode;
     private readonly string _message;
     private TextComponent _changingDisplay;
@@ -27,7 +27,6 @@ public class PreviewState : GameState
     private readonly List<int> _bonuses = [];
     private int _bonusItr;
     private LoopedAction _displayLoop;
-    private readonly LevelState _preloadedLevelState;
     private static bool _showEditor;
 
     private enum Mode
@@ -36,9 +35,9 @@ public class PreviewState : GameState
         Failed,
         Complete
     }
-    #endregion
+#endregion
     
-    #region Constructors
+#region Constructors
     // Common constructor
     private PreviewState(Game game, Mode mode, string message) : base(game)
     {
@@ -47,15 +46,14 @@ public class PreviewState : GameState
         
         if (Statics.LastLevelPreview is not null) return;
         
-        _preloadedLevelState = new LevelState(game);
         Statics.LastLevelPreview = new RenderTarget2D(Game.GraphicsDevice, Configs.NativeWidth/2, Configs.NativeHeight/2);
         Game.GraphicsDevice.SetRenderTarget(Statics.LastLevelPreview);
         var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: Matrix.CreateScale(.5001f, .4999f, 1f));
-        _preloadedLevelState.DrawPreview();
+        using var preview = new PreviewLevelState(Game, Statics.CurrentLevel);
+        preview.Draw(new GameTime());
         spriteBatch.End();
         Game.GraphicsDevice.SetRenderTarget(null);
-        _preloadedLevelState.Visible = false;
     }
     
     // MAKE IT!
@@ -75,6 +73,7 @@ public class PreviewState : GameState
     
     // YOU MADE IT!
     public PreviewState(Game game, int timeLeft, int ballsLeft, int colorJobs, bool superbonus = false)
+        // ReSharper disable once AssignmentInConditionalExpression
         : this(game, Mode.Complete, (_showEditor = !Statics.LevelSet.CheckValidStage(++Configs.Stage)) ? "THE EDITOR!" : "YOU MADE IT!")
     {
         _displayMessages.Add($"TIME BONUS: 10*{timeLeft}%");
@@ -114,9 +113,9 @@ public class PreviewState : GameState
         _bonuses.Add((int)points);
         Configs.Score += points;
     }
-    #endregion
+#endregion
     
-    #region Default Methods
+#region Default Methods
     protected override void LoadContent()
     {
         if (_showEditor && !Statics.LevelSet.CheckValidStage(Configs.Stage - 1))
@@ -208,9 +207,9 @@ public class PreviewState : GameState
     protected override void UnloadContent()
         => Game.Content.UnloadAsset($"{Configs.GraphicSet}/Loading");
 
-    #endregion
+#endregion
 
-    #region Custom Methods
+#region Custom Methods
     private void PrepareExit(Action action)
     {
         Game.Window.KeyDown -= HandleInput;
@@ -226,7 +225,7 @@ public class PreviewState : GameState
     {
         switch (_mode)
         {
-            case Mode.Start: SwitchState(_preloadedLevelState ?? new LevelState(Game)); break;
+            case Mode.Start: SwitchState(new LevelState(Game)); break;
             case Mode.Failed:
                 if (Configs.Lives is 0)
                 {
@@ -237,14 +236,13 @@ public class PreviewState : GameState
                     SwitchState(new LevelState(Game));
                 break;
             case Mode.Complete: 
-                if (_showEditor)
-                    SwitchState(new MessageState(Game, "CONGRATULATIONS\n  YOU MADE IT  "));
-                else
-                    SwitchState(_preloadedLevelState);
-                break;
-            default: throw new NotImplementedException();
+                SwitchState(_showEditor ?
+                    new MessageState(Game, "CONGRATULATIONS\n  YOU MADE IT  ") :
+                    new LevelState(Game)
+                ); break;
+            default: throw new ArgumentException();
         }
     }
 
-    #endregion
+#endregion
 }

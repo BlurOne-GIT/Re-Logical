@@ -310,7 +310,7 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         ConditionClear?.Invoke(this, EventArgs.Empty);
     }
 
-    private void Explode(bool fb = false)
+    private void Explode(bool finalBoom = false)
     {
         foreach (var button in _slotButtons)
             if (button is not null)
@@ -319,10 +319,10 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         _hasExploded = true;
         for (int i = 0; i < 4; i++)
             _slotBalls[i] = null;
-        if (!fb && !ExplodedSpinners.Contains(this))
+        if (!finalBoom && !ExplodedSpinners.Contains(this))
             ExplodedSpinners.Add(this);
         _explodeSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
-        if (!fb && ExplodedSpinners.Count == ExplodedSpinners.Capacity)
+        if (!finalBoom && ExplodedSpinners.Count == ExplodedSpinners.Capacity)
             AllDone?.Invoke(ExplodedSpinners, EventArgs.Empty);
 
         // Intentional break for Faithful parity
@@ -337,14 +337,10 @@ public class Spinner : Block, IReloadable, IFixable, IOverlayable
         return ballsLeft;
     }
 
-    public static void ClearList()
-    {
-        ExplodedSpinners.Clear();
-        ExplodedSpinners.Capacity = 0;
-    }
-
     protected override void Dispose(bool disposing)
     {
+        ExplodedSpinners.Remove(this);
+        --ExplodedSpinners.Capacity;
         _spinButton.RightButtonDown -= Spin;
         _spinButton.Dispose();
         foreach (var button in _slotButtons)
