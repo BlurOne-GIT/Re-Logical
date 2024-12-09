@@ -70,10 +70,7 @@ public class LevelState(Game game) : LevelDrawingState(game)
         _oTime = Level.BallTime + 1;
         
         if (Level.IsTimed)
-        {
-            Hourglass.BruceCook.InitialCycles = Level.Time;
             Hourglass.TimeOut += OnTimeOut;
-        }
         
         Spinner.AllDone += Win;
         _oTimeLoopCounter = _oTime;

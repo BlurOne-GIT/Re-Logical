@@ -4,42 +4,27 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Logical.Blocks;
 
+// TODO: investigate real hourglass behaviour, using this for visual parity
 public class Hourglass : Block, IFixable
 {
     #region Field
     public static Hourglass BruceCook { get; private set; }
     public static event EventHandler TimeOut;
-    private Vector2 _sandLeftOffset = new(10f, 7f);
+    private Vector2 _sandLeftOffset;
     private Vector2 _sandStreamOffset = new(16f, 18f);
-    private Vector2 _sandUsedOffset = new(10f, 20f);
-    private Rectangle _sandLeftSource = new(0, 0, 16, 10);
-    private Rectangle _sandStreamSource = new(0, 0, 5, 12);
-    private Rectangle _sandUsedSource = new(0, 0, 16, 10);
+    private Vector2 _sandUsedOffset;
+    private Rectangle _sandLeftSource;
+    private Rectangle _sandStreamSource;
+    private Rectangle _sandUsedSource;
     private static Texture2D _sandLeft;
     private Texture2D _sandStream;
     private static Texture2D _sandUsed;
-
-    // TODO: investigate real hourglass behaviour, using this for visual parity
-    public int InitialCycles
-    {
-        set
-        {
-            _sandLeftOffset.Y += 10 - value;
-            _sandLeftSource.Height = value;
-            _sandStreamSource.Height = value + 2;
-            _sandUsedOffset.Y += value;
-            _sandUsedSource.Height -= value;
-            _cyclesLeft = value + 1;
-            _initialCycles = value + 1;
-            _initialTicks = ClockCycleReference.Ticks * value; // TODO: check if when having a double clock half time, the reference initial ticks is just 
-        }
-    }
-
+    
     // TODO: check if this Ticks system is correct or if it's actually cycle-based
     public int TimeLeftPoints
         => (int)((ClockCycleReference.Ticks * (_cyclesLeft + 1) - _currentCycle.Ticks) * 100 / _initialTicks);
 
-    private long _initialTicks;
+    private readonly long _initialTicks;
     private int _initialCycles;
     private int _cyclesLeft;
     private TimeSpan _currentCycle = TimeSpan.Zero;
@@ -48,6 +33,9 @@ public class Hourglass : Block, IFixable
     #endregion
 
     public Hourglass(Game game, Point arrayPosition, byte xx, byte yy)
+        : this(game, arrayPosition, xx, yy, Statics.CurrentLevel.Time) {}
+
+    public Hourglass(Game game, Point arrayPosition, byte xx, byte yy, byte initialCycles)
         : base(game, "Hourglass", arrayPosition, xx, yy)
     {
         if (BruceCook is not null)
@@ -57,6 +45,14 @@ public class Hourglass : Block, IFixable
         
         if (Configs.GraphicSet is 1)
             DefaultSource = new Rectangle(0, 0, 36, 36);
+        
+        _sandLeftOffset = new Vector2(10f, 17f - initialCycles);
+        _sandLeftSource = new Rectangle(0, 0, 16, initialCycles);
+        _sandStreamSource = new Rectangle(0, 0, 5, 2 + initialCycles);
+        _sandUsedOffset = new Vector2(10f, 20f + initialCycles);
+        _sandUsedSource = new Rectangle(0, 0, 16, 10 - initialCycles);
+        _cyclesLeft = _initialCycles = initialCycles + 1;
+        _initialTicks = ClockCycleReference.Ticks * initialCycles;
     }
 
     protected override void LoadContent()
@@ -65,6 +61,7 @@ public class Hourglass : Block, IFixable
         _sandLeft ??= Game.Content.Load<Texture2D>("SandLeft");
         _sandStream = Game.Content.Load<Texture2D>("SandStreamTemplate");
         _sandUsed ??= Game.Content.Load<Texture2D>("SandUsed");
+        RandomizeStream();
     }
 
     private static readonly Color LightSand = new(0xFF1199CCU); // packed ABGR for #9C1
@@ -103,7 +100,7 @@ public class Hourglass : Block, IFixable
             TimeOut?.Invoke(this, EventArgs.Empty);
             return;
         }
-
+        
         // Finally, reloads
         _currentCycle = TimeSpan.Zero;
         ColourHandicap.SteveJobs?.Recharge();
