@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Logical.Blocks;
+using Logical.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
@@ -122,8 +122,8 @@ public class LevelState(Game game) : LevelDrawingState(game)
 
     private void RecheckConditioned(object s, EventArgs e)
     {
-        foreach (var block in Tileset)
-            if (block is Spinner spinner)
+        foreach (var tile in Tileset)
+            if (tile is Spinner spinner)
                 spinner.Check();
     }
 
@@ -145,7 +145,7 @@ public class LevelState(Game game) : LevelDrawingState(game)
 
         //Configs.Stage++;
 
-        _timeLeft = Level.IsTimed ? Hourglass.BruceCook.TimeLeftPoints : 100;
+        _timeLeft = Level.IsTimed ? Hourglass.PrimaryInstance.TimeLeftPoints : 100;
     }
 
 
@@ -290,8 +290,8 @@ public class LevelState(Game game) : LevelDrawingState(game)
     {
         if (enable)
             Statics.Cursor.Visible = true; //Statics.ShowCursor = enable;
-        foreach (var block in Tileset)
-            block.Enabled = enable;
+        foreach (var tile in Tileset)
+            tile.Enabled = enable;
         foreach (var ball in Ball.AllBalls)
             ball.Enabled = enable;
     }

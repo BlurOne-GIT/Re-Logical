@@ -1,4 +1,4 @@
-using Logical.Blocks;
+using Logical.Tiles;
 using Microsoft.Xna.Framework;
 using MmgEngine;
 
@@ -7,7 +7,7 @@ namespace Logical.States;
 public class LevelDrawingState : GameState
 {
     public Level Level { get; }
-    public Block[,] Tileset { get; } = new Block[8, 5];
+    public GameTile[,] Tileset { get; } = new GameTile[8, 5];
 
 
     public LevelDrawingState(Game game) : this(game, Statics.CurrentLevel) {}
@@ -16,22 +16,22 @@ public class LevelDrawingState : GameState
     {
         Level = level;
         
-        // FileBlocks to Blocks, then add to tileset, to components, enable (or not), reload, fix, and add overlays
-        for (var i = 0; i < Level.Blocks.Length; i++)
+        // FileTiles to GameTiles, then add to tileset, to components, enable (or not), reload, fix, and add overlays
+        for (var i = 0; i < Level.Tiles.Length; i++)
         {
             var x = i % 8; var y = i / 8;
-            var block = ((FileBlock)Level.Blocks[x, y]).ToGameBlock(game);
+            var tile = ((FileTile)Level.Tiles[x, y]).ToGameTile(game);
             
-            block.Enabled = false;
-            Components.Add(Tileset[x, y] = block);
+            tile.Enabled = false;
+            Components.Add(Tileset[x, y] = tile);
             
-            if (block is IReloadable reloadable)
-                reloadable.Reload(Level.Blocks);
+            if (tile is IReloadable reloadable)
+                reloadable.Reload(Level.Tiles);
 
-            if (block is IFixable fixable && fixable.ShallFix(Configs.FidelityLevel))
+            if (tile is IFixable fixable && fixable.ShallFix(Configs.FidelityLevel))
                 fixable.Fix(Configs.FidelityLevel);
 
-            if (block is not IOverlayable overlayable) continue;
+            if (tile is not IOverlayable overlayable) continue;
             foreach (var component in overlayable.Overlays)
                 Components.Add(component);
         }
@@ -45,7 +45,7 @@ public class LevelDrawingState : GameState
         // Main pipe openings
         var intendedPipes = Configs.FidelityLevel >= IFixable.FidelityLevel.Intended;
         for (var x = 0; x < 8; x++)
-            if (Level.Blocks[x, 0].BlockType is IBlock.BlockTypes.Spinner or IBlock.BlockTypes.Dropper)
+            if (Level.Tiles[x, 0].TileType is ITile.TileTypes.Spinner or ITile.TileTypes.Dropper)
                 Components.Add(
                     new SimpleImage(Game, $"{Configs.GraphicSet}/MainPipeOpen",
                             new Vector2(25 + 36 * x, intendedPipes ? 40 : 41), 1)

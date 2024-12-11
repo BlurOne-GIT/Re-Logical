@@ -13,9 +13,9 @@ public class MessageState : GameState
     //private const int PauserTime = 2*FadeTime + DelayTime; 
     
     public MessageState(Game game, string message) : base(game) =>
-        Components.Add(
-            new TextComponent(game, Statics.TextureFont, message, new Vector2(161, 111), 1, Alignment.TopCenter)
-        );
+        Components.Add(new TextComponent(
+            game, Statics.TextureFont, message, new Vector2(161, 111), 1, Alignment.TopCenter
+        ));
     
     public override void Initialize()
     {

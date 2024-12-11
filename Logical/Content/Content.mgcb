@@ -49,7 +49,7 @@
 /processorParam:TextureFormat=Color
 /build:1/DirectionArrows.png
 
-#begin 1/EmptyBlock.png
+#begin 1/EmptyTile.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -59,7 +59,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:1/EmptyBlock.png
+/build:1/EmptyTile.png
 
 #begin 1/HolderShadows.png
 /importer:TextureImporter
@@ -433,7 +433,7 @@
 /processorParam:TextureFormat=Color
 /build:2/DirectionArrows.png
 
-#begin 2/EmptyBlock.png
+#begin 2/EmptyTile.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -443,7 +443,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:2/EmptyBlock.png
+/build:2/EmptyTile.png
 
 #begin 2/HolderShadows.png
 /importer:TextureImporter
@@ -829,7 +829,7 @@
 /processorParam:TextureFormat=Color
 /build:3/DirectionArrows.png
 
-#begin 3/EmptyBlock.png
+#begin 3/EmptyTile.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -839,7 +839,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:3/EmptyBlock.png
+/build:3/EmptyTile.png
 
 #begin 3/HolderShadows.png
 /importer:TextureImporter
@@ -1225,7 +1225,7 @@
 /processorParam:TextureFormat=Color
 /build:4/DirectionArrows.png
 
-#begin 4/EmptyBlock.png
+#begin 4/EmptyTile.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1235,7 +1235,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:4/EmptyBlock.png
+/build:4/EmptyTile.png
 
 #begin 4/HolderShadows.png
 /importer:TextureImporter
@@ -1621,7 +1621,7 @@
 /processorParam:TextureFormat=Color
 /build:5/DirectionArrows.png
 
-#begin 5/EmptyBlock.png
+#begin 5/EmptyTile.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1631,7 +1631,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:5/EmptyBlock.png
+/build:5/EmptyTile.png
 
 #begin 5/HolderShadows.png
 /importer:TextureImporter

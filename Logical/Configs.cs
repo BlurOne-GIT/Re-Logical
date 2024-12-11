@@ -9,15 +9,12 @@ namespace Logical;
 
 public static class Configs
 {
-    #region Events
     public static event EventHandler ResolutionChanged;
     public static event EventHandler FullscreenChanged;
     public static event EventHandler MusicVolumeChanged;
     public static event EventHandler SfxVolumeChaged;
     public static event EventHandler GraphicSetChanged;
-    #endregion
-
-    #region Fields
+    
     public const int NativeWidth = 320;
     public const int NativeHeight = 256;
     private const string File = "./config.json";
@@ -25,9 +22,7 @@ public static class Configs
     private static uint _score;
     private static byte _lives = 3;
     public static readonly Vector2 NativeSize = new(NativeWidth, NativeHeight);
-    #endregion
 
-    // Instances
     private static FileStream _fileStream;
     private static JsonNode _jsonNode;
 
@@ -235,8 +230,6 @@ public static class Configs
         LoadGame();
     }
 
-    #region Methods
-
     public static void SaveFile()
     {
         _fileStream.SetLength(0);
@@ -346,5 +339,4 @@ public static class Configs
         SaveGame();
         Statics.LastLevelPreview = null;
     }
-    #endregion
 }

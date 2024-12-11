@@ -35,22 +35,20 @@ public class LevelSet : IDisposable, IAsyncDisposable
 
     public Level GetLevel(int level)
     {
-        var tempBlocks = new IBlock[8,5];
+        var tempTiles = new ITile[8,5];
         _stream.Position = (level - 1) * 100 + 2; //int btr = (level - 1) * 100 + 2;
         for (int i = 0; i < 39; i++)
-            tempBlocks[i % 8, i / 8] = new FileBlock(
+            tempTiles[i % 8, i / 8] = new FileTile(
                 (byte)_stream.ReadByte(),
                 (byte)_stream.ReadByte(),
                 new Point(i % 8, i / 8)
             );
         byte oTime;
-        tempBlocks[7,4] = new FileBlock((byte)_stream.ReadByte(), (byte)((oTime = (byte)_stream.ReadByte()) % 4), new Point(7, 4));
-        return new Level(tempBlocks, (byte)level, oTime, (byte)_stream.ReadByte(), _levelNames[level - 1]);
+        tempTiles[7,4] = new FileTile((byte)_stream.ReadByte(), (byte)((oTime = (byte)_stream.ReadByte()) % 4), new Point(7, 4));
+        return new Level(tempTiles, (byte)level, oTime, (byte)_stream.ReadByte(), _levelNames[level - 1]);
     }
 
-    public string GetLevelName(int level)
-        => _levelNames[level - 1];
-    
+    public string GetLevelName(int level) => _levelNames[level - 1];
     
     public static string DecodeName(byte[] encodedName)
         => encodedName.Aggregate("", (current, b) => current + $"{(char)(byte)unchecked(b - 0xC4)}").TrimEnd();

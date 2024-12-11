@@ -10,16 +10,14 @@ namespace Logical;
 
 public class LogicalGame : EngineGame
 {
-#region Instances
+
     private Texture2D _cursorTexture;
     private Texture2D _backdropTexture;
-#if DEBUG
+    #if DEBUG
     private readonly string _versionString;
     private readonly string _commitString;
     #endif
-#endregion
-
-#region Default Methods
+    
     public LogicalGame()
     {
         #if DEBUG
@@ -71,8 +69,8 @@ public class LogicalGame : EngineGame
         _backdropTexture = new Texture2D(Graphics.GraphicsDevice, 1, 1);
         _backdropTexture.SetData([Color.White]);
         
-        Components.Add(
-            Statics.Cursor = new Cursor(this) { Enabled = false, Visible = false, DrawOrder = 10, UpdateOrder = 0}
+        Components.Add(Statics.Cursor =
+            new Cursor(this) { Enabled = false, Visible = false, DrawOrder = 10, UpdateOrder = 0}
         );
         Components.Add(
             Statics.Backdrop = new SimpleImage(this, _backdropTexture,
@@ -121,9 +119,7 @@ public class LogicalGame : EngineGame
         Configs.MusicVolumeChanged -= UpdateVolume;
         base.OnExiting(sender, args);
     }
-#endregion
-
-#region Custom Methods
+    
     private void ReloadScale(object s, EventArgs e)
     {
         if (Configs.Fullscreen)
@@ -152,5 +148,4 @@ public class LogicalGame : EngineGame
         MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2);
         MediaPlayer.IsMuted = Configs.MusicVolume is 0;
     }
-#endregion
 }

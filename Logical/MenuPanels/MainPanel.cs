@@ -15,7 +15,7 @@ public class MainPanel : MenuPanel
     private readonly ClickableArea _passwordButton;
     private readonly ClickableArea _infoButton;
     private readonly ClickableArea _settingsButton;
-    public  readonly ClickableArea GraphicsSetButton;
+    private readonly ClickableArea _graphicsSetButton;
     public  readonly ClickableArea StartButton;
 
     private readonly SimpleImage   _levelsetImage;
@@ -27,15 +27,14 @@ public class MainPanel : MenuPanel
 
     private readonly SimpleImage _passwordImage;
     private readonly TextInput   _passwordInput;
-    private readonly TextInput.Caret _passwordCaret;
-    
+
     public MainPanel(Game game) : base(game)
     {
         Components.Add(_ownSetButton = new ClickableArea(Game, new Rectangle(108, 87, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(_passwordButton = new ClickableArea(Game, new Rectangle(108, 109, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(_infoButton = new ClickableArea(Game, new Rectangle(108, 132, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(_settingsButton = new ClickableArea(Game, new Rectangle(108, 155, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
-        Components.Add(GraphicsSetButton = new ClickableArea(Game, new Rectangle(108, 179, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
+        Components.Add(_graphicsSetButton = new ClickableArea(Game, new Rectangle(108, 179, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         Components.Add(StartButton = new ClickableArea(Game, new Rectangle(108, 201, 103, 16), outsideBehaviour: ClickableArea.OutsideBehaviour.None));
         
         Components.Add(_levelsetImage =
@@ -71,29 +70,28 @@ public class MainPanel : MenuPanel
             new TextInput(Game, Statics.DisplayFont, "", new Vector2(95, 114), 5, false, new Regex("^[A-Z 0-9]{0,15}$"), charFunc: char.ToUpper)
                 { Enabled = false, Visible = false }
         );
-        Components.Add(_passwordCaret =
-            new TextInput.Caret(Game, Statics.DisplayFont.Texture, Vector2.Zero, _passwordInput)
-                { DefaultSource = new Rectangle(360, 0, 8, 7) }
+        Components.Add(new TextInput.Caret(Game, Statics.DisplayFont.Texture, Vector2.Zero, _passwordInput)
+            { DefaultSource = new Rectangle(360, 0, 8, 7) }
         );
         
         _ownSetButton.LeftButtonDown += OwnSet;
         _passwordButton.LeftButtonDown += Password;
         _infoButton.LeftButtonDown += Info;
         _settingsButton.LeftButtonDown += Settings;
-        GraphicsSetButton.ButtonDown += GraphicSet;
+        _graphicsSetButton.ButtonDown += GraphicSet;
 
         _standardLevelsetButton.LeftButtonDown += StandardLevelset;
         _customLevelsetButton.LeftButtonDown += CustomLevelset;
         _cancelLeveldiskButton.LeftButtonDown += LevelsetComplete;
         _selectLeveldiskButton.LeftButtonDown += SelectLeveldisk;
         
-        GraphicsSetButton.RightButtonDown += PlaySfx;
+        _graphicsSetButton.RightButtonDown += PlaySfx;
     }
 
-    #region PanelButtons
+#region PanelButtons
     private bool BunkEnabled
     {
-        set => _ownSetButton.Enabled = _passwordButton.Enabled = _infoButton.Enabled = _settingsButton.Enabled = GraphicsSetButton.Enabled = StartButton.Enabled = value;
+        set => _ownSetButton.Enabled = _passwordButton.Enabled = _infoButton.Enabled = _settingsButton.Enabled = _graphicsSetButton.Enabled = StartButton.Enabled = value;
     }
     
     private void OwnSet(object s, EventArgs e)
@@ -115,11 +113,8 @@ public class MainPanel : MenuPanel
         _passwordInput.Returned += PasswordReturned;
     }
     
-    private void Info(object s, EventArgs e)
-    {
-        SwitchState(new InfoPanel(Game));
-    }
-    
+    private void Info(object s, EventArgs e) => SwitchState(new InfoPanel(Game));
+
     private void Settings(object s, EventArgs e) => SwitchState(new SettingsPanel(Game));
 
     private void GraphicSet(object s, MouseButtons e)
@@ -137,9 +132,9 @@ public class MainPanel : MenuPanel
         _levelsetImage.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/Levelset");
         _leveldiskErrorText.Color = Statics.TopazColor;
     }
-    #endregion
+#endregion
     
-    #region LevelsetMethods
+#region LevelsetMethods
     private void CustomLevelset(object sender, EventArgs e)
     {
         _levelsetImage.DefaultSource = new Rectangle(0, 18, 304, 18);
@@ -189,9 +184,9 @@ public class MainPanel : MenuPanel
         
         BunkEnabled = true;
     }
-    #endregion
+#endregion
 
-    #region PasswordMethods
+#region PasswordMethods
     private void PasswordEscaped(object s = null, EventArgs e = null)
     {
         var mouseHelper = Game.Services.GetService<ClickableWindow>();
@@ -263,7 +258,7 @@ public class MainPanel : MenuPanel
     {
         throw new NotImplementedException("Level editor not implemented.");
     }
-    #endregion
+#endregion
     
     protected override void Dispose(bool disposing)
     {
@@ -271,9 +266,9 @@ public class MainPanel : MenuPanel
         _passwordButton.LeftButtonDown -= Password;
         _infoButton.LeftButtonDown -= Info;
         _settingsButton.LeftButtonDown -= Settings;
-        GraphicsSetButton.ButtonDown -= GraphicSet;
+        _graphicsSetButton.ButtonDown -= GraphicSet;
         
-        GraphicsSetButton.RightButtonDown -= PlaySfx;
+        _graphicsSetButton.RightButtonDown -= PlaySfx;
         
         _standardLevelsetButton.LeftButtonDown -= StandardLevelset;
         _customLevelsetButton.LeftButtonDown -= CustomLevelset;

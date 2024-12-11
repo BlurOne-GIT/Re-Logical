@@ -18,7 +18,6 @@ public class PreviewState : GameState
     private const int BlankTime = 1280;
     private const int TotalTextTime = 2*TextFadeTime + TextTime + DelayTime;
     
-#region Fields
     private readonly Mode _mode;
     private readonly string _message;
     private TextComponent _changingDisplay;
@@ -35,7 +34,6 @@ public class PreviewState : GameState
         Failed,
         Complete
     }
-#endregion
     
 #region Constructors
     // Common constructor
@@ -115,7 +113,6 @@ public class PreviewState : GameState
     }
 #endregion
     
-#region Default Methods
     protected override void LoadContent()
     {
         if (_showEditor && !Statics.LevelSet.CheckValidStage(Configs.Stage - 1))
@@ -126,19 +123,24 @@ public class PreviewState : GameState
             return;
         }
         
-        Statics.Cursor.Visible = false; //Statics.ShowCursor = false;
+        Statics.Cursor.Visible = false;
         Components.Add(new SimpleImage(Game, Statics.LastLevelPreview, new Vector2(159, 23), 0));
-        Components.Add(new SimpleImage(
-            Game,
-            $"{Configs.GraphicSet}/UI/Preview",
-            new Vector2(0, 28),
-            0
-        ));
+        Components.Add(new SimpleImage(Game, $"{Configs.GraphicSet}/UI/Preview", new Vector2(0, 28), 0));
         Components.Add(new TextComponent(Game, Statics.DisplayFont, _message, new Vector2(84, 43), 1, anchor: Alignment.TopCenter));
+        
         var pinkBall = Game.Content.Load<Texture2D>("SpinnerBalls");
         for (int i = 0; i < Configs.Lives; i++)
-            Components.Add(new SimpleImage(Game, pinkBall, new Vector2(72 + 12 * i, 82), 1) { DefaultSource = new Rectangle(0, 0, 8, 8) });
-        Components.Add(new TextComponent(Game, Statics.DisplayFont, _showEditor ? " THE FINAL CUT" : $"{Configs.Stage:00} {Statics.LevelSet.GetLevelName(Configs.Stage)}", new Vector2(16, 123), 1));
+            Components.Add(
+                new SimpleImage(Game, pinkBall, new Vector2(72 + 12 * i, 82), 1)
+                    { DefaultSource = new Rectangle(0, 0, 8, 8) }
+            );
+        
+        Components.Add(new TextComponent(
+            Game, Statics.DisplayFont,
+            _showEditor ? " THE FINAL CUT" : $"{Configs.Stage:00} {Statics.LevelSet.GetLevelName(Configs.Stage)}",
+            new Vector2(16, 123), 1
+        ));
+        
         if (_mode is Mode.Complete) //if (_mode is not Mode.Start)
         {
             Components.Add(
@@ -153,6 +155,7 @@ public class PreviewState : GameState
             );
             //}
         }
+        
         Components.Add( // Score
             new TextComponent(Game, Statics.TextureFont, $"{Configs.Score:000000}", new Vector2(208, 188), 1)
                 { Enabled = false }
@@ -196,7 +199,6 @@ public class PreviewState : GameState
 
     private void HandleInput(object s, InputKeyEventArgs e) =>
         PrepareExit(e.Key is not Keys.Escape || Configs.Lives is 0 ? Exit : () => SwitchState(new MenuState(Game)));
-    
 
     private void HandleInput(object s, MouseButtons e)
     {
@@ -204,12 +206,9 @@ public class PreviewState : GameState
             PrepareExit(Exit);
     }
 
-    protected override void UnloadContent()
-        => Game.Content.UnloadAsset($"{Configs.GraphicSet}/Loading");
-
-#endregion
-
-#region Custom Methods
+    protected override void UnloadContent() =>
+        Game.Content.UnloadAsset($"{Configs.GraphicSet}/Loading");
+    
     private void PrepareExit(Action action)
     {
         Game.Window.KeyDown -= HandleInput;
@@ -243,6 +242,4 @@ public class PreviewState : GameState
             default: throw new ArgumentException();
         }
     }
-
-#endregion
 }

@@ -32,7 +32,8 @@ public abstract class MenuPanel : GameState
         base.UnloadContent();
     }
 
-    protected void PlaySfx(object s, EventArgs e) => _clickSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
+    protected void PlaySfx(object s, EventArgs e) =>
+        _clickSfx.Play(MathF.Pow(Configs.SfxVolume * 0.1f, 2), 0, 0);
 
     private void OnButtonAdded(object s, GameComponentCollectionEventArgs e)
     {

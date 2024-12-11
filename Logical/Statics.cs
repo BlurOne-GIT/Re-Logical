@@ -9,7 +9,6 @@ namespace Logical;
 
 public static class Statics
 {
-    #region Fields
     public const string StandardSet = "./Content/alf.dat";
     private static SpriteFont _topaz;
     private static SpriteFont _topazPlus;
@@ -22,9 +21,7 @@ public static class Statics
         new(0xFF114477U)  // packed ABGR for #741 (GS4R)
     ];
     private static readonly SpriteFont[] TextureFonts = new SpriteFont[5]; // TODO: add texture font fidelity levels
-    #endregion
-
-    #region Properties
+    
     public static SimpleImage Backdrop { get; set; }
     public static Cursor Cursor { get; set; }
     public static LevelSet LevelSet { get; set; } = new(StandardSet);
@@ -44,9 +41,7 @@ public static class Statics
 
     //public static readonly Vector2 CursorTextureOffset = new(7f, 7f);
     public static RenderTarget2D LastLevelPreview;
-    #endregion
-
-    #region Methods
+    
     public static void LoadFonts(ContentManager content)
     {
         var fontTexture = content.Load<Texture2D>("Fonts/DisplayFont");
@@ -85,7 +80,6 @@ public static class Statics
             TextureFonts[gs] = new SpriteFont(fontTexture, glyphRectangles, fontRectangles, characters, 0, 0, kernings, ' ');
         }
     }
-    #endregion
 }
 
 public enum BallColors

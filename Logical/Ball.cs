@@ -9,7 +9,6 @@ namespace Logical;
 
 public class Ball : SimpleImage
 {
-    #region Fields
     public static event EventHandler BallCreated;
     public static event EventHandler BallDestroyed;
     private static SoundEffect _bounceSfx;
@@ -22,9 +21,7 @@ public class Ball : SimpleImage
     private readonly bool _shallSound;
     private bool _justTeleported;
     public static readonly List<Ball> AllBalls = new(5);
-    #endregion
-
-    #region Properties
+    
     public BallColors BallColor { 
         get => _ballColor;
         set
@@ -35,6 +32,7 @@ public class Ball : SimpleImage
             DefaultSource = new Rectangle(10 * (int)_ballColor, 0, 10, 10);
         }
     }
+    
     public Direction MovementDirection
     {
         get => _direction;
@@ -53,6 +51,7 @@ public class Ball : SimpleImage
             };
         }
     }
+    
     public new Vector2 Position
     { 
         get => base.Position;
@@ -66,7 +65,6 @@ public class Ball : SimpleImage
             base.Position = value;
         }
     }
-    #endregion
 
     public Ball(Game game, Vector2 position, Direction direction, BallColors ballColor, bool willSound)
         : base(game, game.Content.Load<Texture2D>("Balls"), position, 7)

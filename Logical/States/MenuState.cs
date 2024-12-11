@@ -11,16 +11,6 @@ namespace Logical.States;
 
 public class MenuState : GameState
 {
-    public MenuState(Game game) : base(game)
-    {
-        Statics.Cursor.Enabled = Statics.Cursor.Visible = true; //Statics.ShowCursor = true;
-        _menuManager = new GameStateManager<MenuPanel>(Components);
-        _menuManager.Switched += MenuManagerOnSwitched;
-        Game.Window.KeyDown += HandleInput;
-        Configs.GraphicSetChanged += OnGraphicSetChanged;
-    }
-
-    #region Fields
     private Song _choose;
     private SoundEffect _beginSfx;
     private SimpleImage _background;
@@ -37,9 +27,16 @@ public class MenuState : GameState
         FadeOut,
         BlackOut
     }
-    #endregion
-
-    #region Default Methods
+    
+    public MenuState(Game game) : base(game)
+    {
+        Statics.Cursor.Enabled = Statics.Cursor.Visible = true; //Statics.ShowCursor = true;
+        _menuManager = new GameStateManager<MenuPanel>(Components);
+        _menuManager.Switched += MenuManagerOnSwitched;
+        Game.Window.KeyDown += HandleInput;
+        Configs.GraphicSetChanged += OnGraphicSetChanged;
+    }
+    
     protected override void LoadContent()
     {
         _choose = Game.Content.Load<Song>("Choose Music");
@@ -128,9 +125,7 @@ public class MenuState : GameState
         _menuManager.Switched -= MenuManagerOnSwitched;
         base.Dispose(disposing);
     }
-    #endregion
-
-    #region Methods
+    
     private void StartGame(object s, EventArgs e)
     {
         if (Configs.Stage is 0)
@@ -146,9 +141,9 @@ public class MenuState : GameState
         MediaPlayer.Stop();
         _menuManager.GameState!.Enabled = false;
         Statics.Cursor.Enabled = false;
-        Components.Add(
-            new TimeDelayedAction(Game, TimeSpan.FromMilliseconds(3400/*7400*/), () => SwitchState(new GuruState(Game)))
-        );
+        Components.Add(new TimeDelayedAction(
+            Game, TimeSpan.FromMilliseconds(3400/*7400*/), () => SwitchState(new GuruState(Game))
+        ));
     }
 
     private void OnGraphicSetChanged(object sender, EventArgs e)
@@ -156,5 +151,4 @@ public class MenuState : GameState
         Game.Content.UnloadAsset($"{Configs.GraphicSet}/UI/MainMenu");
         _background.Texture = Game.Content.Load<Texture2D>($"{Configs.GraphicSet}/UI/MainMenu");
     }
-    #endregion
 }

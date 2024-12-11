@@ -1,32 +1,32 @@
 using System.Collections.Immutable;
 using System.Linq;
-using Logical.Blocks;
+using Logical.Tiles;
 using Microsoft.Xna.Framework;
 
 namespace Logical;
 
 public readonly struct Level
 {
-    private Level(IBlock[,] blocks, byte number, byte ballTime, byte time, string name, byte[] encodedName)
+    private Level(ITile[,] tiles, byte number, byte ballTime, byte time, string name, byte[] encodedName)
     {
-        Blocks = blocks;
+        Tiles = tiles;
         Number = number;
         BallTime = ballTime;
         Time = time;
         Name = name;
         EncodedName = encodedName;
-        var list = Blocks.OfType<IBlock>().ToImmutableList();
-        IsTimed = list.Any(x => x.BlockType is IBlock.BlockTypes.Hourglass);
-        AutoWin = !list.Any(x => x.BlockType is IBlock.BlockTypes.Spinner);
+        var list = Tiles.OfType<ITile>().ToImmutableList();
+        IsTimed = list.Any(x => x.TileType is ITile.TileTypes.Hourglass);
+        AutoWin = !list.Any(x => x.TileType is ITile.TileTypes.Spinner);
     }
     
-    public Level(IBlock[,] blocks, byte number, byte ballTime, byte time, string name)
-        : this(blocks, number, ballTime, time, name, LevelSet.EncodeName(name)) { }
+    public Level(ITile[,] tiles, byte number, byte ballTime, byte time, string name)
+        : this(tiles, number, ballTime, time, name, LevelSet.EncodeName(name)) { }
     
-    public Level(IBlock[,] blocks, byte number, byte ballTime, byte time, byte[] encodedName)
-        : this(blocks, number, ballTime, time, LevelSet.DecodeName(encodedName), encodedName) { }
+    public Level(ITile[,] tiles, byte number, byte ballTime, byte time, byte[] encodedName)
+        : this(tiles, number, ballTime, time, LevelSet.DecodeName(encodedName), encodedName) { }
     
-    public IBlock[,] Blocks { get; init; }
+    public ITile[,] Tiles { get; init; }
     public byte Number { get; init; }
     public byte BallTime { get; init; }
     public byte Time { get; init; }
@@ -36,52 +36,52 @@ public readonly struct Level
     public byte[] EncodedName { get; init; }
 }
 
-public interface IBlock
+public interface ITile
 {
     public byte FileValue { get; }
-    public BlockTypes BlockType => (BlockTypes)FileValue;
+    public TileTypes TileType => (TileTypes)FileValue;
     public byte Argument { get; }
     public Point Point { get; }
     public sealed bool HasArgument => Argument is not 0;
     
     protected static readonly ImmutableHashSet<byte> VerticalAttachables =
     [
-        (byte)BlockTypes.Spinner,
-        (byte)BlockTypes.VerticalPipe,
-        (byte)BlockTypes.CrossPipe,
-        (byte)BlockTypes.VerticalColourStopper,
-        (byte)BlockTypes.CrossColourStopper,
-        (byte)BlockTypes.VerticalTeleporter,
-        (byte)BlockTypes.CrossTeleporter,
-        (byte)BlockTypes.VerticalColourChanger,
-        (byte)BlockTypes.CrossColourChanger,
-        (byte)BlockTypes.RightDirectionArrow,
-        (byte)BlockTypes.LeftDirectionArrow,
-        (byte)BlockTypes.UpDirectionArrow,
-        (byte)BlockTypes.DownDirectionArrow,
-        (byte)BlockTypes.Dropper
+        (byte)TileTypes.Spinner,
+        (byte)TileTypes.VerticalPipe,
+        (byte)TileTypes.CrossPipe,
+        (byte)TileTypes.VerticalColourStopper,
+        (byte)TileTypes.CrossColourStopper,
+        (byte)TileTypes.VerticalTeleporter,
+        (byte)TileTypes.CrossTeleporter,
+        (byte)TileTypes.VerticalColourChanger,
+        (byte)TileTypes.CrossColourChanger,
+        (byte)TileTypes.RightDirectionArrow,
+        (byte)TileTypes.LeftDirectionArrow,
+        (byte)TileTypes.UpDirectionArrow,
+        (byte)TileTypes.DownDirectionArrow,
+        (byte)TileTypes.Dropper
     ];
     
     protected static readonly ImmutableHashSet<byte> HorizontalAttachables =
     [
-        (byte)BlockTypes.Spinner,
-        (byte)BlockTypes.HorizontalPipe,
-        (byte)BlockTypes.CrossPipe,
-        (byte)BlockTypes.HorizontalColourStopper,
-        (byte)BlockTypes.CrossColourStopper,
-        (byte)BlockTypes.HorizontalTeleporter,
-        (byte)BlockTypes.CrossTeleporter,
-        (byte)BlockTypes.HorizontalColourChanger,
-        (byte)BlockTypes.CrossColourChanger,
-        (byte)BlockTypes.RightDirectionArrow,
-        (byte)BlockTypes.LeftDirectionArrow,
-        (byte)BlockTypes.UpDirectionArrow,
-        (byte)BlockTypes.DownDirectionArrow
+        (byte)TileTypes.Spinner,
+        (byte)TileTypes.HorizontalPipe,
+        (byte)TileTypes.CrossPipe,
+        (byte)TileTypes.HorizontalColourStopper,
+        (byte)TileTypes.CrossColourStopper,
+        (byte)TileTypes.HorizontalTeleporter,
+        (byte)TileTypes.CrossTeleporter,
+        (byte)TileTypes.HorizontalColourChanger,
+        (byte)TileTypes.CrossColourChanger,
+        (byte)TileTypes.RightDirectionArrow,
+        (byte)TileTypes.LeftDirectionArrow,
+        (byte)TileTypes.UpDirectionArrow,
+        (byte)TileTypes.DownDirectionArrow
     ];
     
-    public enum BlockTypes : byte
+    public enum TileTypes : byte
     {
-        EmptyBlock = 0x00,
+        EmptyTile = 0x00,
         Spinner = 0x01,
         HorizontalPipe = 0x02,
         VerticalPipe = 0x03,
@@ -108,11 +108,11 @@ public interface IBlock
     }
 }
 
-public readonly record struct FileBlock(byte FileValue, byte Argument, Point Point) : IBlock
+public readonly record struct FileTile(byte FileValue, byte Argument, Point Point) : ITile
 {
-    public Block ToGameBlock(Game game) => FileValue switch
+    public GameTile ToGameTile(Game game) => FileValue switch
     {
-        0x00 => new EmptyBlock(game, Point, FileValue, Argument),
+        0x00 => new EmptyTile(game, Point, FileValue, Argument),
         0x01 => new Spinner(game, Point, FileValue, Argument) { Enabled = false },
         <= 0x04 => new Pipe(game, Point, FileValue, Argument),
         <= 0x07 => new ColourStopper(game, Point, FileValue, Argument),
@@ -125,6 +125,6 @@ public readonly record struct FileBlock(byte FileValue, byte Argument, Point Poi
         0x15 => new TrafficLights(game, Point, FileValue, Argument),
         0x16 => new Dropper(game, Point, FileValue, Argument),
         0x17 => new ColourForecast(game, Point, FileValue, Argument),
-        _ => new EmptyBlock(game, Point, FileValue, Argument)
+        _ => new EmptyTile(game, Point, FileValue, Argument)
     };
 }

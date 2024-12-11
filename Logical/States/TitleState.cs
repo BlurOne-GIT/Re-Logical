@@ -14,17 +14,12 @@ public class TitleState : GameState
         Game.Window.KeyDown += HandleInput;
     }
 
-    #region Fields
-
     private bool _isEnding;
     private Song _titel;
     private SimpleImage _background;
     private const int MusicTransitionTime = 8000;
     private const int SilenceTime = 8720;
     private int _transitionCounter;
-    #endregion
-
-    #region Default Methods
 
     protected override void LoadContent()
     {
@@ -66,9 +61,7 @@ public class TitleState : GameState
 
     private void HandleInput(object s, InputKeyEventArgs e) => EndCaller(s, e);
     private void HandleInput(object s, MouseButtons e) => EndCaller(s, e);
-    #endregion
 
-    #region Custom Methods
     private void EndCaller(object s, object e)
     {
         MediaPlayer.MediaStateChanged -= EndCaller;
@@ -76,5 +69,4 @@ public class TitleState : GameState
             _transitionCounter = MusicTransitionTime;
         _isEnding = true;
     }
-    #endregion
 }
