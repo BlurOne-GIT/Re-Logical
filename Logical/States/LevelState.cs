@@ -74,7 +74,7 @@ public class LevelState(Game game) : LevelDrawingState(game)
         
         Spinner.AllDone += Win;
         _oTimeLoopCounter = _oTime;
-        ColourHandicap.SteveJobs?.Recharge();
+        ColourHandicap.PrimaryInstance?.Recharge();
 
         if (ColorJobLayout.Count != 0 || TrafficLights.Count != 0)
             Spinner.ConditionClear += RecheckConditioned;

@@ -101,7 +101,7 @@ public class Hourglass : GameTile, IFixable
         
         // Finally, reloads
         _currentCycle = TimeSpan.Zero;
-        ColourHandicap.SteveJobs?.Recharge();
+        ColourHandicap.PrimaryInstance?.Recharge();
     }
     
     public override void Draw(GameTime gameTime)

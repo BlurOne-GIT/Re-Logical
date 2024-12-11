@@ -10,8 +10,6 @@ namespace Logical;
 
 public class LogicalGame : EngineGame
 {
-
-    private Texture2D _cursorTexture;
     private Texture2D _backdropTexture;
     #if DEBUG
     private readonly string _versionString;
@@ -65,7 +63,6 @@ public class LogicalGame : EngineGame
         MediaPlayer.Volume = MathF.Pow(Configs.MusicVolume * 0.1f, 2);
         MediaPlayer.IsMuted = Configs.MusicVolume is 0;
         
-        _cursorTexture = Content.Load<Texture2D>("Cursor");
         _backdropTexture = new Texture2D(Graphics.GraphicsDevice, 1, 1);
         _backdropTexture.SetData([Color.White]);
         

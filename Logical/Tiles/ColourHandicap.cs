@@ -6,7 +6,7 @@ namespace Logical.Tiles;
 
 public class ColourHandicap : GameTile, IFixable
 {
-    public static ColourHandicap SteveJobs;
+    public static ColourHandicap PrimaryInstance;
     public bool DisableJobs;
     private static Texture2D _balls;
     private static readonly Vector2[] BallOffsets =
@@ -31,10 +31,10 @@ public class ColourHandicap : GameTile, IFixable
     public ColourHandicap(Game game, Point arrayPosition, byte xx, byte yy)
         : base(game, "ColourHandicap", arrayPosition, xx, yy)
     {
-        if (SteveJobs is not null)
-            SteveJobs.DisableJobs = true;
+        if (PrimaryInstance is not null)
+            PrimaryInstance.DisableJobs = true;
         
-        SteveJobs = this;
+        PrimaryInstance = this;
         
         DefaultSource = new Rectangle(0, 0, 36, 36);
     }
@@ -47,6 +47,7 @@ public class ColourHandicap : GameTile, IFixable
 
     public void Recharge()
     {
+        LevelState.ColorJobLayout.Clear();
         for (int i = 0; i < 4; i++)
         {
             var random = Statics.Brandom.Next(0, 4);
@@ -67,8 +68,8 @@ public class ColourHandicap : GameTile, IFixable
 
     protected override void Dispose(bool disposing)
     {
-        if (SteveJobs.Equals(this))
-            SteveJobs = null;
+        if (PrimaryInstance.Equals(this))
+            PrimaryInstance = null;
         base.Dispose(disposing);
     }
 
